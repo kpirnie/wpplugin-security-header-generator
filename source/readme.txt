@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 5.3.83
+Stable tag: 5.4.77
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -67,6 +67,14 @@ Please understand, I cannot generate the proper headers for you through the word
 6. Headers Set
  
 == Changelog ==
+
+= 5.4.77 =
+* Add: Presets for CSP
+* Rework JS to vanilla
+* Add: get_our_option cache
+* Add: filters to permissions directives and csp directives
+    * `wpsh_csp_directives` allows you to modify the returned array of items
+    * `wpsh_permissions_directives` allows you to modify the returned array of items
 
 = 5.3.83 = 
 * Update: Documentation

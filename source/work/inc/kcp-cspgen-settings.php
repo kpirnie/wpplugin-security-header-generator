@@ -545,6 +545,18 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     'dependency' => array('generate_csp', '==', true),
                 ),
 
+                // apply a preset
+                array(
+                    'id' => 'apply_csp_preset',
+                    'type' => 'select',
+                    'title' => __('Apply a Preset?', 'security-header-generator'),
+                    'desc' => __('Select a preset to start with', 'security-header-generator'),
+                    'default' => ['none'],
+                    'options' => $this->manage_presets(),
+                    'class' => 'kpsh-full-field',
+                    'dependency' => array('generate_csp', '==', true),
+                ),
+
                 // basic auth username
                 array(
                     'id' => 'auth_un',
@@ -848,6 +860,25 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
 
             // return the array
             return $_ret;
+        }
+
+
+        protected function manage_presets(): array
+        {
+
+            // hold the returnable array
+            $ret['none'] = __('No Preset', 'security-header-generator');
+
+            // get the presets
+            $presets = KCP_CSPGEN_Presets::get_presets();
+
+            // loop them
+            foreach ($presets as $key => $val) {
+                $ret[$key] = $val['name'];
+            }
+
+            // return the array
+            return $ret;
         }
     }
 }

@@ -585,7 +585,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             $_ret = '';
 
             // get the allowed directives
-            $_directives = KCP_CSPGEN_Common::get_csp_directives();
+            $_directives = KCP_CSPGEN_Configs::get_csp_directives();
 
             // I know we have the directives so just loop them
             foreach ($_directives as $_key => $_val) {
@@ -658,7 +658,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             $_ret = '';
 
             // get the permissions directives
-            $_directives = KCP_CSPGEN_Common::get_permissions_directives();
+            $_directives = KCP_CSPGEN_Configs::get_permissions_directives();
 
             // get the configured options
             $_options = get_our_option('feature_policies');

@@ -1,76 +1,174 @@
-// Store ONLY the initial user values
-const _initial_values = {
-    styles: '',
-    scripts: '',
-    fonts: '',
-    images: '',
-    connect: '',
-    frames: '',
-    worker: '',
-    media: ''
-};
+// Store ONLY the initial user values - dynamically track all CSP fields
+const _initial_values = {};
 
 // Object to store original field values when "None" is selected
 const cspFieldBackups = {};
 
-jQuery(document).ready(function ($) {
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Dynamically capture initial values for all CSP custom fields
+    setTimeout(function () {
+        document.querySelectorAll('[data-depend-id^="generate_csp_custom_"]').forEach(function (el) {
+            const fieldId = el.getAttribute('data-depend-id');
+            if (!fieldId.endsWith('_allow_unsafe')) {
+                const key = fieldId.replace('generate_csp_custom_', '');
+                _initial_values[key] = el.value || '';
+            }
+        });
+    }, 250);
 
     // Track user modifications to fields
-    $('[data-depend-id^="generate_csp_custom_"]').not('[data-depend-id$="_allow_unsafe"]').on('change blur keyup', function () {
-        const fieldId = $(this).attr('data-depend-id');
-        const key = fieldId.replace('generate_csp_custom_', '');
-        if (_initial_values[key] !== undefined) {
-            _initial_values[key] = $(this).val() || '';
+    document.querySelectorAll('[data-depend-id^="generate_csp_custom_"]').forEach(function (el) {
+        const fieldId = el.getAttribute('data-depend-id');
+        if (!fieldId.endsWith('_allow_unsafe')) {
+            el.addEventListener('change', updateInitialValue);
+            el.addEventListener('blur', updateInitialValue);
+            el.addEventListener('keyup', updateInitialValue);
         }
     });
 
     // get our access methods allow all
-    var _amaa = jQuery('[data-depend-id="include_acam_methods"][value="*"]');
+    const amaa = document.querySelector('[data-depend-id="include_acam_methods"][value="*"]');
 
     // check the click event
-    _amaa.on('click', function () {
-
-        // hold the checked
-        _ischecked = jQuery(this).is(':checked');
-
-        // get the rest of the checkboxes for this
-        _amacbs = jQuery('[data-depend-id="include_acam_methods"]');
-
-        // set the other checkboxes based on this one
-        _amacbs.prop("checked", _ischecked);
-
-    });
-
-    // Capture initial values after page load
-    setTimeout(function () {
-        _initial_values.styles = jQuery('[data-depend-id="generate_csp_custom_styles"]').val() || '';
-        _initial_values.scripts = jQuery('[data-depend-id="generate_csp_custom_scripts"]').val() || '';
-        _initial_values.fonts = jQuery('[data-depend-id="generate_csp_custom_fonts"]').val() || '';
-        _initial_values.images = jQuery('[data-depend-id="generate_csp_custom_images"]').val() || '';
-        _initial_values.connect = jQuery('[data-depend-id="generate_csp_custom_connect"]').val() || '';
-        _initial_values.frames = jQuery('[data-depend-id="generate_csp_custom_frames"]').val() || '';
-        _initial_values.worker = jQuery('[data-depend-id="generate_csp_custom_workers"]').val() || '';
-        _initial_values.media = jQuery('[data-depend-id="generate_csp_custom_media"]').val() || '';
-    }, 250);
+    if (amaa) {
+        amaa.addEventListener('click', function () {
+            const isChecked = this.checked;
+            const amacbs = document.querySelectorAll('[data-depend-id="include_acam_methods"]');
+            amacbs.forEach(function (cb) {
+                cb.checked = isChecked;
+            });
+        });
+    }
 
     // handle the NONE CSP checkboxes
     handleNoneCSP();
 
 });
 
-function backupAndClearFields(checkbox) {
+// Handle preset selection
+document.addEventListener('change', function (e) {
+    if (e.target.matches('[name="wpsh_settings[apply_csp_preset]"]')) {
+        const presetKey = e.target.value;
 
-    const checkboxId = checkbox.attr('data-depend-id');
+        console.log('Preset selected:', presetKey);
+
+        if (!presetKey || presetKey === 'none') return;
+
+        // Check if wpshPresets is defined
+        if (typeof wpshPresets === 'undefined') {
+            console.error('wpshPresets not defined');
+            return;
+        }
+
+        console.log('Making AJAX request...');
+
+        // Make AJAX request to get preset settings
+        const formData = new FormData();
+        formData.append('action', 'wpsh_load_preset');
+        formData.append('preset_key', presetKey);
+        formData.append('nonce', wpshPresets.nonce);
+
+        fetch(wpshPresets.ajaxurl, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                console.log('Response received:', response);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Data:', data);
+                if (data.success && data.data.settings) {
+                    applyPresetSettings(data.data.settings);
+                } else {
+                    console.error('Error in response:', data);
+                }
+            })
+            .catch(error => console.error('Error loading preset:', error));
+    }
+});
+
+function applyPresetSettings(settings) {
+    console.log('Applying settings:', settings);
+
+    // First, clear all CSP fields
+    document.querySelectorAll('[data-depend-id^="generate_csp_custom_"]').forEach(function (field) {
+        if (field.type === 'checkbox') {
+            field.checked = false;
+        } else if (field.type === 'text' || field.type === 'textarea') {
+            field.value = '';
+        }
+    });
+
+    // Now apply the preset settings
+    Object.keys(settings).forEach(function (key) {
+        // Try multiple selector patterns
+        let field = document.querySelector(`[name="wpsh_settings[${key}]"]`);
+
+        if (!field) {
+            field = document.querySelector(`[data-depend-id="${key}"]`);
+        }
+
+        if (!field) {
+            console.log('Field not found:', key);
+            return;
+        }
+
+        console.log('Found field:', key, field);
+
+        const value = settings[key];
+
+        // Handle different field types
+        if (field.type === 'checkbox') {
+            // For checkbox arrays
+            const checkboxes = document.querySelectorAll(`[name="wpsh_settings[${key}][]"]`);
+            if (checkboxes.length > 0) {
+                checkboxes.forEach(function (cb) {
+                    if (Array.isArray(value)) {
+                        cb.checked = value.includes(parseInt(cb.value));
+                    }
+                });
+            } else {
+                field.checked = value;
+            }
+        } else if (field.type === 'radio') {
+            const radios = document.querySelectorAll(`[name="wpsh_settings[${key}]"]`);
+            radios.forEach(function (radio) {
+                radio.checked = (radio.value === value);
+            });
+        } else {
+            // Text, textarea, select
+            field.value = value;
+        }
+
+        // Trigger change event to update UI
+        field.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+}
+
+function updateInitialValue(e) {
+    const fieldId = e.target.getAttribute('data-depend-id');
+    const key = fieldId.replace('generate_csp_custom_', '');
+    if (_initial_values[key] !== undefined) {
+        _initial_values[key] = e.target.value || '';
+    }
+}
+
+function backupAndClearFields(checkbox) {
+    const checkboxId = checkbox.getAttribute('data-depend-id');
     const fieldId = getFieldIdFromCheckboxId(checkboxId);
-    const $field = jQuery(`[data-depend-id="${fieldId}"]`);
+    const field = document.querySelector(`[data-depend-id="${fieldId}"]`);
+
+    if (!field) return;
 
     // Backup the current value if not already stored
     if (!cspFieldBackups[fieldId]) {
-        cspFieldBackups[fieldId] = $field.val();
+        cspFieldBackups[fieldId] = field.value;
     }
 
     // Clear the field
-    $field.val('');
+    field.value = '';
 
     // Update _initial_values to reflect the cleared state
     const key = fieldId.replace('generate_csp_custom_', '');
@@ -80,13 +178,15 @@ function backupAndClearFields(checkbox) {
 }
 
 function restoreFields(checkbox) {
-    const checkboxId = checkbox.attr('data-depend-id');
+    const checkboxId = checkbox.getAttribute('data-depend-id');
     const fieldId = getFieldIdFromCheckboxId(checkboxId);
-    const $field = jQuery(`[data-depend-id="${fieldId}"]`);
+    const field = document.querySelector(`[data-depend-id="${fieldId}"]`);
+
+    if (!field) return;
 
     // Restore the original value if a backup exists
     if (cspFieldBackups[fieldId] !== undefined) {
-        $field.val(cspFieldBackups[fieldId]);
+        field.value = cspFieldBackups[fieldId];
 
         // Update _initial_values to reflect the restored state
         const key = fieldId.replace('generate_csp_custom_', '');
@@ -104,34 +204,44 @@ function getFieldIdFromCheckboxId(checkboxId) {
 
 // get the grouped checkboxes
 function getCheckboxGroupId(checkbox) {
-    return checkbox.attr('data-depend-id').replace(/_allow_unsafe$/, '');
+    return checkbox.getAttribute('data-depend-id').replace(/_allow_unsafe$/, '');
 }
 
 // make sure we're only unchecking the proper others
 function handleNoneCSP() {
+    document.addEventListener('change', function (e) {
+        const target = e.target;
+        const dependId = target.getAttribute('data-depend-id');
 
-    jQuery(document).on('change', '[data-depend-id$="_allow_unsafe"]', function () {
-        const $changedCheckbox = jQuery(this);
-        const groupId = $changedCheckbox.attr('data-depend-id').replace('_allow_unsafe', '');
-        const isValue3 = $changedCheckbox.attr('value') === '3';
-        const isChecked = $changedCheckbox.prop('checked');
+        if (dependId && dependId.endsWith('_allow_unsafe')) {
+            const groupId = dependId.replace('_allow_unsafe', '');
+            const isValue3 = target.value === '3';
+            const isChecked = target.checked;
 
-        const $groupCheckboxes = jQuery(`[data-depend-id="${groupId}_allow_unsafe"]`);
+            const groupCheckboxes = document.querySelectorAll(`[data-depend-id="${groupId}_allow_unsafe"]`);
 
-        // Case 1: "None" (value="3") is checked → clear other checkboxes + backup & clear fields
-        if (isValue3 && isChecked) {
-            $groupCheckboxes.not($changedCheckbox).prop('checked', false);
-            backupAndClearFields($changedCheckbox);
-        }
-        // Case 2: Another checkbox is checked → uncheck "None" and restore fields
-        else if (!isValue3 && isChecked) {
-            $groupCheckboxes.filter('[value="3"]').prop('checked', false);
-            if (Object.keys(cspFieldBackups).length > 0) {
-                restoreFields($changedCheckbox);
+            // Case 1: "None" (value="3") is checked → clear other checkboxes + backup & clear fields
+            if (isValue3 && isChecked) {
+                groupCheckboxes.forEach(function (cb) {
+                    if (cb !== target) {
+                        cb.checked = false;
+                    }
+                });
+                backupAndClearFields(target);
+            }
+            // Case 2: Another checkbox is checked → uncheck "None" and restore fields
+            else if (!isValue3 && isChecked) {
+                groupCheckboxes.forEach(function (cb) {
+                    if (cb.value === '3') {
+                        cb.checked = false;
+                    }
+                });
+                if (Object.keys(cspFieldBackups).length > 0) {
+                    restoreFields(target);
+                }
             }
         }
     });
-
 }
 
 // remove the duplicates

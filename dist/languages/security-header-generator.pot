@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-03 11:55+0000\n"
+"POT-Creation-Date: 2026-02-03 13:46+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -30,872 +30,952 @@ msgstr ""
 msgid "Cannot Network Activate"
 msgstr ""
 
-#: source/work/common.php:148
+#: source/work/common.php:154
 msgid "PHP Upgrade Notice"
 msgstr ""
 
-#: source/work/common.php:149
+#: source/work/common.php:155
 msgid "To maintain the security standards of the Security Header Generator plugin this will be the final version that supports PHP versions lower than 8.2. Your site must be upgraded in order to update the plugin to future versions."
 msgstr ""
 
-#: source/work/common.php:150
+#: source/work/common.php:156
 msgid "Please see here for up to date PHP version information: https://www.php.net/supported-versions.php"
 msgstr ""
 
-#: source/work/doc.php:25
+#: source/work/doc.php:27
 msgid "This plugin generates the proper security HTTP response headers and generates a Content Security Policy if configured to do so"
 msgstr ""
 
-#: source/work/doc.php:27
+#: source/work/doc.php:29
 msgid "Install"
 msgstr ""
 
-#: source/work/doc.php:29
+#: source/work/doc.php:31
 msgid "Download the plugin, unzip it, and upload to your sites"
 msgstr ""
 
-#: source/work/doc.php:29
+#: source/work/doc.php:31
 msgid "directory"
 msgstr ""
 
-#: source/work/doc.php:31
+#: source/work/doc.php:33
 msgid "You can also upload it directly to your Plugins admin"
 msgstr ""
 
-#: source/work/doc.php:34
+#: source/work/doc.php:36
 msgid "Activate the plugin through the \"Plugins\" menu in WordPress"
 msgstr ""
 
-#: source/work/doc.php:37
+#: source/work/doc.php:39
 msgid "Usage"
 msgstr ""
 
-#: source/work/doc.php:38
+#: source/work/doc.php:40
 msgid "Head over to the admin section of your site and click \"Security Headers\", configure how you need it to be configured. The configured headers will automatically be implemented."
 msgstr ""
 
-#: source/work/doc.php:40
+#: source/work/doc.php:42
 msgid "IMPORTANT: Hosting Environment Considerations"
 msgstr ""
 
-#: source/work/doc.php:41
+#: source/work/doc.php:43
 msgid "If your hosting environment is already setting these headers, most likely your settings in this plugin will <strong>NOT</strong> override the values you specify"
 msgstr ""
 
-#: source/work/doc.php:42
+#: source/work/doc.php:44
 msgid "If this is the case, please check with your hosting company or review your server configuration for headers being set. The plugin will do its best to override them, but in some environments this is just not possible"
 msgstr ""
 
-#: source/work/doc.php:44
+#: source/work/doc.php:46
 msgid "Settings Overview"
 msgstr ""
 
-#: source/work/doc.php:47
+#: source/work/doc.php:50
 msgid "Standard Security Headers Tab"
 msgstr ""
 
-#: source/work/doc.php:48
+#: source/work/doc.php:51
 msgid "This tab controls the basic security headers that protect your website from common attacks and vulnerabilities."
 msgstr ""
 
-#: source/work/doc.php:51, source/work/doc.php:320, source/work/doc.php:421
+#: source/work/doc.php:54, source/work/doc.php:324, source/work/doc.php:456
 msgid "Apply to Admin"
 msgstr ""
 
-#: source/work/doc.php:53
+#: source/work/doc.php:56
 msgid "Choose whether to apply these security headers to the WordPress admin area in addition to your public-facing website. Enabling this provides protection for your admin panel as well."
 msgstr ""
 
-#: source/work/doc.php:57
+#: source/work/doc.php:60
 msgid "Apply to the REST API"
 msgstr ""
 
-#: source/work/doc.php:59
+#: source/work/doc.php:62
 msgid "Choose whether to apply these headers to your WordPress REST API. <strong>NOTE:</strong> Because of how WordPress works, enabling this will also apply headers to the admin areas. Test thoroughly after enabling to ensure nothing breaks."
 msgstr ""
 
-#: source/work/doc.php:63
+#: source/work/doc.php:66
 msgid "Strict Transport Security"
 msgstr ""
 
-#: source/work/doc.php:66
+#: source/work/doc.php:69
 msgid "This forces browsers to only access your site over HTTPS (secure connections), preventing downgrade attacks where someone might try to force an insecure HTTP connection."
 msgstr ""
 
-#: source/work/doc.php:69, source/work/doc.php:91, source/work/doc.php:112, source/work/doc.php:129, source/work/doc.php:146, source/work/doc.php:163, source/work/doc.php:177, source/work/doc.php:203, source/work/doc.php:215, source/work/doc.php:229, source/work/doc.php:243, source/work/doc.php:264, source/work/doc.php:286, source/work/doc.php:314, source/work/doc.php:417
+#: source/work/doc.php:72, source/work/doc.php:94, source/work/doc.php:115, source/work/doc.php:132, source/work/doc.php:149, source/work/doc.php:166, source/work/doc.php:180, source/work/doc.php:206, source/work/doc.php:218, source/work/doc.php:232, source/work/doc.php:246, source/work/doc.php:267, source/work/doc.php:289, source/work/doc.php:318, source/work/doc.php:452
 msgid "Learn more:"
 msgstr ""
 
-#: source/work/doc.php:75
+#: source/work/doc.php:78
 msgid "Configuration options:"
 msgstr ""
 
-#: source/work/doc.php:77
+#: source/work/doc.php:80
 msgid "Cache Age:"
 msgstr ""
 
-#: source/work/doc.php:77
+#: source/work/doc.php:80
 msgid "How long (in seconds) browsers should remember to only use HTTPS. Default is 31536000 (1 year)."
 msgstr ""
 
-#: source/work/doc.php:78
+#: source/work/doc.php:81
 msgid "Include Subdomains:"
 msgstr ""
 
-#: source/work/doc.php:78
+#: source/work/doc.php:81
 msgid "Apply this rule to all subdomains (like blog.yoursite.com, shop.yoursite.com). Only enable if ALL your subdomains use HTTPS."
 msgstr ""
 
-#: source/work/doc.php:79
+#: source/work/doc.php:82
 msgid "Preload:"
 msgstr ""
 
-#: source/work/doc.php:79
+#: source/work/doc.php:82
 msgid "Submit your site to browsers' preload lists for maximum security. If enabled, change Cache Age to 63072000 (2 years). Learn more:"
 msgstr ""
 
-#: source/work/doc.php:85
+#: source/work/doc.php:88
 msgid "Frame Sources"
 msgstr ""
 
-#: source/work/doc.php:88
+#: source/work/doc.php:91
 msgid "Controls whether other websites can display your site in an iframe or frame. This prevents \"clickjacking\" attacks where attackers trick users by embedding your site invisibly."
 msgstr ""
 
-#: source/work/doc.php:97, source/work/doc.php:249, source/work/doc.php:270, source/work/doc.php:292
+#: source/work/doc.php:100, source/work/doc.php:252, source/work/doc.php:273, source/work/doc.php:295
 msgid "Options:"
 msgstr ""
 
-#: source/work/doc.php:99
+#: source/work/doc.php:102
 msgid "Block all websites from framing your site (most secure)"
 msgstr ""
 
-#: source/work/doc.php:100
+#: source/work/doc.php:103
 msgid "Only allow your own domain to frame your site (useful if you need iframes on your own site)"
 msgstr ""
 
-#: source/work/doc.php:106
+#: source/work/doc.php:109
 msgid "Access Control Methods"
 msgstr ""
 
-#: source/work/doc.php:109
+#: source/work/doc.php:112
 msgid "Controls which HTTP request methods (like GET, POST, etc.) external websites can use when accessing your site. This is useful for API security."
 msgstr ""
 
-#: source/work/doc.php:118
+#: source/work/doc.php:121
 msgid "Select which methods to allow. Most public websites need at least GET (for viewing pages). Clicking \"Allow All\" will check or uncheck all options. <strong>Note:</strong> Unselected methods will be blocked."
 msgstr ""
 
-#: source/work/doc.php:123
+#: source/work/doc.php:126
 msgid "Access Control Credentials"
 msgstr ""
 
-#: source/work/doc.php:126
+#: source/work/doc.php:129
 msgid "Allows browsers to send cookies and authentication information when JavaScript makes requests to your site. Useful for AJAX-based features and API calls that require user authentication."
 msgstr ""
 
-#: source/work/doc.php:135
+#: source/work/doc.php:138
 msgid "Default is Yes. Most modern websites need this enabled for JavaScript-driven features to work properly."
 msgstr ""
 
-#: source/work/doc.php:140
+#: source/work/doc.php:143
 msgid "Access Control Origin"
 msgstr ""
 
-#: source/work/doc.php:143
+#: source/work/doc.php:146
 msgid "Specifies which external websites can access your site's resources. This helps prevent unauthorized cross-site requests."
 msgstr ""
 
-#: source/work/doc.php:152
+#: source/work/doc.php:155
 msgid "Enter a specific domain (like <code>https://example.com</code>) or use <code>*</code> to allow all domains. If left empty, defaults to <code>*</code>."
 msgstr ""
 
-#: source/work/doc.php:157
+#: source/work/doc.php:160
 msgid "Prevent MimeType Sniffing"
 msgstr ""
 
-#: source/work/doc.php:160
+#: source/work/doc.php:163
 msgid "Stops browsers from trying to \"guess\" the type of files you serve. This prevents attackers from disguising malicious files as safe ones."
 msgstr ""
 
-#: source/work/doc.php:171
+#: source/work/doc.php:174
 msgid "Origin Referrers"
 msgstr ""
 
-#: source/work/doc.php:174
+#: source/work/doc.php:177
 msgid "Controls how much information about your site is shared when users click links to external websites. This protects user privacy."
 msgstr ""
 
-#: source/work/doc.php:183
+#: source/work/doc.php:186
 msgid "Policy options (from most private to least private):"
 msgstr ""
 
-#: source/work/doc.php:185
+#: source/work/doc.php:188
 msgid "Share no information at all"
 msgstr ""
 
-#: source/work/doc.php:186
+#: source/work/doc.php:189
 msgid "Only share your domain name, only on secure (HTTPS) connections (recommended)"
 msgstr ""
 
-#: source/work/doc.php:187
+#: source/work/doc.php:190
 msgid "Only share your domain name"
 msgstr ""
 
-#: source/work/doc.php:188
+#: source/work/doc.php:191
 msgid "Share full URL within your own site, but only domain for external sites"
 msgstr ""
 
-#: source/work/doc.php:189
+#: source/work/doc.php:192
 msgid "Share full URL on your site, domain only for external sites (on secure connections)"
 msgstr ""
 
-#: source/work/doc.php:190
+#: source/work/doc.php:193
 msgid "Share full URL on your site, domain only for external sites"
 msgstr ""
 
-#: source/work/doc.php:191
+#: source/work/doc.php:194
 msgid "Share full URL except when moving from HTTPS to HTTP"
 msgstr ""
 
-#: source/work/doc.php:192
+#: source/work/doc.php:195
 msgid "Always share full URL (least private)"
 msgstr ""
 
-#: source/work/doc.php:198
+#: source/work/doc.php:201
 msgid "Force Downloads"
 msgstr ""
 
-#: source/work/doc.php:201
+#: source/work/doc.php:204
 msgid "Forces certain files to be downloaded rather than opened directly in the browser. This adds an extra layer of security for file handling."
 msgstr ""
 
-#: source/work/doc.php:209
+#: source/work/doc.php:212
 msgid "Cross Domain Origins"
 msgstr ""
 
-#: source/work/doc.php:212
+#: source/work/doc.php:215
 msgid "Blocks cross-domain access for PDFs and Flash content embedded on your site. This prevents certain types of attacks using these file types."
 msgstr ""
 
-#: source/work/doc.php:223
+#: source/work/doc.php:226
 msgid "Upgrade Insecure Requests"
 msgstr ""
 
-#: source/work/doc.php:226
+#: source/work/doc.php:229
 msgid "Automatically upgrades all insecure (HTTP) requests to secure (HTTPS) requests. This ensures all resources load securely even if old links reference HTTP."
 msgstr ""
 
-#: source/work/doc.php:237
+#: source/work/doc.php:240
 msgid "Cross Origin Embedder Policy"
 msgstr ""
 
-#: source/work/doc.php:240
+#: source/work/doc.php:243
 msgid "Controls how your site can embed resources from other domains. This prevents certain types of attacks involving embedded content."
 msgstr ""
 
-#: source/work/doc.php:251
+#: source/work/doc.php:254
 msgid "Allow embedding external resources without explicit permission (default, less secure)"
 msgstr ""
 
-#: source/work/doc.php:252
+#: source/work/doc.php:255
 msgid "Only allow resources explicitly marked as embeddable (more secure, may require configuration)"
 msgstr ""
 
-#: source/work/doc.php:258
+#: source/work/doc.php:261
 msgid "Cross Origin Resource Policy"
 msgstr ""
 
-#: source/work/doc.php:261
+#: source/work/doc.php:264
 msgid "Controls which websites can load resources (images, scripts, etc.) from your site. This prevents unauthorized use of your content."
 msgstr ""
 
-#: source/work/doc.php:272
+#: source/work/doc.php:275
 msgid "Only your exact domain can use your resources (most secure)"
 msgstr ""
 
-#: source/work/doc.php:273
+#: source/work/doc.php:276
 msgid "Your domain and subdomains can use your resources"
 msgstr ""
 
-#: source/work/doc.php:274
+#: source/work/doc.php:277
 msgid "Any website can use your resources (least secure)"
 msgstr ""
 
-#: source/work/doc.php:280
+#: source/work/doc.php:283
 msgid "Cross Origin Opener Policy"
 msgstr ""
 
-#: source/work/doc.php:283
+#: source/work/doc.php:286
 msgid "Controls whether other websites can access your site when opened in popups or new tabs. This prevents certain cross-site attacks."
 msgstr ""
 
-#: source/work/doc.php:294
+#: source/work/doc.php:297
 msgid "Allow normal popup/tab behavior (default)"
 msgstr ""
 
-#: source/work/doc.php:295
+#: source/work/doc.php:298
 msgid "Allow popups but isolate from other origins"
 msgstr ""
 
-#: source/work/doc.php:296
+#: source/work/doc.php:299
 msgid "Complete isolation from other origins (most secure)"
 msgstr ""
 
-#: source/work/doc.php:304
+#: source/work/doc.php:308
 msgid "Content Security Policy Tab"
 msgstr ""
 
-#: source/work/doc.php:305
+#: source/work/doc.php:309
 msgid "Content Security Policy (CSP) is an advanced security feature that controls which external resources your website can load. This prevents many types of attacks including Cross-Site Scripting (XSS)."
 msgstr ""
 
-#: source/work/doc.php:308
+#: source/work/doc.php:312
 msgid "Generate CSP"
 msgstr ""
 
-#: source/work/doc.php:311
+#: source/work/doc.php:315
 msgid "Enable this to create a Content Security Policy for your site. This will show many additional fields where you can specify which external resources (scripts, styles, images, etc.) are allowed to load."
 msgstr ""
 
-#: source/work/doc.php:313
+#: source/work/doc.php:317
 msgid "Enter external domains in the Source fields using a space-separated list (example: <code>cdn.example.com fonts.google.com</code>)"
 msgstr ""
 
-#: source/work/doc.php:322
+#: source/work/doc.php:326
 msgid "Choose whether to apply the Content Security Policy to your WordPress admin area as well as the public site. <strong>Warning:</strong> This may break admin features if not configured correctly. Test thoroughly."
 msgstr ""
 
-#: source/work/doc.php:326
-msgid "Include WordPress Defaults"
-msgstr ""
-
-#: source/work/doc.php:329
-msgid "This toggle controls whether WordPress default domains are <strong>added to</strong> your custom values. It does NOT replace your custom settings."
+#: source/work/doc.php:330
+msgid "CSP Presets"
 msgstr ""
 
 #: source/work/doc.php:332
-msgid "How it works:"
+msgid "Quick start templates are available to help you configure CSP for common scenarios:"
 msgstr ""
 
 #: source/work/doc.php:334
-msgid "When ON:"
+msgid "WordPress Core Only (Strict):"
 msgstr ""
 
-#: source/work/doc.php:334
-msgid "Your custom domains PLUS WordPress default domains are included in the CSP"
+#: source/work/doc.php:335, source/work/inc/kcp-cspgen-presets.php:41
+msgid "Minimal external sources - only WordPress.org, Gravatar, and Google Fonts. Good starting point for basic sites."
 msgstr ""
 
-#: source/work/doc.php:335
-msgid "When OFF:"
+#: source/work/doc.php:338
+msgid "WooCommerce Compatible:"
 msgstr ""
 
-#: source/work/doc.php:335
-msgid "Only your custom domains are included in the CSP"
+#: source/work/doc.php:339, source/work/inc/kcp-cspgen-presets.php:46
+msgid "WordPress Core plus payment gateways (PayPal, Stripe), common WooCommerce extensions, and analytics."
 msgstr ""
 
-#: source/work/doc.php:339
-msgid "WordPress default domains that will be added when enabled:"
+#: source/work/doc.php:342
+msgid "Page Builder Friendly:"
 msgstr ""
 
-#: source/work/doc.php:353
-msgid "Understanding CSP Directive Configuration"
+#: source/work/doc.php:343, source/work/inc/kcp-cspgen-presets.php:51
+msgid "WordPress Core plus Google Fonts, video embeds, CDN sources. Allows inline styles/scripts required for Elementor/Divi."
 msgstr ""
 
-#: source/work/doc.php:355
-msgid "Each CSP directive (like script-src, style-src, etc.) has two configuration sections:"
+#: source/work/doc.php:346
+msgid "Locked Down (Maximum Security):"
 msgstr ""
 
-#: source/work/doc.php:357
-msgid "Source Field (Left Side):"
+#: source/work/doc.php:347, source/work/inc/kcp-cspgen-presets.php:56
+msgid "Self only for most directives. No inline/eval. Minimal external sources. Best for static/admin-only sites."
 msgstr ""
 
-#: source/work/doc.php:359
-msgid "Enter external domains that should be allowed for this type of resource"
+#: source/work/doc.php:350
+msgid "Development/Testing:"
 msgstr ""
 
-#: source/work/doc.php:360
-msgid "Example for scripts: <code>cdn.jsdelivr.net ajax.googleapis.com</code>"
+#: source/work/doc.php:351, source/work/inc/kcp-cspgen-presets.php:61
+msgid "Permissive settings. Allows localhost and common development tools. Good for staging environments."
 msgstr ""
 
-#: source/work/doc.php:361
-msgid "Separate multiple domains with spaces"
-msgstr ""
-
-#: source/work/doc.php:365
-msgid "Extra Settings Checkboxes (Right Side):"
-msgstr ""
-
-#: source/work/doc.php:367
-msgid "Allow resources from your own domain (recommended for most directives)"
-msgstr ""
-
-#: source/work/doc.php:368
-msgid "Allow inline styles/scripts embedded in your HTML. <strong>Warning:</strong> This reduces security and should only be used if necessary."
-msgstr ""
-
-#: source/work/doc.php:369
-msgid "Allow JavaScript eval() function. <strong>Warning:</strong> This reduces security and should only be used if necessary."
-msgstr ""
-
-#: source/work/doc.php:370
-msgid "Block ALL sources for this directive (overrides everything else). Use this to completely disable a resource type."
-msgstr ""
-
-#: source/work/doc.php:376
-msgid "How WordPress Defaults Toggle Affects Settings"
-msgstr ""
-
-#: source/work/doc.php:378
-msgid "When you turn WordPress Defaults ON:"
-msgstr ""
-
-#: source/work/doc.php:380
-msgid "WordPress default domains are ADDED to your Source field values"
-msgstr ""
-
-#: source/work/doc.php:381
-msgid "Extra Settings checkboxes are temporarily set (usually \"Self\" is checked)"
-msgstr ""
-
-#: source/work/doc.php:382
-msgid "Your original checkbox selections are saved in the background"
-msgstr ""
-
-#: source/work/doc.php:385
-msgid "When you turn WordPress Defaults OFF:"
-msgstr ""
-
-#: source/work/doc.php:387
-msgid "WordPress default domains are removed"
-msgstr ""
-
-#: source/work/doc.php:388
-msgid "Your original Extra Settings checkbox selections are restored"
-msgstr ""
-
-#: source/work/doc.php:392
+#: source/work/doc.php:354, source/work/doc.php:426
 msgid "Important:"
 msgstr ""
 
-#: source/work/doc.php:392
-msgid "Changes only take effect when you click \"Save Settings\". Toggling WordPress Defaults on/off without saving will not permanently change your configuration."
+#: source/work/doc.php:355
+msgid "Selecting a preset will immediately populate all CSP fields and clear any previous values. Make sure to save your current configuration before trying a preset if you want to keep it."
+msgstr ""
+
+#: source/work/doc.php:360
+msgid "Include WordPress Defaults"
+msgstr ""
+
+#: source/work/doc.php:363
+msgid "This toggle controls whether WordPress default domains are <strong>added to</strong> your custom values. It does NOT replace your custom settings."
+msgstr ""
+
+#: source/work/doc.php:366
+msgid "How it works:"
+msgstr ""
+
+#: source/work/doc.php:368
+msgid "When ON:"
+msgstr ""
+
+#: source/work/doc.php:368
+msgid "Your custom domains PLUS WordPress default domains are included in the CSP"
+msgstr ""
+
+#: source/work/doc.php:369
+msgid "When OFF:"
+msgstr ""
+
+#: source/work/doc.php:369
+msgid "Only your custom domains are included in the CSP"
+msgstr ""
+
+#: source/work/doc.php:373
+msgid "WordPress default domains that will be added when enabled:"
+msgstr ""
+
+#: source/work/doc.php:387
+msgid "Understanding CSP Directive Configuration"
+msgstr ""
+
+#: source/work/doc.php:389
+msgid "Each CSP directive (like script-src, style-src, etc.) has two configuration sections:"
+msgstr ""
+
+#: source/work/doc.php:391
+msgid "Source Field (Left Side):"
+msgstr ""
+
+#: source/work/doc.php:393
+msgid "Enter external domains that should be allowed for this type of resource"
+msgstr ""
+
+#: source/work/doc.php:394
+msgid "Example for scripts: <code>cdn.jsdelivr.net ajax.googleapis.com</code>"
+msgstr ""
+
+#: source/work/doc.php:395
+msgid "Separate multiple domains with spaces"
 msgstr ""
 
 #: source/work/doc.php:399
-msgid "Permissions Policy Tab"
+msgid "Extra Settings Checkboxes (Right Side):"
 msgstr ""
 
-#: source/work/doc.php:400
-msgid "Permissions Policy (formerly Feature Policy) controls which browser features and APIs your website and embedded content can use. This prevents malicious scripts from accessing sensitive features like camera, microphone, or geolocation."
+#: source/work/doc.php:401
+msgid "Allow resources from your own domain (recommended for most directives)"
+msgstr ""
+
+#: source/work/doc.php:402
+msgid "Allow inline styles/scripts embedded in your HTML. <strong>Warning:</strong> This reduces security and should only be used if necessary."
 msgstr ""
 
 #: source/work/doc.php:403
-msgid "Configure Permissions Policy"
+msgid "Allow JavaScript eval() function. <strong>Warning:</strong> This reduces security and should only be used if necessary."
 msgstr ""
 
-#: source/work/doc.php:406
-msgid "Enable this to control browser feature permissions. For each feature, you can choose:"
-msgstr ""
-
-#: source/work/doc.php:408
-msgid "Block this feature completely"
-msgstr ""
-
-#: source/work/doc.php:409
-msgid "Allow from any domain (least secure)"
+#: source/work/doc.php:404
+msgid "Block ALL sources for this directive (overrides everything else). Use this to completely disable a resource type."
 msgstr ""
 
 #: source/work/doc.php:410
-msgid "Only allow from your own domain (recommended)"
+msgid "How WordPress Defaults Toggle Affects Settings"
 msgstr ""
 
-#: source/work/doc.php:411
-msgid "Allow from specific domains you list"
+#: source/work/doc.php:412
+msgid "When you turn WordPress Defaults ON:"
+msgstr ""
+
+#: source/work/doc.php:414
+msgid "WordPress default domains are ADDED to your Source field values"
 msgstr ""
 
 #: source/work/doc.php:415
-msgid "If you select \"Source\", enter full URLs with protocol: <code>https://example.com https://trusted-site.com</code>"
+msgid "Extra Settings checkboxes are temporarily set (usually \"Self\" is checked)"
 msgstr ""
 
-#: source/work/doc.php:423
-msgid "Choose whether to apply Permissions Policy to your WordPress admin area as well as the public site."
+#: source/work/doc.php:416
+msgid "Your original checkbox selections are saved in the background"
 msgstr ""
 
-#: source/work/doc.php:431
-msgid "Technical Reference: CSP Directives"
+#: source/work/doc.php:419
+msgid "When you turn WordPress Defaults OFF:"
 msgstr ""
 
-#: source/work/doc.php:432
-msgid "This section provides technical details about each Content Security Policy directive. These are automatically generated based on the plugin configuration."
+#: source/work/doc.php:421
+msgid "WordPress default domains are removed"
+msgstr ""
+
+#: source/work/doc.php:422
+msgid "Your original Extra Settings checkbox selections are restored"
+msgstr ""
+
+#: source/work/doc.php:426
+msgid "Changes only take effect when you click \"Save Settings\". Toggling WordPress Defaults on/off without saving will not permanently change your configuration."
+msgstr ""
+
+#: source/work/doc.php:434
+msgid "Permissions Policy Tab"
+msgstr ""
+
+#: source/work/doc.php:435
+msgid "Permissions Policy (formerly Feature Policy) controls which browser features and APIs your website and embedded content can use. This prevents malicious scripts from accessing sensitive features like camera, microphone, or geolocation."
+msgstr ""
+
+#: source/work/doc.php:438
+msgid "Configure Permissions Policy"
+msgstr ""
+
+#: source/work/doc.php:441
+msgid "Enable this to control browser feature permissions. For each feature, you can choose:"
+msgstr ""
+
+#: source/work/doc.php:443
+msgid "Block this feature completely"
+msgstr ""
+
+#: source/work/doc.php:444
+msgid "Allow from any domain (least secure)"
+msgstr ""
+
+#: source/work/doc.php:445
+msgid "Only allow from your own domain (recommended)"
+msgstr ""
+
+#: source/work/doc.php:446
+msgid "Allow from specific domains you list"
 msgstr ""
 
 #: source/work/doc.php:450
+msgid "If you select \"Source\", enter full URLs with protocol: <code>https://example.com https://trusted-site.com</code>"
+msgstr ""
+
+#: source/work/doc.php:458
+msgid "Choose whether to apply Permissions Policy to your WordPress admin area as well as the public site."
+msgstr ""
+
+#: source/work/doc.php:466
+msgid "Technical Reference: CSP Directives"
+msgstr ""
+
+#: source/work/doc.php:467
+msgid "This section provides technical details about each Content Security Policy directive. These are automatically generated based on the plugin configuration."
+msgstr ""
+
+#: source/work/doc.php:485
 msgid "Technical Reference: Permissions Policy Directives"
 msgstr ""
 
-#: source/work/doc.php:451
+#: source/work/doc.php:486
 msgid "This section provides technical details about each Permissions Policy directive. Note that browser support varies by directive."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:80
+#: source/work/inc/kcp-cspgen-configs.php:49
 msgid "Base URI"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:81
+#: source/work/inc/kcp-cspgen-configs.php:50
 msgid "Restricts the URLs which can be used in a document's <base> element."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:85
+#: source/work/inc/kcp-cspgen-configs.php:54
 msgid "Child Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:86
+#: source/work/inc/kcp-cspgen-configs.php:55
 msgid "Defines the valid sources for web workers and nested browsing contexts."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:90
+#: source/work/inc/kcp-cspgen-configs.php:59
 msgid "Connect/Ajax/XHR Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:91
+#: source/work/inc/kcp-cspgen-configs.php:60
 msgid "Restricts the URLs which can be loaded using script interfaces"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:95
+#: source/work/inc/kcp-cspgen-configs.php:64
 msgid "Default Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:96
+#: source/work/inc/kcp-cspgen-configs.php:65
 msgid "Serves as a fallback for the other fetch directives."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:100
+#: source/work/inc/kcp-cspgen-configs.php:69
 msgid "Font Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:101
+#: source/work/inc/kcp-cspgen-configs.php:70
 msgid "Specifies valid sources for fonts loaded using @font-face."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:105
+#: source/work/inc/kcp-cspgen-configs.php:74
 msgid "Form Action"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:106
+#: source/work/inc/kcp-cspgen-configs.php:75
 msgid "Restricts the URLs which can be used as the target of form submissions."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:110
+#: source/work/inc/kcp-cspgen-configs.php:79
 msgid "Frame Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:111
+#: source/work/inc/kcp-cspgen-configs.php:80
 msgid "Specifies valid sources for nested browsing contexts."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:115
+#: source/work/inc/kcp-cspgen-configs.php:84
 msgid "Frame Ancestors"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:116
+#: source/work/inc/kcp-cspgen-configs.php:85
 msgid "Specifies valid parents that may embed a page."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:120
+#: source/work/inc/kcp-cspgen-configs.php:89
 msgid "Image Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:121
+#: source/work/inc/kcp-cspgen-configs.php:90
 msgid "Specifies valid sources of images and favicons."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:125
+#: source/work/inc/kcp-cspgen-configs.php:94
 msgid "Manifest Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:126
+#: source/work/inc/kcp-cspgen-configs.php:95
 msgid "Specifies valid sources of application manifest files."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:130
+#: source/work/inc/kcp-cspgen-configs.php:99
 msgid "Media Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:131
+#: source/work/inc/kcp-cspgen-configs.php:100
 msgid "Specifies valid sources for loading media."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:135
+#: source/work/inc/kcp-cspgen-configs.php:104
 msgid "Object Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:136
+#: source/work/inc/kcp-cspgen-configs.php:105
 msgid "Specifies valid sources for object, embed, and applet elements."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:140
+#: source/work/inc/kcp-cspgen-configs.php:109
+msgid "Report To"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-configs.php:110
+msgid "The Content-Security-Policy Report-To HTTP response header field instructs the user agent to store reporting endpoints for an origin."
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-configs.php:114
 msgid "Sandbox"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:141
+#: source/work/inc/kcp-cspgen-configs.php:115
 msgid "Applies restrictions to a page's actions."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:145
+#: source/work/inc/kcp-cspgen-configs.php:119
 msgid "Script Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:146
+#: source/work/inc/kcp-cspgen-configs.php:120
 msgid "Specifies valid sources for JavaScript."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:150
+#: source/work/inc/kcp-cspgen-configs.php:124
 msgid "Script Source Elements"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:151
+#: source/work/inc/kcp-cspgen-configs.php:125
 msgid "Specifies valid sources for JavaScript script elements."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:155
+#: source/work/inc/kcp-cspgen-configs.php:129
 msgid "Script Source Attributes"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:156
+#: source/work/inc/kcp-cspgen-configs.php:130
 msgid "Specifies valid sources for JavaScript inline event handlers."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:160
+#: source/work/inc/kcp-cspgen-configs.php:134
 msgid "Style Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:161
+#: source/work/inc/kcp-cspgen-configs.php:135
 msgid "Specifies valid sources for stylesheets."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:165
+#: source/work/inc/kcp-cspgen-configs.php:139
 msgid "Style Source Elements"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:166
+#: source/work/inc/kcp-cspgen-configs.php:140
 msgid "Specifies valid sources for stylesheet elements."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:170
+#: source/work/inc/kcp-cspgen-configs.php:144
 msgid "Style Source Attributes"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:171
+#: source/work/inc/kcp-cspgen-configs.php:145
 msgid "Specifies valid sources for inline styles."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:175
+#: source/work/inc/kcp-cspgen-configs.php:149
 msgid "Worker Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:176
+#: source/work/inc/kcp-cspgen-configs.php:150
 msgid "Specifies valid sources for Worker scripts."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:201
+#: source/work/inc/kcp-cspgen-configs.php:175
 msgid "Accelerometer"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:202
+#: source/work/inc/kcp-cspgen-configs.php:176
 msgid "Controls access to the Accelerometer interface."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:206
+#: source/work/inc/kcp-cspgen-configs.php:180
 msgid "Ambient Light Sensor"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:207
+#: source/work/inc/kcp-cspgen-configs.php:181
 msgid "Controls access to the AmbientLightSensor interface."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:211
+#: source/work/inc/kcp-cspgen-configs.php:185
 msgid "Autoplay"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:212
+#: source/work/inc/kcp-cspgen-configs.php:186
 msgid "Controls whether media can autoplay."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:216
+#: source/work/inc/kcp-cspgen-configs.php:190
 msgid "Camera"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:217
+#: source/work/inc/kcp-cspgen-configs.php:191
 msgid "Controls access to video input devices."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:221
+#: source/work/inc/kcp-cspgen-configs.php:195
 msgid "Display Capture"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:222
+#: source/work/inc/kcp-cspgen-configs.php:196
 msgid "Controls access to screen capture."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:226
+#: source/work/inc/kcp-cspgen-configs.php:200
 msgid "Encrypted Media"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:227
+#: source/work/inc/kcp-cspgen-configs.php:201
 msgid "Controls access to the Encrypted Media Extensions API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:231
+#: source/work/inc/kcp-cspgen-configs.php:205
 msgid "Full Screen"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:232
+#: source/work/inc/kcp-cspgen-configs.php:206
 msgid "Controls access to requestFullScreen."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:236
+#: source/work/inc/kcp-cspgen-configs.php:210
 msgid "Geo Location"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:237
+#: source/work/inc/kcp-cspgen-configs.php:211
 msgid "Controls access to the Geolocation Interface."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:241
+#: source/work/inc/kcp-cspgen-configs.php:215
 msgid "Gyroscope"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:242
+#: source/work/inc/kcp-cspgen-configs.php:216
 msgid "Controls access to the Gyroscope interface."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:246
+#: source/work/inc/kcp-cspgen-configs.php:220
 msgid "Human Interface Device"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:247
+#: source/work/inc/kcp-cspgen-configs.php:221
 msgid "Controls access to the WebHID API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:251
+#: source/work/inc/kcp-cspgen-configs.php:225
 msgid "Identity Credentials Get"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:252
+#: source/work/inc/kcp-cspgen-configs.php:226
 msgid "Controls access to the Federated Credential Management API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:256
+#: source/work/inc/kcp-cspgen-configs.php:230
 msgid "Idle Detection"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:257
+#: source/work/inc/kcp-cspgen-configs.php:231
 msgid "Controls access to the Idle Detection API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:261
+#: source/work/inc/kcp-cspgen-configs.php:235
 msgid "Magnetometer"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:262
+#: source/work/inc/kcp-cspgen-configs.php:236
 msgid "Controls access to the Magnetometer interface."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:266
+#: source/work/inc/kcp-cspgen-configs.php:240
 msgid "Microphone"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:267
+#: source/work/inc/kcp-cspgen-configs.php:241
 msgid "Controls access to audio input devices."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:271
+#: source/work/inc/kcp-cspgen-configs.php:245
 msgid "MIDI"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:272
+#: source/work/inc/kcp-cspgen-configs.php:246
 msgid "Controls access to the Web MIDI API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:276
+#: source/work/inc/kcp-cspgen-configs.php:250
 msgid "Payment"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:277
+#: source/work/inc/kcp-cspgen-configs.php:251
 msgid "Controls access to the Payment Request API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:281
+#: source/work/inc/kcp-cspgen-configs.php:255
 msgid "Picture in Picture"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:282
+#: source/work/inc/kcp-cspgen-configs.php:256
 msgid "Controls access to Picture-in-Picture mode."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:286
+#: source/work/inc/kcp-cspgen-configs.php:260
 msgid "Publickey Credentials Create"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:287
+#: source/work/inc/kcp-cspgen-configs.php:261
 msgid "Controls creation of WebAuthn credentials."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:291
+#: source/work/inc/kcp-cspgen-configs.php:265
 msgid "Publickey Credentials Get"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:292
+#: source/work/inc/kcp-cspgen-configs.php:266
 msgid "Controls retrieval of WebAuthn credentials."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:296
+#: source/work/inc/kcp-cspgen-configs.php:270
 msgid "Screen Wake Lock"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:297
+#: source/work/inc/kcp-cspgen-configs.php:271
 msgid "Controls access to Screen Wake Lock API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:301
+#: source/work/inc/kcp-cspgen-configs.php:275
 msgid "Serial"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:302
+#: source/work/inc/kcp-cspgen-configs.php:276
 msgid "Controls access to the Web Serial API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:306
+#: source/work/inc/kcp-cspgen-configs.php:280
 msgid "Sync XHR"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:307
+#: source/work/inc/kcp-cspgen-configs.php:281
 msgid "Controls synchronous XMLHttpRequest requests."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:311
+#: source/work/inc/kcp-cspgen-configs.php:285
 msgid "USB"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:312
+#: source/work/inc/kcp-cspgen-configs.php:286
 msgid "Controls access to the WebUSB API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:316
+#: source/work/inc/kcp-cspgen-configs.php:290
 msgid "Web Share"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:317
+#: source/work/inc/kcp-cspgen-configs.php:291
 msgid "Controls access to the Web Share API."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:321
+#: source/work/inc/kcp-cspgen-configs.php:295
 msgid "XR Spatial Tracking"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-config.php:322
+#: source/work/inc/kcp-cspgen-configs.php:296
 msgid "Controls access to the WebXR Device API."
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-presets.php:40
+msgid "WordPress Core Only (Strict)"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-presets.php:45
+msgid "WooCommerce Compatible"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-presets.php:50
+msgid "Page Builder Friendly"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-presets.php:55
+msgid "Locked Down (Maximum Security)"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-presets.php:60
+msgid "Development/Testing"
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-settings.php:78
@@ -938,7 +1018,7 @@ msgstr ""
 msgid "Export/Import Settings"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:218, source/work/inc/kcp-cspgen-settings.php:542, source/work/inc/kcp-cspgen-settings.php:708
+#: source/work/inc/kcp-cspgen-settings.php:218, source/work/inc/kcp-cspgen-settings.php:542, source/work/inc/kcp-cspgen-settings.php:720
 msgid "Apply to Admin?"
 msgstr ""
 
@@ -1223,137 +1303,149 @@ msgid "This will attempt to apply the Content Security Policy Headers to the adm
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-settings.php:552
-msgid "Basic Auth Username"
+msgid "Apply a Preset?"
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-settings.php:553
-msgid "Enter your Basic Auth Username, if your site has this protection. (aka: htaccess protection, or htpasswd"
+msgid "Select a preset to start with"
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-settings.php:564
-msgid "Basic Auth Password"
+msgid "Basic Auth Username"
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-settings.php:565
+msgid "Enter your Basic Auth Username, if your site has this protection. (aka: htaccess protection, or htpasswd"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-settings.php:576
+msgid "Basic Auth Password"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-settings.php:577
 msgid "Enter your Basic Auth Password, if your site has this protection. (aka: htaccess protection, or htpasswd"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:656
+#: source/work/inc/kcp-cspgen-settings.php:668
 msgid "Extra Settings?"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:657
+#: source/work/inc/kcp-cspgen-settings.php:669
 msgid "Injects the proper attribute when selected"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:589
+#: source/work/inc/kcp-cspgen-settings.php:601
 msgid "allow-downloads"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:590
+#: source/work/inc/kcp-cspgen-settings.php:602
 msgid "allow-downloads-without-user-activation"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:591
+#: source/work/inc/kcp-cspgen-settings.php:603
 msgid "allow-forms"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:592
+#: source/work/inc/kcp-cspgen-settings.php:604
 msgid "allow-modals"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:593
+#: source/work/inc/kcp-cspgen-settings.php:605
 msgid "allow-orientation-lock"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:594
+#: source/work/inc/kcp-cspgen-settings.php:606
 msgid "allow-pointer-lock"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:595
+#: source/work/inc/kcp-cspgen-settings.php:607
 msgid "allow-popups"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:596
+#: source/work/inc/kcp-cspgen-settings.php:608
 msgid "allow-popups-to-escape-sandbox"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:597
+#: source/work/inc/kcp-cspgen-settings.php:609
 msgid "allow-presentation"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:598
+#: source/work/inc/kcp-cspgen-settings.php:610
 msgid "allow-same-origin"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:599
+#: source/work/inc/kcp-cspgen-settings.php:611
 msgid "allow-scripts"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:600
+#: source/work/inc/kcp-cspgen-settings.php:612
 msgid "allow-storage-access-by-user-activation"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:601
+#: source/work/inc/kcp-cspgen-settings.php:613
 msgid "allow-top-navigation"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:602
+#: source/work/inc/kcp-cspgen-settings.php:614
 msgid "allow-top-navigation-by-user-activation"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:603
+#: source/work/inc/kcp-cspgen-settings.php:615
 msgid "allow-top-navigation-to-custom-protocols"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:699
+#: source/work/inc/kcp-cspgen-settings.php:711
 msgid "Do you want to configure a Feature Policy (aka Permissions-Policy)?"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:700
+#: source/work/inc/kcp-cspgen-settings.php:712
 msgid "Setting this will add another header to configure browser and frame permissions. See here for more information: <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy\" target=\"_blank\">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy</a><br /><br />NOTE:  Some of these features are not implemented for all browsers, and/or could be experimental.  Please read through that information and decide what features you need, and what audiences you need to apply to."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:709
+#: source/work/inc/kcp-cspgen-settings.php:721
 msgid "This will attempt to apply the Feature Policy Headers to the admin side of your site in addition to the front-end."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:718
+#: source/work/inc/kcp-cspgen-settings.php:730
 msgid "Allowed Policy Directives"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:719
+#: source/work/inc/kcp-cspgen-settings.php:731
 msgid "Select the policy directives you would like to allow, along with its origins. See here for more information: <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives\" target=\"_blank\">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives</a>"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:761, source/work/inc/kcp-cspgen-settings.php:847
+#: source/work/inc/kcp-cspgen-settings.php:773, source/work/inc/kcp-cspgen-settings.php:859
 msgid "None"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:762
+#: source/work/inc/kcp-cspgen-settings.php:774
 msgid "Any"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:763, source/work/inc/kcp-cspgen-settings.php:846
+#: source/work/inc/kcp-cspgen-settings.php:775, source/work/inc/kcp-cspgen-settings.php:858
 msgid "Self"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:764
+#: source/work/inc/kcp-cspgen-settings.php:776
 msgid "Source"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:774
+#: source/work/inc/kcp-cspgen-settings.php:786
 msgid "Source Domains"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:775
+#: source/work/inc/kcp-cspgen-settings.php:787
 msgid "Space-delimited list of allowed source URIs. Please make sure they include the http(s):// and each is enclosed in quotes."
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:841
+#: source/work/inc/kcp-cspgen-settings.php:853
 msgid "Inline"
 msgstr ""
 
-#: source/work/inc/kcp-cspgen-settings.php:842
+#: source/work/inc/kcp-cspgen-settings.php:854
 msgid "Eval"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-settings.php:870
+msgid "No Preset"
 msgstr ""

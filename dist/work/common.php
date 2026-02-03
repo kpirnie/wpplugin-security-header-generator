@@ -127,7 +127,13 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
         wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, time());
 
         // register the unminified script
-        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), null, time());
+        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), time());
+
+        // localize script data
+        wp_localize_script('kpsh_js', 'wpshPresets', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('wpsh_presets')
+        ));
 
         // enqueue it
         wp_enqueue_style('kpsh_css');
@@ -152,6 +158,32 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
 <?php
         }
     }, PHP_INT_MAX);
+
+    // AJAX handler for loading presets
+    add_action('wp_ajax_wpsh_load_preset', function (): void {
+        check_ajax_referer('wpsh_presets', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Insufficient permissions');
+        }
+
+        $preset_key = sanitize_text_field($_POST['preset_key'] ?? '');
+
+        if (empty($preset_key)) {
+            wp_send_json_error('No preset key provided');
+        }
+
+        $presets = KCP_CSPGEN_Presets::get_presets();
+
+        if (!isset($presets[$preset_key])) {
+            wp_send_json_error('Invalid preset key');
+        }
+
+        wp_send_json_success(array(
+            'settings' => $presets[$preset_key]['settings']
+        ));
+    });
+
 
     // bring in our header functionality and apply them
     $_headers = new KCP_CSPGEN_Headers();

@@ -1,7 +1,7 @@
 <?php
 
 // We don't want to allow direct access to this
-defined( 'ABSPATH' ) OR die( 'No direct script access allowed' );
+defined('ABSPATH') or die('No direct script access allowed');
 
 /*
 Plugin Name: Security Header Generator
@@ -11,20 +11,20 @@ Author: Kevin C. Pirnie
 Author URI: https://kevinpirnie.com/
 Requires at least: 6.0.9
 Requires PHP: 8.2
-Version: 5.3.83
+Version: 5.4.77
 Text Domain: security-header-generator
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 */
 
 // setup the full page to this plugin
-define( 'WPSH_PATH', dirname( __FILE__ ) );
+define('WPSH_PATH', dirname(__FILE__));
 
 // setup the directory name
-define( 'WPSH_DIRNAME', basename( dirname( __FILE__ ) ) );
+define('WPSH_DIRNAME', basename(dirname(__FILE__)));
 
 // setup the primary plugin file name
-define( 'WPSH_FILENAME', basename( __FILE__ ) );
+define('WPSH_FILENAME', basename(__FILE__));
 
 // Require our primary
-require( dirname( __FILE__ ) . '/work/common.php' );
+require(dirname(__FILE__) . '/work/common.php');
