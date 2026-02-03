@@ -53,20 +53,52 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                     'title' => __( 'Accelerometer', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to gather information about the acceleration of the device through the Accelerometer interface.', 'security-header-generator' ),
                 ),
+                /* Commented out - limited browser support
                 'ambient-light-sensor' => array(
                     'id' => 'fp_ambient-light-sensor',
                     'title' => __( 'Ambient Light Sensor', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to gather information about the amount of light in the environment around the device through the AmbientLightSensor interface.', 'security-header-generator' ),
                 ),
+                */
                 'autoplay' => array(
                     'id' => 'fp_autoplay',
                     'title' => __( 'Autoplay', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to autoplay media requested through the HTMLMediaElement interface. When this policy is disabled and there were no user gestures, the Promise returned by HTMLMediaElement.play() will reject with a DOMException. The autoplay attribute on &lt;audio&gt; and &lt;video&gt; elements will be ignored.', 'security-header-generator' ),
                 ),
+                'bluetooth' => array(
+                    'id' => 'fp_bluetooth',
+                    'title' => __( 'Bluetooth', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the use of the Web Bluetooth API is allowed. When this policy is disabled, the methods of the Bluetooth object returned by Navigator.bluetooth will either return false or reject the returned Promise with a SecurityError DOMException.', 'security-header-generator' ),
+                ),
                 'camera' => array(
                     'id' => 'fp_camera',
                     'title' => __( 'Camera', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use video input devices. When this policy is disabled, the Promise returned by getUserMedia() will reject with a NotAllowedError DOMException.', 'security-header-generator' ),
+                ),
+                'captured-surface-control' => array(
+                    'id' => 'fp_captured-surface-control',
+                    'title' => __( 'Captured Surface Control', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the Captured Surface Control feature can be used to programmatically manipulate a display surface being captured (such as a browser tab or window), including scrolling and zooming.', 'security-header-generator' ),
+                ),
+                'compute-pressure' => array(
+                    'id' => 'fp_compute-pressure',
+                    'title' => __( 'Compute Pressure', 'security-header-generator' ),
+                    'desc' => __( 'Controls access to the Compute Pressure API, which allows monitoring of compute pressure (CPU, GPU) on the device.', 'security-header-generator' ),
+                ),
+                'cross-origin-isolated' => array(
+                    'id' => 'fp_cross-origin-isolated',
+                    'title' => __( 'Cross Origin Isolated', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the document is cross-origin isolated, enabling certain powerful features like SharedArrayBuffer and high-precision timers.', 'security-header-generator' ),
+                ),
+                'deferred-fetch' => array(
+                    'id' => 'fp_deferred-fetch',
+                    'title' => __( 'Deferred Fetch', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the current document is allowed to use the fetchLater() API to defer fetch requests until after the document is unloaded.', 'security-header-generator' ),
+                ),
+                'deferred-fetch-minimal' => array(
+                    'id' => 'fp_deferred-fetch-minimal',
+                    'title' => __( 'Deferred Fetch Minimal', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the current document is allowed to use the fetchLater() API with minimal quota restrictions.', 'security-header-generator' ),
                 ),
                 'display-capture' => array(
                     'id' => 'fp_display-capture',
@@ -110,11 +142,13 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                     'desc' => __( 'Controls whether the current document is allowed to use the Idle Detection API to detect when users are interacting with their devices, for example to report "available"/"away" status in chat applications.', 'security-header-generator' ),
                 ),
                 
+                /* Commented out - limited browser support
                 'magnetometer' => array(
                     'id' => 'fp_magnetometer',
                     'title' => __( 'Magnetometer', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to gather information about the orientation of the device through the Magnetometer interface', 'security-header-generator' ),
                 ),
+                */
                 'microphone' => array(
                     'id' => 'fp_microphone',
                     'title' => __( 'Microphone', 'security-header-generator' ),
@@ -124,6 +158,11 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                     'id' => 'fp_midi',
                     'title' => __( 'MIDI', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use the Web MIDI API. When this policy is disabled, the Promise returned by Navigator.requestMIDIAccess() will reject with a DOMException', 'security-header-generator' ),
+                ),
+                'otp-credentials' => array(
+                    'id' => 'fp_otp-credentials',
+                    'title' => __( 'OTP Credentials', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the current document is allowed to use the WebOTP API to request a one-time password (OTP) from a specially-formatted SMS message sent by the app\'s server.', 'security-header-generator' ),
                 ),
                 'payment' => array(
                     'id' => 'fp_payment',
@@ -137,12 +176,12 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                 ),
                 'publickey-credentials-create' => array(
                     'id' => 'fp_publickey-credentials-create',
-                    'title' => __( 'Publicket Credentials Create', 'security-header-generator' ),
+                    'title' => __( 'Publickey Credentials Create', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use the Web Authentication API to create new WebAuthn credentials, i.e., via navigator.credentials.create({publicKey}).', 'security-header-generator' ),
                 ),
                 'publickey-credentials-get' => array(
                     'id' => 'fp_publickey-credentials-get',
-                    'title' => __( 'Publicket Credentials Get', 'security-header-generator' ),
+                    'title' => __( 'Publickey Credentials Get', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use the Web Authentication API to retrieve already stored public-key credentials, i.e. via navigator.credentials.get({publicKey: ..., ...})', 'security-header-generator' ),
                 ),
                 'screen-wake-lock' => array(
@@ -155,11 +194,18 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                     'title' => __( 'Serial', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use the Web Serial API to communicate with serial devices, either directly connected via a serial port, or via USB or Bluetooth devices emulating a serial port.', 'security-header-generator' ),
                 ),
+                'storage-access' => array(
+                    'id' => 'fp_storage-access',
+                    'title' => __( 'Storage Access', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether a document loaded in a third-party context (i.e. embedded in an &lt;iframe&gt;) is allowed to use the Storage Access API to request access to unpartitioned cookies.', 'security-header-generator' ),
+                ),
+                /* Commented out - limited browser support
                 'sync-xhr' => array(
                     'id' => 'fp_sync-xhr',
                     'title' => __( 'Sync XHR', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to make synchronous XMLHttpRequest requests', 'security-header-generator' ),
                 ),
+                */
                 'usb' => array(
                     'id' => 'fp_usb',
                     'title' => __( 'USB', 'security-header-generator' ),
@@ -169,6 +215,11 @@ if( ! class_exists( 'KCP_CSPGEN_Common' ) ) {
                     'id' => 'fp_web-share',
                     'title' => __( 'Web Share', 'security-header-generator' ),
                     'desc' => __( 'Controls whether the current document is allowed to use the Navigator.share() method of the Web Share API to share text, links, images, and other content to arbitrary destinations of the user\'s choice.', 'security-header-generator' ),
+                ),
+                'window-management' => array(
+                    'id' => 'fp_window-management',
+                    'title' => __( 'Window Management', 'security-header-generator' ),
+                    'desc' => __( 'Controls whether the current document is allowed to use the Window Management API to manage windows on multiple displays.', 'security-header-generator' ),
                 ),
                 'xr-spatial-tracking' => array(
                     'id' => 'fp_xr-spatial-tracking',

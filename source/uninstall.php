@@ -27,5 +27,4 @@ delete_option( 'kp_cspgen_settings_name' );
 unregister_post_type( 'kcp_csp' );
 
 // remove the post for the CSP
-global $wpdb;
-$wpdb -> query( "DELETE FROM {$wpdb->posts} WHERE `post_type` = 'kcp_csp'" );
+array_map( fn( $id ) => wp_delete_post( $id, true ), get_posts( ['post_type' => 'kcp_csp', 'posts_per_page'=>-1, 'fields'=>'ids'] ) );

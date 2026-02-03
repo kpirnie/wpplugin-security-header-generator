@@ -20,8 +20,8 @@ register_activation_hook( WPSH_PATH . '/' . WPSH_FILENAME, function( $_network )
     if ( version_compare( PHP_VERSION, '8.1', '<=' ) ) {
 
         // it is, so throw and error message and exit
-        wp_die( __( '<h1>PHP To Low</h1><p>Due to the nature of this plugin, it cannot be run on lower versions of PHP.</p><p>Please contact your hosting provider to upgrade your site to at least version 8.1.</p>', 'security-header-generator' ), 
-            __( 'Cannot Activate: PHP To Low', 'security-header-generator' ),
+        wp_die( esc_html_e( '<h1>PHP To Low</h1><p>Due to the nature of this plugin, it cannot be run on lower versions of PHP.</p><p>Please contact your hosting provider to upgrade your site to at least version 8.1.</p>', 'security-header-generator' ), 
+            esc_html_e( 'Cannot Activate: PHP To Low', 'security-header-generator' ),
             array(
                 'back_link' => true,
             ) );
@@ -33,8 +33,8 @@ register_activation_hook( WPSH_PATH . '/' . WPSH_FILENAME, function( $_network )
 
         // we did, so... throw an error message and exit
         wp_die( 
-            __( '<h1>Cannot Network Activate</h1><p>Due to the nature of this plugin, it cannot be network activated.</p><p>Please go back, and activate inside your subsites.</p>', 'security-header-generator' ), 
-            __( 'Cannot Network Activate', 'security-header-generator' ),
+            esc_html_e( '<h1>Cannot Network Activate</h1><p>Due to the nature of this plugin, it cannot be network activated.</p><p>Please go back, and activate inside your subsites.</p>', 'security-header-generator' ), 
+            esc_html_e( 'Cannot Network Activate', 'security-header-generator' ),
             array(
                 'back_link' => true,
             ) 
@@ -101,24 +101,11 @@ if( in_array( WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters( 'active_plugins
     // hack in some styling
     add_action( 'admin_enqueue_scripts', function( ) : void {
 
-        // if WP_DEBUG is set and true
-        if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        // register the unminified stylesheet
+        wp_register_style( 'kpsh_css', plugins_url( '/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
 
-            // register the unminified stylesheet
-            wp_register_style( 'kpsh_css', plugins_url( '/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
-
-            // register the unminified script
-            wp_register_script( 'kpsh_js', plugins_url( '/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
-
-        } else {
-
-            // register the minifiedstylesheet
-            wp_register_style( 'kpsh_css', plugins_url( '/assets/css/style.min.css', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
-
-            // register the minified script
-            wp_register_script( 'kpsh_js', plugins_url( '/assets/js/script.min.js', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
-
-        }
+        // register the unminified script
+        wp_register_script( 'kpsh_js', plugins_url( '/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME ), null, null );
 
         // enqueue it
         wp_enqueue_style( 'kpsh_css' );
@@ -131,13 +118,15 @@ if( in_array( WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters( 'active_plugins
     // we'll need a message in wp-admin for PHP 8 compatibility
     add_action( 'admin_notices', function( ) : void {
 
-        // if the site is under PHP 8.1
-        if ( version_compare( PHP_VERSION, '8.1', '<=' ) ) {
+        // if the site is under PHP 8.2
+        if ( version_compare( PHP_VERSION, '8.2', '<=' ) ) {
 
             // show this notice
             ?>
             <div class="notice notice-info is-dismissible">
-                <p><?php _e( "<h3>PHP Upgrade Notice</h3><p>To maintain the security standards of the <strong>Security Header Generator</strong> plugin this will be the final version that supports PHP versions lower than 8.1. Your site must be upgraded in order to update the plugin to future versions.</p><p>Please see here for up to date PHP version information: <a href='https://www.php.net/supported-versions.php' target='_blank'>https://www.php.net/supported-versions.php</a></p>", 'security-header-generator' ); ?></p>
+                <h3><?php esc_html_e( "PHP Upgrade Notice", 'security-header-generator' ); ?></h3>
+                <p><?php esc_html_e( "To maintain the security standards of the Security Header Generator plugin this will be the final version that supports PHP versions lower than 8.2. Your site must be upgraded in order to update the plugin to future versions.", 'security-header-generator' ); ?>
+                <p><?php esc_html_e( "Please see here for up to date PHP version information: https://www.php.net/supported-versions.php", 'security-header-generator' ); ?></p>
             </div>
         <?php
         }

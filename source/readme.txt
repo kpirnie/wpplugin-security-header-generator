@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 5.3.67
+Stable tag: 5.3.83
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -68,12 +68,40 @@ Please understand, I cannot generate the proper headers for you through the word
  
 == Changelog ==
 
+= 5.3.83 = 
+* Update: Documentation
+* Remove: Minified css and js
+    * Not necessary files are small enough
+* Corrected: Some more "plugin checker" items
+    * Direct db in uninstall
+* Remove: WordPress defaults
+* Add: Report-To CSP directive
+    * See here for more information: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to
+
+= 5.3.77 =
+* Update: Fixes for "plugin checker"
+* Remove: Permissions-Policy: ambient-light-sensor
+    * Not compatible with any browsers: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/ambient-light-sensor
+* Remove: Permissions-Policy: magnetometer
+    * Not compatible with any browsers: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/magnetometer
+* Remove: Permissions-Policy: sync-xhr
+    * Completely removed from spec
+* Add: The following list of Permissions-Policy attributes:
+    * bluetooth
+    * captured-surface-control
+    * compute-pressure
+    * cross-origin-isolated
+    * deferred-fetch
+    * deferred-fetch-minimal
+    * otp-credentials
+    * storage-access
+    * window-management
+
 = 5.3.67 =
 * Verify: Core 7.0
 * Update: PHP 8.2 requirement
 * Update: Defaults for WordPress
     * JS controller was causing issues with fields no populating properly
-* Update: Documentation
 * Remove: Enforce Certificate Transparency
     * Deprecated: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Expect-CT
 

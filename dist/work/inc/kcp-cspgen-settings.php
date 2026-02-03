@@ -132,7 +132,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     array(
                         'title'  => __( 'Standard Security Headers', 'security-header-generator' ),
                         'fields' => $this -> kcp_standard_security_headers( ),
-                        'description' => __( '<p><strong>NOTE</strong><br />Make sure to check your web browsers <strong>Development Tools</strong> once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator' ),
+                        'description' => __( '<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator' ),
                     )
                 );
 
@@ -141,7 +141,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     array(
                         'title'  => __( 'Content Security Headers', 'security-header-generator' ),
                         'fields' => $this -> kcp_content_security_policy_headers( ),
-                        'description' => __( '<p><strong>NOTE</strong><br />Make sure to check your web browsers <strong>Development Tools</strong> once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.<br /><br /><strong>Suggested:</strong><br />Add your domains to the necessary attribute prior to adding the external resource...</p>', 'security-header-generator' ),
+                        'description' => __( '<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.<br /><br />Suggested:<br />Add your domains to the necessary attribute prior to adding the external resource...</p>', 'security-header-generator' ),
                         'class' => 'wpsh_content_security_policy'
                     )
                 );
@@ -151,7 +151,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     array(
                         'title'  => __( 'Permissions Policy Headers', 'security-header-generator' ),
                         'fields' => $this -> kcp_permissions_policy_headers( ),
-                        'description' => __( '<p><strong>NOTE</strong><br />Make sure to check your web browsers <strong>Development Tools</strong> once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator' ),
+                        'description' => __( '<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator' ),
                     )
                 );
 
@@ -216,7 +216,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'apply_to_rest',
                     'type' => 'switcher',
                     'title' => __( 'Apply to the REST API?', 'security-header-generator' ),
-                    'desc' => __( 'This will attempt to apply all headers to the REST API of your site.<br /><strong>NOTE:</strong> Due to the default nature of the REST API, the headers will also be applied to the admin areas of the website. You will need to check for breakages after applying.', 'security-header-generator' ),
+                    'desc' => __( 'This will attempt to apply all headers to the REST API of your site.<br />NOTE: Due to the default nature of the REST API, the headers will also be applied to the admin areas of the website. You will need to check for breakages after applying.', 'security-header-generator' ),
                     'default' => false,
                 ),
 
@@ -244,7 +244,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                 array(
                     'id' => 'include_sts_subdomains',
                     'type' => 'switcher',
-                    'title' => __( '<strong>Include Subdomains?</strong>', 'security-header-generator' ),
+                    'title' => __( 'Include Subdomains?', 'security-header-generator' ),
                     'desc' => __( 'If this optional parameter is specified, this rule applies to all of the site\'s subdomains as well.', 'security-header-generator' ),
                     'default' => false,
                     'dependency' => array( 'include_sts', '==', true ),
@@ -254,20 +254,22 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                 array(
                     'id' => 'include_sts_preload',
                     'type' => 'switcher',
-                    'title' => __( '<strong>Preload?</strong>', 'security-header-generator' ),
+                    'title' => __( 'Preload?', 'security-header-generator' ),
                     'desc' => __( 'If you enable preload, you should change the cache age to 2 Years. (63072000)', 'security-header-generator' ),
                     'default' => false,
                     'dependency' => array( 'include_sts', '==', true ),
                 ),
 
+                /* DEPRECATED
                 // include Expect-CT header
                 array(
                     'id' => 'include_expectct',
                     'type' => 'switcher',
                     'title' => __( 'Enforce Certificate Transparency?', 'security-header-generator' ),
-                    'desc' => __( 'Setting this will add another header to enforce Certificate Transparency. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT</a><br /><strong>NOTE: </strong>This header is likely to be deprecated in the near future.', 'security-header-generator' ),
+                    'desc' => __( 'Setting this will add another header to enforce Certificate Transparency. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT</a><br />NOTE: This header is likely to be deprecated in the near future.', 'security-header-generator' ),
                     'default' => false,
                 ),
+                */
                 
                 // frame sources
                 array(
@@ -305,7 +307,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'include_acam_methods',
                     'type' => 'checkbox',
                     'title' => __( 'Methods', 'security-header-generator' ),
-                    'desc' => __( 'Select the methods you wish to allow.<br /><strong>NOTE:</strong> Most public websites require at least GET to be viewable online.<br /><strong>NOTE 2:</strong> This will block unselected methods.', 'security-header-generator' ),
+                    'desc' => __( 'Select the methods you wish to allow.<br />NOTE: Most public websites require at least GET to be viewable online.<br />NOTE 2: This will block unselected methods.', 'security-header-generator' ),
                     'options' => array(
                         'GET' => __( 'GET', 'security-header-generator' ),
                         'HEAD' => __( 'HEAD', 'security-header-generator' ),
@@ -346,7 +348,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'include_acao_origin',
                     'type' => 'text',
                     'title' => __( 'Origin', 'security-header-generator' ),
-                    'desc' => __( 'Set the allowed access origin here.  Can either be an asterisk: <code>*</code>, or a FQDN URL: <code>https://example.com</code><br /><strong>NOTE: </strong>If nothing is put in here, we will default to <code>*</code>', 'security-header-generator' ),
+                    'desc' => __( 'Set the allowed access origin here.  Can either be an asterisk: <code>*</code>, or a FQDN URL: <code>https://example.com</code><br />NOTE: If nothing is put in here, we will default to <code>*</code>', 'security-header-generator' ),
                     'dependency' => array( 'include_acao', '==', true ),
                 ),
                 
@@ -402,7 +404,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'include_crossdomain',
                     'type' => 'switcher',
                     'title' => __( 'Do you want to block cross domain origins?', 'security-header-generator' ),
-                    'desc' => __( 'Setting this will add another header to block cross domain origins. See here for more information: <a href="https://webtechsurvey.com/response-header/x-permitted-cross-domain-policies" target="_blank">https://webtechsurvey.com/response-header/x-permitted-cross-domain-policies</a>', 'security-header-generator' ),
+                    'desc' => __( 'Setting this will add another header to block cross domain origins. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies</a>', 'security-header-generator' ),
                     'default' => false,
                 ),
                 
@@ -547,7 +549,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                 array(
                     'id' => 'auth_un',
                     'type' => 'text',
-                    'title' => __( '<strong>Basic Auth Username</strong>', 'security-header-generator' ),
+                    'title' => __( 'Basic Auth Username', 'security-header-generator' ),
                     'desc' => __( 'Enter your Basic Auth Username, if your site has this protection. (aka: htaccess protection, or htpasswd', 'security-header-generator' ),
                     'dependency' => array( 'generate_csp', '==', true ),
                     'class' => 'kpsh-half-field',
@@ -559,7 +561,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'auth_pw',
                     'type' => 'text',
                     'attributes' => array( 'type' => 'password', 'autocomplete' => 'new-password' ),
-                    'title' => __( '<strong>Basic Auth Password</strong>', 'security-header-generator' ),
+                    'title' => __( 'Basic Auth Password', 'security-header-generator' ),
                     'desc' => __( 'Enter your Basic Auth Password, if your site has this protection. (aka: htaccess protection, or htpasswd', 'security-header-generator' ),
                     'dependency' => array( 'generate_csp', '==', true ),
                     'class' => 'kpsh-half-field',
@@ -696,7 +698,7 @@ if( ! class_exists( 'KCP_CSPGEN_Settings' ) ) {
                     'id' => 'feature_policy',
                     'type' => 'switcher',
                     'title' => __( 'Do you want to configure a Feature Policy (aka Permissions-Policy)?', 'security-header-generator' ),
-                    'desc' => __( 'Setting this will add another header to configure browser and frame permissions. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy</a><br /><br /><strong>NOTE: </strong> Some of these features are not implemented for all browsers, and/or could be experimental.  Please read through that information and decide what features you need, and what audiences you need to apply to.', 'security-header-generator' ),
+                    'desc' => __( 'Setting this will add another header to configure browser and frame permissions. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy</a><br /><br />NOTE:  Some of these features are not implemented for all browsers, and/or could be experimental.  Please read through that information and decide what features you need, and what audiences you need to apply to.', 'security-header-generator' ),
                     'default' => false,
                 ),
 

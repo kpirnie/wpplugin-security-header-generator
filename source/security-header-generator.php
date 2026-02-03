@@ -11,12 +11,10 @@ Author: Kevin C. Pirnie
 Author URI: https://kevinpirnie.com/
 Requires at least: 6.0.9
 Requires PHP: 8.2
-Version: 5.3.67
-Network: false
+Version: 5.3.83
 Text Domain: security-header-generator
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
-Update URI: https://wordpress.org/plugins/security-header-generator/
 */
 
 // setup the full page to this plugin

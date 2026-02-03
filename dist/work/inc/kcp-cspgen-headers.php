@@ -285,6 +285,7 @@ if( ! class_exists( 'KCP_CSPGEN_Headers' ) ) {
 
             }
 
+            /* DEPRECATED
             // include expect CT setting
             $_apply_ect = filter_var( get_our_option( 'include_expectct' ), FILTER_VALIDATE_BOOLEAN );
 
@@ -303,6 +304,7 @@ if( ! class_exists( 'KCP_CSPGEN_Headers' ) ) {
                 }
 
             }
+                */
 
             // include Options setting
             $_apply_ofs = filter_var( get_our_option( 'include_ofs' ), FILTER_VALIDATE_BOOLEAN );
@@ -781,6 +783,11 @@ if( ! class_exists( 'KCP_CSPGEN_Headers' ) ) {
 
             // I know we have them, so just loop over them
             foreach( $_directives as $_key => $_val ) {
+
+                // if the key itself doesn't exist, skip it
+                if( ! array_key_exists( 'fp_' . $_key . '_src_domain', $_options ) || ! isset( $_options['fp_' . $_key . '_src_domain'] ) ) {
+                    continue;
+                }
 
                 // get the configured options directive, default to any
                 $_dir = ( $_options[$_val['id']] ) ?? 1;

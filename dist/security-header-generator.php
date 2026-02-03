@@ -10,13 +10,11 @@ Plugin URI: https://kevinpirnie.com/blog/2021/10/13/wordpress-plugin-security-he
 Author: Kevin C. Pirnie
 Author URI: https://kevinpirnie.com/
 Requires at least: 6.0.9
-Requires PHP: 8.1
-Version: 5.3.01
-Network: false
+Requires PHP: 8.2
+Version: 5.3.77
 Text Domain: security-header-generator
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
-Update URI: https://wordpress.org/plugins/security-header-generator/
 */
 
 // setup the full page to this plugin

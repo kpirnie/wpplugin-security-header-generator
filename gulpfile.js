@@ -207,9 +207,9 @@ function copyToProduction(done) {
 
 // Define tasks using gulp.task for backward compatibility
 task('clean_dist', cleanDist);
-task('sass', compileSass);
-task('stylesheets', processStyles);
-task('javascripts', processScripts);
+// task('sass', compileSass);
+// task('stylesheets', processStyles);
+// task('javascripts', processScripts);
 task('fonts', copyFonts);
 task('images', optimizeImages);
 task('svgs', optimizeSvgs);
@@ -223,8 +223,8 @@ task('production_copy', copyToProduction);
 // Default task
 task('default', series(
   'clean_dist',
-  'stylesheets',
-  'javascripts',
+//   'stylesheets',
+//   'javascripts',
   'clean_concat',
   parallel('languages', 'templates', 'customs'),
   'vendor',

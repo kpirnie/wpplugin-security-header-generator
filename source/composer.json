@@ -1,0 +1,41 @@
+{
+    "name": "kevinpirnie/security-header-generator",
+    "description": "Security Header Generator",
+    "version": "5.3.67",
+    "type": "project",
+    "homepage": "https://kevinpirnie.com/",
+    "readme": "readme.txt",
+    "license": "GPL-3.0-or-later",
+    "prefer-stable": true,
+    "authors": [
+        {
+            "name": "Kevin Pirnie",
+            "email": "me@kpirnie.com",
+            "homepage": "https://kevinpirnie.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@kpirnie.com",
+        "issues": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator/-/issues",
+        "source": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator"
+    },
+    "funding": [
+        {
+            "type": "paypal",
+            "url": "https://paypal.me/kevinpirnie"
+        }
+    ],
+    "require": {
+        "php": ">=8.2"
+    },
+    "autoload": {
+        "classmap": [
+            "work/inc/"
+        ],
+        "files": [
+            "vendor/custom-fields/classes/setup.class.php"
+        ]
+    },
+    "optimize-autoloader": true
+}

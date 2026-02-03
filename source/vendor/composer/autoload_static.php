@@ -12,7 +12,7 @@ class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'KCP_CSPGEN_Common' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-common.php',
+        'KCP_CSPGEN_Configs' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-config.php',
         'KCP_CSPGEN_Headers' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-headers.php',
         'KCP_CSPGEN_Settings' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-settings.php',
     );
