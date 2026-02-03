@@ -1,7 +1,7 @@
 {
   "name": "security-header-generator",
   "package": "Security Header Generator",
-  "version": "5.3.67",
+  "version": "5.3.83",
   "description": "This plugin generates the proper security HTTP response headers to keep your site secured.",
   "main": "gulpfile.js",
   "source": "source",
@@ -29,25 +29,18 @@
   },
   "type": "commonjs",
   "scripts": {
-    "gulp": "gulp"
+    "minify:js": "esbuild source/assets/js/script.js --minify --outfile=dist/assets/js/script.min.js",
+    "minify:css": "esbuild source/assets/css/style.css --minify --outfile=dist/assets/css/style.min.css",
+    "minify": "npm run minify:js && npm run minify:css",
+    "gulp": "gulp",
+    "build": "gulp && npm run minify"
   },
   "homepage": "https://kevinpirnie.com/kevin-pirnies-articles/wordpress-plugin-security-header-generator/",
   "devDependencies": {
     "del": "latest",
+    "esbuild": "latest",
     "gulp": "latest",
     "gulp-clean": "latest",
-    "gulp-concat": "latest",
-    "gulp-cssnano": "latest",
-    "gulp-imagemin": "^9.1.0",
-    "gulp-rename": "latest",
-    "gulp-replace": "latest",
-    "gulp-sass": "latest",
-    "gulp-svgo": "^1.2.5",
-    "gulp-uglify": "latest",
-    "gulp-wp-pot": "latest",
-    "sass": "latest"
-  },
-  "dependencies": {
-    "node-fetch": "latest"
+    "gulp-wp-pot": "latest"
   }
 }

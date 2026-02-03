@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 5.3.77
+Stable tag: 5.3.83
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -67,6 +67,16 @@ Please understand, I cannot generate the proper headers for you through the word
 6. Headers Set
  
 == Changelog ==
+
+= 5.3.83 = 
+* Update: Documentation
+* Remove: Minified css and js
+    * Not necessary files are small enough
+* Corrected: Some more "plugin checker" items
+    * Direct db in uninstall
+* Remove: WordPress defaults
+* Add: Report-To CSP directive
+    * See here for more information: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/report-to
 
 = 5.3.77 =
 * Update: Fixes for "plugin checker"
