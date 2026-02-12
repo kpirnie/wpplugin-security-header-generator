@@ -85,15 +85,8 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 // get our generated headers
                 $_gen_headers = $this->kp_populate_header_array();
 
-                // loop over the generated header and add it
-                foreach ($_gen_headers as $_k => $_v) {
-
-                    // try to remove the existing header if there is one
-                    header_remove($_k);
-
-                    // add the header, and try to replace the existing header if it exists
-                    header($_k . ': ' . $_v, true);
-                }
+                // apply sanitized headers
+                $this->kp_apply_headers($_gen_headers);
 
                 // implement hook
                 do_action('wpsh_send_frontend_headers');
@@ -131,21 +124,11 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // add in ours
                     add_filter('rest_pre_serve_request', function ($value) {
 
-                        // remove all preset headers
-                        header_remove();
-
                         // get our generated headers
                         $_gen_headers = $this->kp_populate_header_array();
 
-                        // loop over the generated header and add it
-                        foreach ($_gen_headers as $_k => $_v) {
-
-                            // try to remove the existing header if there is one
-                            header_remove($_k);
-
-                            // add the header, and try to replace the existing header if it exists
-                            header($_k . ': ' . $_v, true);
-                        }
+                        // apply sanitized headers
+                        $this->kp_apply_headers($_gen_headers);
 
                         // return
                         return $value;
@@ -179,19 +162,49 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 // get our generated headers
                 $_gen_headers = $this->kp_populate_header_array();
 
-                // loop over the generated header and add it
-                foreach ($_gen_headers as $_k => $_v) {
-
-                    // try to remove the existing header if there is one
-                    header_remove($_k);
-
-                    // add the header, and try to replace the existing header if it exists
-                    header($_k . ': ' . $_v, true);
-                }
+                // apply sanitized headers
+                $this->kp_apply_headers($_gen_headers);
 
                 // implement hook
                 do_action('wpsh_send_admin_headers');
             }, PHP_INT_MAX);
+        }
+
+
+        /** 
+         * kp_apply_headers
+         * 
+         * Apply and sanitize generated headers before sending.
+         * 
+         * @param array $_headers The generated headers
+         * 
+         * @return void
+         * 
+         */
+        private function kp_apply_headers(array $_headers): void
+        {
+
+            // loop over each generated header and apply it after sanitizing
+            foreach ($_headers as $_k => $_v) {
+
+                // sanitize and validate the header name
+                $_header_name = sanitize_text_field((string) $_k);
+                if ($_header_name === '') {
+                    continue;
+                }
+
+                // sanitize and normalize the header value
+                $_header_value = preg_replace('/[\r\n]+/', ' ', sanitize_text_field((string) $_v));
+                if ($_header_value === null || $_header_value === '') {
+                    continue;
+                }
+
+                // remove the existing header if there is one
+                header_remove($_header_name);
+
+                // add the new header value
+                header($_header_name . ': ' . trim($_header_value), true);
+            }
         }
 
         /** 

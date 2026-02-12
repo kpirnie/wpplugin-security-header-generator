@@ -77,7 +77,7 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                 KPSHG::createOptions($_settings_id, array(
                     'menu_title' => __('Security Headers', 'security-header-generator'),
                     'menu_slug'  => 'wpsh_settings',
-                    'menu_capability' => 'list_users',
+                    'menu_capability' => 'manage_options',
                     'menu_icon' => 'dashicons-shield',
                     'admin_bar_menu_icon' => 'dashicons-shield',
                     'menu_position' => 2,
