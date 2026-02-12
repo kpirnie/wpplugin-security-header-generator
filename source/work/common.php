@@ -123,11 +123,21 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     // hack in some styling
     add_action('admin_enqueue_scripts', function (): void {
 
+        // only load assets on this plugin's settings screen
+        $_page = sanitize_key($_GET['page'] ?? '');
+        if ($_page !== 'wpsh_settings') {
+            return;
+        }
+
+        // use filemtime for stable cache-busting instead of disabling cache on every request
+        $_css_version = file_exists(WPSH_PATH . '/assets/css/style.css') ? (string) filemtime(WPSH_PATH . '/assets/css/style.css') : null;
+        $_js_version = file_exists(WPSH_PATH . '/assets/js/script.js') ? (string) filemtime(WPSH_PATH . '/assets/js/script.js') : null;
+
         // register the unminified stylesheet
-        wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, time());
+        wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, $_css_version);
 
         // register the unminified script
-        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), time());
+        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), $_js_version, true);
 
         // localize script data
         wp_localize_script('kpsh_js', 'wpshPresets', array(
