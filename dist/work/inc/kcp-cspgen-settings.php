@@ -75,6 +75,7 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
 
             // add in the menu
             $this->kcp_cspgen_menu();
+
         }
 
         /** 
@@ -114,6 +115,23 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
 
             // register the options page
             $options->register();
+
+            // add in the sub menu items linking to the tabs
+            add_submenu_page( 'wpsh_settings', '', 'CSP Headers', 'manage_options', 'admin.php?page=wpsh_settings&tab=csp', '' );
+            add_submenu_page( 'wpsh_settings', '', 'Permissions Headers', 'manage_options', 'admin.php?page=wpsh_settings&tab=permissions', '' );
+            add_submenu_page( 'wpsh_settings', '', 'Documentation', 'manage_options', 'admin.php?page=wpsh_settings&tab=doc', '' );
+
+            // bold the tab in the submenu
+            add_filter( 'submenu_file', function( $submenu_file ) {
+                $page = sanitize_key( $_GET['page'] ?? '' );
+                $tab  = sanitize_key( $_GET['tab']  ?? '' );
+
+                if ( $page === 'wpsh_settings' && $tab !== '' ) {
+                    $submenu_file = 'admin.php?page=wpsh_settings&tab=' . $tab;
+                }
+
+                return $submenu_file;
+            } );
         }
 
         /**
