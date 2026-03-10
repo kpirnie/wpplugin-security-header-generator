@@ -68,6 +68,9 @@ Please understand, I cannot generate the proper headers for you through the word
  
 == Changelog ==
 
+= 5.6.03 =
+* Replace: reworked settings
+
 = 5.4.77 =
 * Add: Presets for CSP
 * Rework JS to vanilla

@@ -8,24 +8,8 @@ if (! current_user_can('manage_options')) {
     return;
 }
 ?>
-
-<style type="text/css">
-    .the_list {
-        margin-left: 25px;
-    }
-
-    .technical-section {
-        margin-top: 40px;
-        padding-top: 30px;
-        border-top: 3px solid #2271b1;
-    }
-
-    .technical-section h3 {
-        color: #2271b1;
-    }
-</style>
+<h2><?php esc_html_e('Security Header Generator Documentation', 'security-header-generator'); ?></h2>
 <p><?php esc_html_e('This plugin generates the proper security HTTP response headers and generates a Content Security Policy if configured to do so', 'security-header-generator'); ?>.</p>
-
 <h3 id="install"><?php esc_html_e('Install', 'security-header-generator'); ?></h3>
 <ul class="the_list">
     <li><?php esc_html_e('Download the plugin, unzip it, and upload to your sites', 'security-header-generator'); ?> <code>/wp-content/plugins/</code> <?php esc_html_e('directory', 'security-header-generator'); ?>

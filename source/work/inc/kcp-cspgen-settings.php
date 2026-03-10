@@ -31,6 +31,32 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
     class KCP_CSPGEN_Settings
     {
 
+        /**
+         * @var \KP\WPFieldFramework\Framework|null $fw The field framework instance
+         */
+        protected ?\KP\WPFieldFramework\Framework $fw = null;
+
+        /**
+         * @var array $tabs An array to hold the tabs for the settings page
+         */
+        protected array $tabs = array();
+
+        /**
+         * Class constructor
+         * 
+         * Setup the object
+         * 
+         * @internal
+         */
+        public function __construct()
+        {
+
+            // load our field framework
+            $this->fw = \KP\WPFieldFramework\Loader::init();
+            // add our tabs
+            $this->tabs = $this->add_tabs();
+        }
+
         /** 
          * kp_cspgen_settings
          * 
@@ -67,129 +93,85 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
         private function kcp_cspgen_menu(): void
         {
 
-            // make sure our field framework actually exists
-            if (class_exists('KPSHG')) {
+            // our options key
+            $opts_key = 'wpsh_settings';
 
-                // our settings id
-                $_settings_id = 'wpsh_settings';
+            // add the options page
+            $options = $this->fw->addOptionsPage([
+                'option_key'         => $opts_key,
+                'page_title'         => __('Security Header Generator', 'security-header-generator'),
+                'menu_title'         => __('Security Headers', 'security-header-generator'),
+                'menu_slug'          => $opts_key,
+                'icon_url'           => 'dashicons-shield',
+                'position'           => 2,
+                'tabs'               => $this->tabs,
+                'save_button'        => __('Save Your Settings', 'security-header-generator'),
+                'footer_text'        => __('Thank you for securing your site!', 'security-header-generator'),
+                'show_export_import' => true,
+                'autoload'           => true, // false, true, null
+                'tab_layout'         => 'vertical',
+            ]);
 
-                // create the main options page
-                KPSHG::createOptions($_settings_id, array(
-                    'menu_title' => __('Security Headers', 'security-header-generator'),
-                    'menu_slug'  => 'wpsh_settings',
-                    'menu_capability' => 'list_users',
-                    'menu_icon' => 'dashicons-shield',
-                    'admin_bar_menu_icon' => 'dashicons-shield',
-                    'menu_position' => 2,
-                    'show_in_network' => false,
-                    'show_reset_all' => false,
-                    'show_reset_section' => false,
-                    'sticky_header' => false,
-                    'ajax_save' => false,
-                    'footer_text' => '<a href="https://kevinpirnie.com" target="_blank"><img src="https://cdn.kevp.cc/kp/kevinpirnie-logo-color.svg" alt="Kevin Pirnie: https://kevinpirnie.com" style="width:250px !important;" /></a>',
-                    'framework_title' => __('The Security Header Generator <small>by <a href="https://kevinpirnie.com/" target="_blank">Kevin C. Pirnie</a></small>', 'security-header-generator'),
-                    'footer_credit' => __('Thank you for securing your site!', 'security-header-generator'),
-                ));
+            // register the options page
+            $options->register();
+        }
 
-                // after the save occurs, clear WP option cache
-                add_filter("kpshg_{$_settings_id}_saved", function (): void {
-
-                    // clear our plugin's option cache
-                    clear_our_option_cache();
-
-                    // get the current site id
-                    $_site_id = get_current_blog_id();
-
-                    // first clear wordpress's builtin cache
-                    wp_cache_flush();
-
-                    // now try to delete the wp object cache
-                    if (function_exists('wp_cache_delete')) {
-
-                        // clear the plugin object cache
-                        wp_cache_delete('uninstall_plugins', 'options');
-
-                        // clear the options object cache
-                        wp_cache_delete('alloptions', 'options');
-
-                        // clear the rest of the object cache
-                        wp_cache_delete('notoptions', 'options');
-
-                        // clear the rest of the object cache for the parent site in a multisite install
-                        wp_cache_delete($_site_id . '-notoptions', 'site-options');
-
-                        // clear the plugin object cache for the parent site in a multisite install
-                        wp_cache_delete($_site_id . '-active_sitewide_plugins', 'site-options');
-                    }
-
-                    // probably overkill, but let's fire off the rest of the builtin cache flushing mechanisms
-                    global $wp_object_cache;
-
-                    // try to flush the object cache
-                    $wp_object_cache->flush(0);
-
-                    // attempt to clear the opcache
-                    opcache_reset();
-                });
-
-                // Standard Security Headers
-                KPSHG::createSection(
-                    $_settings_id,
-                    array(
-                        'title'  => __('Standard Security Headers', 'security-header-generator'),
-                        'fields' => $this->kcp_standard_security_headers(),
-                        'description' => __('<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator'),
-                    )
-                );
-
-                // Content Security Policy
-                KPSHG::createSection(
-                    $_settings_id,
-                    array(
-                        'title'  => __('Content Security Headers', 'security-header-generator'),
-                        'fields' => $this->kcp_content_security_policy_headers(),
-                        'description' => __('<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.<br /><br />Suggested:<br />Add your domains to the necessary attribute prior to adding the external resource...</p>', 'security-header-generator'),
-                        'class' => 'wpsh_content_security_policy'
-                    )
-                );
-
-                // Feature / Permissions Policy
-                KPSHG::createSection(
-                    $_settings_id,
-                    array(
-                        'title'  => __('Permissions Policy Headers', 'security-header-generator'),
-                        'fields' => $this->kcp_permissions_policy_headers(),
-                        'description' => __('<p>NOTE<br />Make sure to check your web browsers Development Tools once you are finished configuring this. You will need to make sure you are not blocking necessary items for your website.</p>', 'security-header-generator'),
-                    )
-                );
-
-                // the documentation "page"
-                KPSHG::createSection(
-                    $_settings_id,
-                    array(
-                        'title'  => __('Documentation', 'security-header-generator'),
-                        'fields' => array(
-                            array(
-                                'type' => 'content',
-                                'content' => $this->kcp_documentation(),
-                            )
-                        ),
-                    )
-                );
-
-                // setup and exports "page"
-                KPSHG::createSection(
-                    $_settings_id,
-                    array(
-                        'title'  => __('Export/Import Settings', 'security-header-generator'),
-                        'fields' => array(
-                            array(
-                                'type' => 'backup',
-                            ),
-                        ),
-                    )
-                );
-            }
+        /**
+         * add_tabs
+         * 
+         * The method is responsible for adding tabs to the settings page.  This is where we will inject our different sections of settings, such as standard security headers, content security policy headers, and permissions policy headers.
+         * 
+         * @since 8.4
+         * @access private
+         * @author Kevin Pirnie <me@kpirnie.com>
+         * @package Kevin's Security Header Generator
+         * 
+         * @return array Returns an array of tabs to be added to the settings page
+         */
+        private function add_tabs(): array
+        {
+            // return the array of tabs with their respective fields
+            return array(
+                'standard' => array(
+                    'title' => __('Standard Headers', 'security-header-generator'),
+                    'description' => __('Configure your standard security headers here.', 'security-header-generator'),
+                    'sections' => [
+                        'a' => [
+                            'fields' => $this->kcp_standard_security_headers(),
+                        ],
+                    ],
+                ),
+                'csp' => array(
+                    'title' => __('CSP Headers', 'security-header-generator'),
+                    'sections' => [
+                        'b' => [
+                            'fields' => $this->kcp_csp_headers(),
+                        ],
+                    ],
+                ),
+                'permissions' => array(
+                    'title' => __('Permissions Headers', 'security-header-generator'),
+                    'sections' => [
+                        'c' => [
+                            'fields' => $this->kcp_perm_headers(),
+                        ],
+                    ],
+                ),
+                'doc' => array(
+                    'title' => __('Documentation', 'security-header-generator'),
+                    'sections' => [
+                        'd' => [
+                            'fields' => [
+                                [
+                                    'id'      => 'shg_documentation',
+                                    'type'    => 'html',
+                                    'content' => $this->kcp_documentation(),
+                                ],
+                            ],
+                        ],
+                    ],
+                ),
+            );
         }
 
         /** 
@@ -207,117 +189,113 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
          */
         private function kcp_standard_security_headers(): array
         {
-
-            // return an array of the fields needed
-            return array(
-
-                // apply to admin
-                array(
-                    'id' => 'apply_to_admin',
-                    'type' => 'switcher',
-                    'title' => __('Apply to Admin?', 'security-header-generator'),
-                    'desc' => __('This will attempt to apply all headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // apply to REST
-                array(
-                    'id' => 'apply_to_rest',
-                    'type' => 'switcher',
-                    'title' => __('Apply to the REST API?', 'security-header-generator'),
-                    'desc' => __('This will attempt to apply all headers to the REST API of your site.<br />NOTE: Due to the default nature of the REST API, the headers will also be applied to the admin areas of the website. You will need to check for breakages after applying.', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // include sts
-                array(
-                    'id' => 'include_sts',
-                    'type' => 'switcher',
-                    'title' => __('Include Strict Transport Security?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to force Strict Transport Security. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // sts cache age
-                array(
-                    'id' => 'include_sts_max_age',
-                    'type' => 'text',
-                    'title' => __('Cache Age', 'security-header-generator'),
-                    'desc' => __('The time, in seconds, that the browser should remember that a site is only to be accessed using HTTPS.', 'security-header-generator'),
-                    'default' => 31536000,
-                    'attributes' => array('type' => 'number'),
-                    'dependency' => array('include_sts', '==', true),
-                ),
-
-                // sts subdomains
-                array(
-                    'id' => 'include_sts_subdomains',
-                    'type' => 'switcher',
-                    'title' => __('Include Subdomains?', 'security-header-generator'),
-                    'desc' => __('If this optional parameter is specified, this rule applies to all of the site\'s subdomains as well.', 'security-header-generator'),
-                    'default' => false,
-                    'dependency' => array('include_sts', '==', true),
-                ),
-
-                // sts preload
-                array(
-                    'id' => 'include_sts_preload',
-                    'type' => 'switcher',
-                    'title' => __('Preload?', 'security-header-generator'),
-                    'desc' => __('If you enable preload, you should change the cache age to 2 Years. (63072000)', 'security-header-generator'),
-                    'default' => false,
-                    'dependency' => array('include_sts', '==', true),
-                ),
-
-                /* DEPRECATED
-                // include Expect-CT header
-                array(
-                    'id' => 'include_expectct',
-                    'type' => 'switcher',
-                    'title' => __( 'Enforce Certificate Transparency?', 'security-header-generator' ),
-                    'desc' => __( 'Setting this will add another header to enforce Certificate Transparency. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT</a><br />NOTE: This header is likely to be deprecated in the near future.', 'security-header-generator' ),
-                    'default' => false,
-                ),
-                */
-
-                // frame sources
-                array(
-                    'id' => 'include_ofs',
-                    'type' => 'switcher',
-                    'title' => __('Configure Frame Sources?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to configure allowed frame sources. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // deny or allow sameorigin
-                array(
+            return [
+                [
+                    'id'        => 'apply_to_admin',
+                    'type'      => 'switch',
+                    'label' => __('Apply to Admin?', 'security-header-generator'),
+                    'description' => __('This will attempt to apply all headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'apply_to_rest',
+                    'type'      => 'switch',
+                    'label' => __('Apply to the REST API?', 'security-header-generator'),
+                    'description' => __('This will attempt to apply all headers to the REST API of your site.<br /><strong>NOTE:</strong> Due to the default nature of the REST API, the headers will also be applied to the admin areas of the website. You will need to check for breakages after applying.', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'include_sts',
+                    'type'      => 'switch',
+                    'label' => __('Include Strict Transport Security?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to force Strict Transport Security. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id' => 'sts_group',
+                    'type' => 'group',
+                    'fields' => [
+                        [
+                            'id' => 'include_sts_max_age',
+                            'type' => 'text',
+                            'label' => __('Cache Age', 'security-header-generator'),
+                            'description' => __('The time, in seconds, that the browser should remember that a site is only to be accessed using HTTPS.', 'security-header-generator'),
+                            'default' => 31536000,
+                        ],
+                        [
+                            'id'        => 'include_sts_subdomains',
+                            'type'      => 'switch',
+                            'label' => __('Include Subdomains?', 'security-header-generator'),
+                            'description' => __('If this optional parameter is specified, this rule applies to all of the site\'s subdomains as well.', 'security-header-generator'),
+                            'on_label'  => __('Yes', 'security-header-generator'),
+                            'off_label' => __('No', 'security-header-generator'),
+                            'default'   => false,
+                            'inline' => true,
+                        ],
+                        [
+                            'id'        => 'include_sts_preload',
+                            'type'      => 'switch',
+                            'label' => __('Preload?', 'security-header-generator'),
+                            'description' => __('If you enable preload, you should change the cache age to 2 Years. (63072000)', 'security-header-generator'),
+                            'on_label'  => __('Yes', 'security-header-generator'),
+                            'off_label' => __('No', 'security-header-generator'),
+                            'default'   => false,
+                            'inline' => true,
+                        ],
+                    ],
+                    'conditional' => [
+                        'field'     => 'include_sts',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'include_ofs',
+                    'type'      => 'switch',
+                    'label' => __('Configure Frame Sources?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to configure allowed frame sources. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'include_ofs_type',
                     'type' => 'radio',
-                    'title' => __('Directives', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to configure site framing. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options</a>', 'security-header-generator'),
+                    'label' => __('Directives', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to configure site framing. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options</a>', 'security-header-generator'),
                     'options' => array(
                         'DENY' => __('deny all framing', 'security-header-generator'),
                         'SAMEORIGIN' => __('deny all framing unless done from the origination domain', 'security-header-generator'),
                     ),
                     'inline' => true,
                     'default' => 'DENY',
-                    'dependency' => array('include_ofs', '==', true),
-                ),
-
-                // access control allow methods
-                array(
-                    'id' => 'include_acam',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure access methods?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header for Access-Control-Allow-Methods. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-                array(
+                    'conditional' => [
+                        'field'     => 'include_ofs',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'include_acam',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to configure access methods?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header for Access-Control-Allow-Methods. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'include_acam_methods',
-                    'type' => 'checkbox',
-                    'title' => __('Methods', 'security-header-generator'),
-                    'desc' => __('Select the methods you wish to allow.<br />NOTE: Most public websites require at least GET to be viewable online.<br />NOTE 2: This will block unselected methods.', 'security-header-generator'),
-                    'options' => array(
+                    'type' => 'checkboxes',
+                    'label' => __('Methods', 'security-header-generator'),
+                    'description' => __('Select the methods you wish to allow.<br /><strong>NOTE:</strong> Most public websites require at least GET to be viewable online.<br /><strong>NOTE 2:</strong> This will block unselected methods.', 'security-header-generator'),
+                    'options' => [
                         'GET' => __('GET', 'security-header-generator'),
                         'HEAD' => __('HEAD', 'security-header-generator'),
                         'POST' => __('POST', 'security-header-generator'),
@@ -328,63 +306,69 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                         'TRACE' => __('TRACE', 'security-header-generator'),
                         'PATCH' => __('PATCH', 'security-header-generator'),
                         '*' => __('Allow All', 'security-header-generator'),
-                    ),
+                    ],
                     'inline' => true,
                     'default' => array('GET', 'POST', 'HEAD'),
-                    'dependency' => array('include_acam', '==', true),
-                ),
-
-                // access control allow credentials
-                array(
-                    'id' => 'include_acac',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to allow access control credentials?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header for Access-Control-Allow-Credentials. See here for more information: <a href=https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials</a>', 'security-header-generator'),
-                    'default' => true,
-                ),
-
-                // access control allow origin
-                array(
-                    'id' => 'include_acao',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to allow an access control origin?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header for Access-Control-Allow-Origin. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // origin
-                array(
+                    'conditional' => [
+                        'field'     => 'include_acam',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'include_acac',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to allow access control credentials?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header for Access-Control-Allow-Credentials. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => true,
+                ],
+                [
+                    'id'        => 'include_acao',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to allow an access control origin?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header for Access-Control-Allow-Origin. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'include_acao_origin',
                     'type' => 'text',
-                    'title' => __('Origin', 'security-header-generator'),
-                    'desc' => __('Set the allowed access origin here.  Can either be an asterisk: <code>*</code>, or a FQDN URL: <code>https://example.com</code><br />NOTE: If nothing is put in here, we will default to <code>*</code>', 'security-header-generator'),
-                    'dependency' => array('include_acao', '==', true),
-                ),
+                    'label' => __('Access Control Allow Origin', 'security-header-generator'),
+                    'description' => __('Set the allowed access origin here. Can either be an asterisk: <code>*</code>, or a FQDN URL: <code>https://example.com</code>', 'security-header-generator'),
+                    'default' => '*',
+                    'conditional' => [
+                        'field'     => 'include_acao',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
 
-                // mimetype sniffing
-                array(
-                    'id' => 'include_mimesniffing',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to prevent mime-type sniffing?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to force proper mime-types. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // referrer policy
-                array(
-                    'id' => 'include_referrer_policy',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure origin referrers?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to configure allowed origin referrers. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // configure the referrer policy
-                array(
+                ],
+                [
+                    'id'        => 'include_mimesniffing',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to prevent mime-type sniffing?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to force proper mime-types. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'include_referrer_policy',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to configure referrer policy?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to configure allowed origin referrers. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'include_referrer_policy_setting',
                     'type' => 'radio',
-                    'title' => __('Directives', 'security-header-generator'),
-                    'options' => array(
+                    'label' => __('Directives', 'security-header-generator'),
+                    'options' => [
                         'no-referrer' => __('no referrer', 'security-header-generator'),
                         'no-referrer-when-downgrade' => __('no referrer on protocol downgrade', 'security-header-generator'),
                         'origin' => __('origin only', 'security-header-generator'),
@@ -393,115 +377,124 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                         'strict-origin' => __('strict origin', 'security-header-generator'),
                         'strict-origin-when-cross-origin' => __('strict origin on cross domain', 'security-header-generator'),
                         'unsafe-url' => __('full referrer path', 'security-header-generator')
-                    ),
+                    ],
                     'inline' => true,
-                    'default' => 'strict-origin',
-                    'dependency' => array('include_referrer_policy', '==', true),
-                ),
-
-                // force downloads
-                array(
-                    'id' => 'include_download_options',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to force downloads?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to downloading resources instead of directly openning them in the browser. See here for more information: <a href="https://www.nwebsec.com/HttpHeaders/SecurityHeaders/XDownloadOptions" target="_blank">https://www.nwebsec.com/HttpHeaders/SecurityHeaders/XDownloadOptions</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // block cross-domain requests from pdf's and flash
-                array(
-                    'id' => 'include_crossdomain',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to block cross domain origins?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to block cross domain origins. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // upgrade insecure requests
-                array(
-                    'id' => 'include_upgrade_insecure',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to upgrade insecure requests?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to upgrade insecure requests. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // Cross-Origin-Embedder-Policy
-                array(
-                    'id' => 'coep',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure a Cross-Origin-Embedder-Policy?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to set a Cross-Origin-Embedder-Policy. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // configure the resource policy
-                array(
+                    'default' => array('same-origin'),
+                    'conditional' => [
+                        'field'     => 'include_referrer_policy',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'include_download_options',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to force downloads?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to downloading resources instead of directly openning them in the browser. See here for more information: <a href="https://www.nwebsec.com/HttpHeaders/SecurityHeaders/XDownloadOptions" target="_blank">https://www.nwebsec.com/HttpHeaders/SecurityHeaders/XDownloadOptions</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'include_crossdomain',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to block cross domain origins?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to block cross domain origins. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/X-Permitted-Cross-Domain-Policies</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'include_upgrade_insecure',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to upgrade insecure requests?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to upgrade insecure requests. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade-Insecure-Requests</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
+                    'id'        => 'coep',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to configure a Cross-Origin-Embedder-Policy?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to set a Cross-Origin-Embedder-Policy. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Embedder-Policy</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'coep_setting',
                     'type' => 'radio',
-                    'title' => __('Directives', 'security-header-generator'),
-                    'options' => array(
+                    'label' => __('Directives', 'security-header-generator'),
+                    'options' => [
                         'unsafe-none' => __('unsafe-none', 'security-header-generator'),
                         'require-corp' => __('require-corp', 'security-header-generator'),
-                    ),
+                    ],
                     'inline' => true,
-                    'default' => 'unsafe-none',
-                    'dependency' => array('coep', '==', true),
-                ),
-
-                // Cross-Origin-Resource-Policy
-                array(
-                    'id' => 'corp',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure a Cross-Origin-Resource-Policy?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to set a Cross-Origin-Resource-Policy. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // configure the resource policy
-                array(
+                    'default' => array('unsafe-none'),
+                    'conditional' => [
+                        'field'     => 'coep',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'corp',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to configure a Cross-Origin-Resource-Policy?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to set a Cross-Origin-Resource-Policy. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'corp_setting',
                     'type' => 'radio',
-                    'title' => __('Directives', 'security-header-generator'),
-                    'options' => array(
+                    'label' => __('Directives', 'security-header-generator'),
+                    'options' => [
                         'same-site' => __('same-site', 'security-header-generator'),
                         'same-origin' => __('same-origin', 'security-header-generator'),
                         'cross-origin' => __('cross-origin', 'security-header-generator'),
-                    ),
+                    ],
                     'inline' => true,
-                    'default' => 'same-origin',
-                    'dependency' => array('corp', '==', true),
-                ),
-
-                // Cross-Origin-Opener-Policy
-                array(
-                    'id' => 'coop',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure a Cross-Origin-Opener-Policy?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to set a Cross-Origin-Opener-Policy. See here for more information: <a href="https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy" target="_blank">https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy</a>', 'security-header-generator'),
-                    'default' => false,
-                ),
-
-                // configure the opener policy
-                array(
+                    'default' => array('same-origin'),
+                    'conditional' => [
+                        'field'     => 'corp',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id'        => 'coop',
+                    'type'      => 'switch',
+                    'label' => __('Do you want to configure a Cross-Origin-Opener-Policy?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to set a Cross-Origin-Opener-Policy. See here for more information: <a href="https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy" target="_blank">https://owasp.org/www-project-secure-headers/#cross-origin-opener-policy</a>', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                ],
+                [
                     'id' => 'coop_setting',
                     'type' => 'radio',
-                    'title' => __('Directives', 'security-header-generator'),
-                    'options' => array(
+                    'label' => __('Directives', 'security-header-generator'),
+                    'options' => [
                         'unsafe-none' => __('unsafe-none', 'security-header-generator'),
                         'same-origin-allow-popups' => __('same-origin-allow-popups', 'security-header-generator'),
                         'same-origin' => __('same-origin', 'security-header-generator'),
-                    ),
+                    ],
                     'inline' => true,
-                    'default' => 'unsafe-none',
-                    'dependency' => array('coop', '==', true),
-                ),
-
-            );
+                    'default' => array('unsafe-none'),
+                    'conditional' => [
+                        'field'     => 'coop',
+                        'value'     => true,
+                        'condition' => '==',
+                    ],
+                ],
+            ];
         }
 
         /** 
-         * kcp_content_security_policy_headers
+         * kcp_csp_headers
          * 
          * The method is responsible for setting up the content security policy header settings
          * 
@@ -513,176 +506,174 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
          * @return array Returns an array of all the settings necessary
          * 
          */
-        private function kcp_content_security_policy_headers(): array
-        {
+        private function kcp_csp_headers(): array {
 
-            // hold the return array and directives array
-            $_ret = array();
-            $_ret_dir = array();
+            // hold the return and the directives array
+            $ret = [];
+            $dir_arr = [];
+            
+            // now hold all our directives
+            $dir = \KCP_CSPGEN_Configs::get_csp_directives();
 
-            // hold an array of directives
-            $_dir = KCP_CSPGEN_Configs::get_csp_directives();
-
-            // build out our first set of fields
-            $_ret[] = array(
-
-                // generate content security policy
-                array(
+            // build out the initial fields
+            $ret = [
+                [
                     'id' => 'generate_csp',
-                    'type' => 'switcher',
-                    'title' => __('Generate CSP?', 'security-header-generator'),
-                    'desc' => __('Setting this will set the flag for generating a Content Security Policy.  See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a>', 'security-header-generator'),
+                    'type' => 'switch',
+                    'label' => __('Generate the CSP?', 'security-header-generator'),
+                    'description' => __('Setting this will set the flag for generating a Content Security Policy.  See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a>', 'security-header-generator'),
+                    'on_label' => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
                     'default' => false,
-                ),
-
-                // apply to admin
-                array(
+                ],
+                [
                     'id' => 'apply_csp_to_admin',
-                    'type' => 'switcher',
-                    'title' => __('Apply to Admin?', 'security-header-generator'),
-                    'desc' => __('This will attempt to apply the Content Security Policy Headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
-                    'default' => false,
-                    'dependency' => array('generate_csp', '==', true),
-                ),
+                    'type' => 'switch',
+                    'label' => __('Apply it to the Admin?', 'security-header-generator'),
+                    'description' => __('This will attempt to apply the Content Security Policy Headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                    'conditional' => [
+                        'field' => 'generate_csp',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
 
-                // apply a preset
-                array(
+                ],
+                [
                     'id' => 'apply_csp_preset',
                     'type' => 'select',
-                    'title' => __('Apply a Preset?', 'security-header-generator'),
-                    'desc' => __('Select a preset to start with', 'security-header-generator'),
+                    'label' => __('Apply a preset?', 'security-header-generator'),
+                    'description' => __('Select a preset to start with...', 'security-header-generator'),
                     'default' => ['none'],
                     'options' => $this->manage_presets(),
                     'class' => 'kpsh-full-field',
-                    'dependency' => array('generate_csp', '==', true),
-                ),
+                    'conditional' => [
+                        'field' => 'generate_csp',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
 
-                // basic auth username
-                array(
-                    'id' => 'auth_un',
-                    'type' => 'text',
-                    'title' => __('Basic Auth Username', 'security-header-generator'),
-                    'desc' => __('Enter your Basic Auth Username, if your site has this protection. (aka: htaccess protection, or htpasswd', 'security-header-generator'),
-                    'dependency' => array('generate_csp', '==', true),
-                    'class' => 'kpsh-half-field',
-                    'attributes' => array('autocomplete' => 'off',),
-                ),
-
-                // basic auth password
-                array(
-                    'id' => 'auth_pw',
-                    'type' => 'text',
-                    'attributes' => array('type' => 'password', 'autocomplete' => 'new-password'),
-                    'title' => __('Basic Auth Password', 'security-header-generator'),
-                    'desc' => __('Enter your Basic Auth Password, if your site has this protection. (aka: htaccess protection, or htpasswd', 'security-header-generator'),
-                    'dependency' => array('generate_csp', '==', true),
-                    'class' => 'kpsh-half-field',
-
-                ),
-
-            );
-
-            // loop over the directives array
-            foreach ($_dir as $_key => $_val) {
-
-                // we want some other fields for the sandbox directive
-                if ($_val['id'] == 'generate_csp_custom_sandbox') {
-
-                    // add the field to the array
-                    $_ret_dir[] = array(
-
-                        // csp directive
-                        array(
-                            'id' => $_val['id'],
-                            'title' => $_val['title'],
-                            'desc' => $_val['desc'],
-                            'type' => 'checkbox',
-                            'options' => array(
-                                'allow-downloads' => __('allow-downloads', 'security-header-generator'),
-                                'allow-downloads-without-user-activation' => __('allow-downloads-without-user-activation', 'security-header-generator'),
-                                'allow-forms' => __('allow-forms', 'security-header-generator'),
-                                'allow-modals' => __('allow-modals', 'security-header-generator'),
-                                'allow-orientation-lock' => __('allow-orientation-lock', 'security-header-generator'),
-                                'allow-pointer-lock' => __('allow-pointer-lock', 'security-header-generator'),
-                                'allow-popups' => __('allow-popups', 'security-header-generator'),
-                                'allow-popups-to-escape-sandbox' => __('allow-popups-to-escape-sandbox', 'security-header-generator'),
-                                'allow-presentation' => __('allow-presentation', 'security-header-generator'),
-                                'allow-same-origin' => __('allow-same-origin', 'security-header-generator'),
-                                'allow-scripts' => __('allow-scripts', 'security-header-generator'),
-                                'allow-storage-access-by-user-activation' => __('allow-storage-access-by-user-activation', 'security-header-generator'),
-                                'allow-top-navigation' => __('allow-top-navigation', 'security-header-generator'),
-                                'allow-top-navigation-by-user-activation' => __('allow-top-navigation-by-user-activation', 'security-header-generator'),
-                                'allow-top-navigation-to-custom-protocols' => __('allow-top-navigation-to-custom-protocols', 'security-header-generator'),
-                            ),
+                ],
+                [
+                    'id' => 'csp_basic_auth',
+                    'label' => __('Basic Authentication', 'security-header-generator'),
+                    'description' => __('Enter your Basic Auth Username and Password, if your site has this protection. (aka: htaccess protection, or htpasswd)<br /><strong>NOTE:</strong> This is stored unencrypted.', 'security-header-generator'),
+                    'type' => 'group',
+                    'fields' => [
+                        [
+                            'id' => 'auth_un',
+                            'type' => 'text',
+                            'label'  => __( 'Username', 'security-header-generator' ),
                             'inline' => true,
-                            'class' => 'kpsh-full-field',
-                            'dependency' => array('generate_csp', '==', true),
-                        ),
+                        ],
+                        [
+                            'id' => 'auth_pw',
+                            'type' => 'password',
+                            'label'  => __( 'Password', 'security-header-generator' ),
+                            'inline' => true,
+                        ],
+                    ],
+                    'conditional' => [
+                        'field' => 'generate_csp',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
+                ],
 
-                    );
+            ];
 
-                    // we don't want the full fields set for the report-to directive
-                } elseif ($_val['id'] == 'generate_csp_report_to') {
+            // now... loop over the directives
+            foreach($dir as $k => $v) {
 
-                    // add the field to the array
-                    $_ret_dir[] = array(
+                // check if we're at the sandbox directive
+                if ($v['id'] == 'generate_csp_custom_sandbox') {
 
-                        // csp directive
-                        array(
-                            'id' => $_val['id'],
-                            'title' => $_val['title'],
-                            'desc' => $_val['desc'],
-                            'type' => 'text',
-                            'dependency' => array('generate_csp', '==', true),
-                            'class' => 'kpsh-half-field',
-                        ),
-                        array(
-                            'id' => $_val['id'] . '_hidden',
-                            'type' => 'text',
-                            'default' => '0',
-                            'dependency' => array('generate_csp', '==', true),
-                            'class' => 'kpsh-half-field kpsh-half-field-hidden',
-                        )
+                    // add it to the array
+                    $dir_arr[] = [
+                        'id' => $v['id'],
+                        'type' => 'checkboxes',
+                        'label' => __($v['title'], 'security-header-generator'),
+                        'description' => __($v['desc'], 'security-header-generator'),
+                        'options' => [
+                            'allow-downloads' => __('allow-downloads', 'security-header-generator'),
+                            'allow-downloads-without-user-activation' => __('allow-downloads-without-user-activation', 'security-header-generator'),
+                            'allow-forms' => __('allow-forms', 'security-header-generator'),
+                            'allow-modals' => __('allow-modals', 'security-header-generator'),
+                            'allow-orientation-lock' => __('allow-orientation-lock', 'security-header-generator'),
+                            'allow-pointer-lock' => __('allow-pointer-lock', 'security-header-generator'),
+                            'allow-popups' => __('allow-popups', 'security-header-generator'),
+                            'allow-popups-to-escape-sandbox' => __('allow-popups-to-escape-sandbox', 'security-header-generator'),
+                            'allow-presentation' => __('allow-presentation', 'security-header-generator'),
+                            'allow-same-origin' => __('allow-same-origin', 'security-header-generator'),
+                            'allow-scripts' => __('allow-scripts', 'security-header-generator'),
+                            'allow-storage-access-by-user-activation' => __('allow-storage-access-by-user-activation', 'security-header-generator'),
+                            'allow-top-navigation' => __('allow-top-navigation', 'security-header-generator'),
+                            'allow-top-navigation-by-user-activation' => __('allow-top-navigation-by-user-activation', 'security-header-generator'),
+                            'allow-top-navigation-to-custom-protocols' => __('allow-top-navigation-to-custom-protocols', 'security-header-generator'),
+                        ],
+                        'inline' => true,
+                        'conditional' => [
+                            'field' => 'generate_csp',
+                            'value' => true,
+                            'condition' => '==',
+                        ],
+                    ];
+                    
+                // check if we're at the report-to directive
+                } elseif ($v['id'] == 'generate_csp_report_to') {
 
-                    );
+                    // add it to the array
+                    $dir_arr[] = [
+                        'id' => $v['id'],
+                        'type' => 'text',
+                        'label'  => __( $v['title'], 'security-header-generator' ),
+                        'description' => __($v['desc'], 'security-header-generator'),
+                        'conditional' => [
+                            'field' => 'generate_csp',
+                            'value' => true,
+                            'condition' => '==',
+                        ],
+                    ];
 
-                    // it's not, we can move on
+                // proceed with the rest
                 } else {
 
-                    // add the field to the array
-                    $_ret_dir[] = array(
+                    // add it to the array
+                    $dir_arr[] = [
+                        'id' => sprintf('csp_group_%s', $v['id']),
+                        'type' => 'group',
+                        'label' => __($v['title'], 'security-header-generator'),
+                        'fields' => [
+                            [
+                                'id' => $v['id'],
+                                'type' => 'text',
+                                'description' => __($v['desc'], 'security-header-generator'),
+                                'inline' => true,
+                            ],
+                            [
+                                'id' => $v['id'],
+                                'type' => 'checkboxes',
+                                'description' => __($v['desc'], 'security-header-generator'),
+                                'options' => $this->manage_extras($v['id']),
+                                'inline' => true,
+                            ],
+                        ],
+                        'conditional' => [
+                            'field' => 'generate_csp',
+                            'value' => true,
+                            'condition' => '==',
+                        ],
+                    ];
 
-                        // csp directive
-                        array(
-                            'id' => $_val['id'],
-                            'title' => $_val['title'],
-                            'desc' => $_val['desc'],
-                            'type' => 'text',
-                            'dependency' => array('generate_csp', '==', true),
-                            'class' => 'kpsh-half-field',
-                        ),
-
-                        // extra fields
-                        array(
-                            'id' => $_val['id'] . '_allow_unsafe',
-                            'title' => __('Extra Settings?', 'security-header-generator'),
-                            'desc' => __('Injects the proper attribute when selected', 'security-header-generator'),
-                            'type' => 'checkbox',
-                            'options' => $this->manage_extras($_val['id']),
-                            'inline' => true,
-                            'dependency' => array('generate_csp', '==', true),
-                            'class' => 'kpsh-half-field',
-                        )
-
-                    );
                 }
+
             }
 
-            // inject the flattenned directive field array
-            $_ret[] = array_merge(...$_ret_dir);
+            // return the array
+            return array_merge($ret, $dir_arr);
 
-            // return the unpacked array
-            return array_merge(...$_ret);
         }
 
         /** 
@@ -698,42 +689,49 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
          * @return array Returns an array of all the settings necessary
          * 
          */
-        private function kcp_permissions_policy_headers(): array
-        {
+        private function kcp_perm_headers(): array {
 
-            // return the array of fields
-            return array(
-
-                // Feature Policy: aka Permissions-Policy
-                array(
+            // set the fields array
+            $ret = [
+                [
                     'id' => 'feature_policy',
-                    'type' => 'switcher',
-                    'title' => __('Do you want to configure a Feature Policy (aka Permissions-Policy)?', 'security-header-generator'),
-                    'desc' => __('Setting this will add another header to configure browser and frame permissions. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy</a><br /><br />NOTE:  Some of these features are not implemented for all browsers, and/or could be experimental.  Please read through that information and decide what features you need, and what audiences you need to apply to.', 'security-header-generator'),
+                    'type' => 'switch',
+                    'label' => __('Generate a Feature Policy (aka Permissions-Policy)?', 'security-header-generator'),
+                    'description' => __('Setting this will add another header to configure browser and frame permissions. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy</a><br /><br />NOTE:  Some of these features are not implemented for all browsers, and/or could be experimental.  Please read through that information and decide what features you need, and what audiences you need to apply to.', 'security-header-generator'),
+                    'on_label' => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
                     'default' => false,
-                ),
-
-                // apply to admin
-                array(
+                ],
+                [
                     'id' => 'apply_fp_to_admin',
-                    'type' => 'switcher',
-                    'title' => __('Apply to Admin?', 'security-header-generator'),
-                    'desc' => __('This will attempt to apply the Feature Policy Headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
-                    'default' => false,
-                    'dependency' => array('feature_policy', '==', true),
-                ),
+                    'type' => 'switch',
+                    'label' => __('Apply to Admin?', 'security-header-generator'),
+                    'description' => __('This will attempt to apply the Feature Policy Headers to the admin side of your site in addition to the front-end.', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                    'conditional' => [
+                        'field' => 'feature_policy',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
+                    'id' => 'fp_section',
+                    'label' => __('Allowed Policy Directives', 'security-header-generator'),
+                    'type' => 'message',
+                    'message_type' => 'info', // info, success, warning, error
+                    'content' => __('Select the policy directives you would like to allow, along with its origins. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives</a>', 'security-header-generator'),
+                    'conditional' => [
+                        'field' => 'feature_policy',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
+                ],
+            ];
 
-                // Feature Policies Fieldset
-                array(
-                    'id' => 'feature_policies',
-                    'type' => 'fieldset',
-                    'title' => __('Allowed Policy Directives', 'security-header-generator'),
-                    'desc' => __('Select the policy directives you would like to allow, along with its origins. See here for more information: <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy#directives</a>', 'security-header-generator'),
-                    'dependency' => array('feature_policy', '==', true),
-                    'fields' => $this->kcp_feature_policy_fields(),
-                ),
-
-            );
+            // return the array
+            return array_merge($ret, $this->kcp_feature_policy_fields());
         }
 
         /** 
@@ -753,46 +751,50 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
         {
 
             // get the array of policies
-            $_policies = KCP_CSPGEN_Configs::get_permissions_directives();
+            $policies = KCP_CSPGEN_Configs::get_permissions_directives();
 
             // setup the returnable array
-            $_ret = array();
+            $ret = [];
 
             // loop over the policies array and add the approriate field
-            foreach ($_policies as $_key => $_val) {
+            foreach ($policies as $k => $v) {
 
-                $_ret[] = array(
-
-                    // policy directive
-                    array(
-                        'id' => $_val['id'],
-                        'title' => $_val['title'],
-                        'desc' => $_val['desc'],
-                        'type' => 'button_set',
-                        'options' => array(
-                            0 => __('None', 'security-header-generator'),
-                            1 => __('Any', 'security-header-generator'),
-                            2 => __('Self', 'security-header-generator'),
-                            3 => __('Source', 'security-header-generator'),
-                        ),
-                        'default' => 1,
-                        'inline' => true,
-                    ),
-
-                    // source domains if needed
-                    array(
-                        'id' => 'fp_' . $_key . '_src_domain',
-                        'type' => 'text',
-                        'title' => __('Source Domains', 'security-header-generator'),
-                        'desc' => __('Space-delimited list of allowed source URIs. Please make sure they include the http(s):// and each is enclosed in quotes.', 'security-header-generator'),
-                        'dependency' => array('fp_' . $_key, '==', 3),
-                    ),
-
-                );
+                $ret[] = [
+                    'id' => $v['id'],
+                    'type' => 'group',
+                    'label' => __($v['title'], 'security-header-generator'),
+                    'description' => __($v['desc'], 'security-header-generator'),
+                    'fields' => [
+                        [
+                            'id' => sprintf('fp_%s', $k),
+                            'type' => 'radio',
+                            'options' => array(
+                                '0' => __('None', 'security-header-generator'),
+                                '1' => __('Any', 'security-header-generator'),
+                                '2' => __('Self', 'security-header-generator'),
+                                '3' => __('Source', 'security-header-generator'),
+                            ),
+                            'default' => ['1'],
+                            'inline' => true,
+                        ],
+                        [
+                            'id' => sprintf('fp_%s_src_domain', $k),
+                            'type' => 'text',
+                            'label' => __('Source Domains', 'security-header-generator'),
+                            'description' => __('Space-delimited list of allowed source URIs. Please make sure they include the http(s):// and each is enclosed in quotes.', 'security-header-generator'),
+                            'inline' => true,
+                        ],
+                    ],
+                    'conditional' => [
+                        'field' => 'feature_policy',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
+                ];
             }
 
             // return the fields
-            return array_merge(...$_ret);
+            return $ret;
         }
 
         /** 

@@ -6,8 +6,18 @@ namespace Composer\Autoload;
 
 class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
 {
-    public static $files = array (
-        '1f4ba90fb71805aa5e237b786e9d2517' => __DIR__ . '/..' . '/custom-fields/classes/setup.class.php',
+    public static $prefixLengthsPsr4 = array (
+        'K' =>
+        array (
+            'KP\\WPFieldFramework\\' => 20,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'KP\\WPFieldFramework\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src',
+        ),
     );
 
     public static $classMap = array (
@@ -16,11 +26,23 @@ class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
         'KCP_CSPGEN_Headers' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-headers.php',
         'KCP_CSPGEN_Presets' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-presets.php',
         'KCP_CSPGEN_Settings' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-settings.php',
+        'KP\\WPFieldFramework\\BlockGenerator' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/BlockGenerator.php',
+        'KP\\WPFieldFramework\\ExportImport' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/ExportImport.php',
+        'KP\\WPFieldFramework\\FieldTypes' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/FieldTypes.php',
+        'KP\\WPFieldFramework\\Framework' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/Framework.php',
+        'KP\\WPFieldFramework\\Loader' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/Loader.php',
+        'KP\\WPFieldFramework\\MetaBox' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/MetaBox.php',
+        'KP\\WPFieldFramework\\OptionsPage' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/OptionsPage.php',
+        'KP\\WPFieldFramework\\Repeater' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/Repeater.php',
+        'KP\\WPFieldFramework\\Sanitizer' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/Sanitizer.php',
+        'KP\\WPFieldFramework\\Storage' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/Storage.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$classMap;
 
         }, null, ClassLoader::class);

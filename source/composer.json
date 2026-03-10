@@ -7,35 +7,41 @@
     "readme": "readme.txt",
     "license": "GPL-3.0-or-later",
     "prefer-stable": true,
+    "funding": [
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.biz/kevinpirnie"
+        },
+        {
+            "type": "ko-fi",
+            "url": "https://ko-fi.com/kevinpirnie"
+        }
+    ],
     "authors": [
         {
             "name": "Kevin Pirnie",
-            "email": "me@kpirnie.com",
-            "homepage": "https://kevinpirnie.com",
+            "email": "iam@kevinpirnie.com",
             "role": "Developer"
         }
     ],
     "support": {
-        "email": "support@kpirnie.com",
+        "email": "iam@kevinpirnie.com",
         "issues": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator/-/issues",
         "source": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator"
     },
-    "funding": [
-        {
-            "type": "paypal",
-            "url": "https://paypal.me/kevinpirnie"
-        }
-    ],
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "kevinpirnie/kpt-wpfieldframework": ">=1"
     },
     "autoload": {
         "classmap": [
             "work/inc/"
-        ],
-        "files": [
-            "vendor/custom-fields/classes/setup.class.php"
         ]
     },
-    "optimize-autoloader": true
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "apcu-autoloader": true,
+        "sort-packages": true
+    }
 }

@@ -31,19 +31,9 @@ class ComposerAutoloaderInita3c874ab9c3efef40cc6301f5815a401
         require __DIR__ . '/autoload_static.php';
         call_user_func(\Composer\Autoload\ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::getInitializer($loader));
 
+        $loader->setClassMapAuthoritative(true);
+        $loader->setApcuPrefix('8ff2a15a3bc0fcc7e720');
         $loader->register(true);
-
-        $filesToLoad = \Composer\Autoload\ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$files;
-        $requireFile = \Closure::bind(static function ($fileIdentifier, $file) {
-            if (empty($GLOBALS['__composer_autoload_files'][$fileIdentifier])) {
-                $GLOBALS['__composer_autoload_files'][$fileIdentifier] = true;
-
-                require $file;
-            }
-        }, null, null);
-        foreach ($filesToLoad as $fileIdentifier => $file) {
-            $requireFile($fileIdentifier, $file);
-        }
 
         return $loader;
     }

@@ -107,17 +107,17 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     // include our autoloader
     include WPSH_PATH . '/vendor/autoload.php';
 
-    // hook into the plugin loaded
-    add_action('kpshg_loaded', function (): void {
+    // hook into the admin menu action to add our settings page
+    add_action('admin_menu', function (): void {
 
-        // create the settings as well as the menu pages
-        $_settings = new KCP_CSPGEN_Settings();
+        // bring in our settings class
+        $settings = new KCP_CSPGEN_Settings();
 
-        // run it
-        $_settings->kp_cspgen_settings();
+        // fire up the settings
+        $settings->kp_cspgen_settings();
 
-        // clean it up
-        unset($_settings);
+        // clean up
+        unset($settings);
     }, PHP_INT_MAX);
 
     // hack in some styling
@@ -127,7 +127,7 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
         wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, time());
 
         // register the unminified script
-        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), time());
+        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), time(), true);
 
         // localize script data
         wp_localize_script('kpsh_js', 'wpshPresets', array(
@@ -167,7 +167,7 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
             wp_send_json_error('Insufficient permissions');
         }
 
-        $preset_key = sanitize_text_field($_POST['preset_key'] ?? '');
+        $preset_key = sanitize_text_field(wp_unslash($_POST['preset_key'] ?? ''));
 
         if (empty($preset_key)) {
             wp_send_json_error('No preset key provided');

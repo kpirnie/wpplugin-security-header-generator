@@ -67,3 +67,22 @@
 .kpshg-depend-hidden>.kpshg-title {
     text-align: right;
 }
+
+.the_list {
+    margin-left: 25px;
+}
+
+.technical-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 3px solid #2271b1;
+}
+
+.technical-section h3 {
+    color: #2271b1;
+}
+
+.kp-wsf-field-row--html>th {
+    width: 1px !important;
+}
+.kp-wsf-group-field label:first-child {padding-bottom:10px !important;}
