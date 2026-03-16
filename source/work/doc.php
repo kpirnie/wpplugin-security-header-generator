@@ -124,6 +124,51 @@ if (! current_user_can('manage_options')) {
                 </ul>
             </li>
             <li>
+                <strong><?php esc_html_e('Access Control Allow Headers', 'security-header-generator'); ?></strong>
+                <ul class="the_list">
+                    <li>
+                        <?php esc_html_e('Specifies which HTTP request headers are permitted when making the actual cross-origin request following a preflight. This is the server\'s response to the browser\'s Access-Control-Request-Headers preflight header.', 'security-header-generator'); ?>
+                        <ul class="the_list">
+                            <li>
+                                <?php esc_html_e('Learn more:', 'security-header-generator'); ?>
+                                <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><?php esc_html_e('Enter a comma-delimited list of header names. Example: <code>Content-Type, Authorization, X-Requested-With</code>', 'security-header-generator'); ?></li>
+                </ul>
+            </li>
+            <li>
+                <strong><?php esc_html_e('Access Control Expose Headers', 'security-header-generator'); ?></strong>
+                <ul class="the_list">
+                    <li>
+                        <?php esc_html_e('Controls which response headers are exposed to JavaScript running in the browser. By default, only CORS-safelisted headers are accessible. Use this to expose custom headers your application relies on.', 'security-header-generator'); ?>
+                        <ul class="the_list">
+                            <li>
+                                <?php esc_html_e('Learn more:', 'security-header-generator'); ?>
+                                <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Expose-Headers</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><?php esc_html_e('Enter a comma-delimited list of header names to expose. Example: <code>X-Custom-Header, X-Request-Id</code>', 'security-header-generator'); ?></li>
+                </ul>
+            </li>
+            <li>
+                <strong><?php esc_html_e('Access Control Max Age', 'security-header-generator'); ?></strong>
+                <ul class="the_list">
+                    <li>
+                        <?php esc_html_e('Controls how long the results of a preflight request can be cached, reducing the number of OPTIONS roundtrips for repeat cross-origin requests.', 'security-header-generator'); ?>
+                        <ul class="the_list">
+                            <li>
+                                <?php esc_html_e('Learn more:', 'security-header-generator'); ?>
+                                <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><?php esc_html_e('Enter the number of seconds to cache preflight results. Default is 600 (10 minutes). Chrome caps at 7200; Firefox caps at 86400.', 'security-header-generator'); ?></li>
+                </ul>
+            </li>
+            <li>
                 <strong><?php esc_html_e('Access Control Origin', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
                     <li>

@@ -97,6 +97,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
 
                 // implement hook
                 do_action('wpsh_send_frontend_headers');
+
             }, PHP_INT_MIN);
         }
 
@@ -464,10 +465,48 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 if ($_admin_apply || (! is_admin())) {
 
                     // append the header... since this is only applicable if it's true
-                    $_ret['Access-Control-Allow-Credentials'] = true;
+                    $_ret['Access-Control-Allow-Credentials'] = 'true';
 
                     // implement hook with the header argument
                     do_action('wpsh_acac_header', $_ret['Access-Control-Allow-Credentials']);
+                }
+            }
+
+            // include Access-Control-Allow-Headers setting
+            $_apply_acah = filter_var(get_our_option('include_acah'), FILTER_VALIDATE_BOOLEAN);
+            if ($_apply_acah) {
+                if ($_admin_apply || (! is_admin())) {
+                    $_headers = (get_our_option('include_acah_headers')) ?: 'Content-Type, Authorization';
+                    $_ret['Access-Control-Allow-Headers'] = $_headers;
+
+                    // implement hook with the header argument
+                    do_action('wpsh_acah_header', $_ret['Access-Control-Allow-Headers']);
+                }
+            }
+
+            // include Access-Control-Expose-Headers setting
+            $_apply_aceh = filter_var(get_our_option('include_aceh'), FILTER_VALIDATE_BOOLEAN);
+            if ($_apply_aceh) {
+                if ($_admin_apply || (! is_admin())) {
+                    $_expose = (get_our_option('include_aceh_headers')) ?: '';
+                    if (!empty($_expose)) {
+                        $_ret['Access-Control-Expose-Headers'] = $_expose;
+
+                        // implement hook with the header argument
+                        do_action('wpsh_aceh_header', $_ret['Access-Control-Expose-Headers']);
+                    }
+                }
+            }
+
+            // include Access-Control-Max-Age setting
+            $_apply_acma = filter_var(get_our_option('include_acma'), FILTER_VALIDATE_BOOLEAN);
+            if ($_apply_acma) {
+                if ($_admin_apply || (! is_admin())) {
+                    $_max_age = (get_our_option('include_acma_seconds')) ?: 600;
+                    $_ret['Access-Control-Max-Age'] = $_max_age;
+
+                    // implement hook with the header argument
+                    do_action('wpsh_acma_header', $_ret['Access-Control-Max-Age']);
                 }
             }
 
@@ -587,17 +626,30 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // get the allowed directives
             $_directives = KCP_CSPGEN_Configs::get_csp_directives();
 
-            // I know we have the directives so just loop them
+            // Directives that are saved as flat top-level options (not wrapped in a group field)
+            $_flat_ids = ['generate_csp_custom_sandbox', 'generate_csp_report_to'];
+
+            // loop the directives
             foreach ($_directives as $_key => $_val) {
 
-                // get the directive value URI's
-                $_uris = get_our_option($_val['id']) ?? '';
+                if (in_array($_val['id'], $_flat_ids)) {
 
-                // get the unsafe config
-                $_unsafe = get_our_option($_val['id'] . '_allow_unsafe') ?? array();
+                    // Sandbox and report-to are flat fields - read directly
+                    $_uris   = get_our_option($_val['id']) ?? '';
+                    $_unsafe = array();
 
-                // hold the defaults: removed WP Defaults
-                $_defaults = ''; // $this -> kp_csp_wp_defaults( $_val['id'] ) ?? '';
+                } else {
+
+                    // All other directives are saved under their group wrapper key:
+                    // wpsh_settings[csp_group_{id}][{id}]
+                    // wpsh_settings[csp_group_{id}][{id}_allow_unsafe][]
+                    $_group  = (array) ( get_our_option('csp_group_' . $_val['id']) ?? array() );
+                    $_uris   = $_group[$_val['id']] ?? '';
+                    $_unsafe = $_group[$_val['id'] . '_allow_unsafe'] ?? array();
+                }
+
+                // hold the defaults
+                $_defaults = '';
 
                 // hold an unsafe string
                 $_us = '';
@@ -608,24 +660,24 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // manage the "extras" flags
                     $_us = $this->manage_extras((array) $_unsafe);
 
-                    // we need the sandbox directive to be added if it's set
+                    // special case: sandbox directive expects an array of tokens
                     if ($_val['id'] == 'generate_csp_custom_sandbox') {
 
-                        // Special case for sandbox directive, it should be an array
                         $_ret .= is_array($_uris) ? 'sandbox ' . implode(' ', $_uris) . '; ' : '';
+
                     }
 
-                    // append it with the self
+                    // append the directive
                     $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . $_defaults . "; ";
+
                 } else {
 
                     // manage the "extras" flags
                     $_us = $this->manage_extras((array) $_unsafe);
 
-                    // only append this if we have a value
+                    // only append if extras are set
                     if (! empty($_us)) {
 
-                        // append it
                         $_ret .= $_key . " " . $_us . "; ";
                     }
                 }
@@ -660,28 +712,31 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // get the permissions directives
             $_directives = KCP_CSPGEN_Configs::get_permissions_directives();
 
-            // get the configured options
-            $_options = get_our_option('feature_policies');
-
-            // I know we have them, so just loop over them
+            // loop over them
             foreach ($_directives as $_key => $_val) {
 
-                // if the key itself doesn't exist, skip it
-                if (! array_key_exists('fp_' . $_key . '_src_domain', $_options) || ! isset($_options['fp_' . $_key . '_src_domain'])) {
+                // Each directive is saved under its group wrapper key (e.g. fp_accelerometer)
+                // which contains:
+                //   fp_{key}            → the radio value (0=none, 1=any, 2=self, 3=source)
+                //   fp_{key}_src_domain → the source URL text field
+                $_group = (array) ( get_our_option($_val['id']) ?? array() );
+
+                // skip if this directive has never been configured
+                if (empty($_group)) {
                     continue;
                 }
 
-                // get the configured options directive, default to any
-                $_dir = ($_options[$_val['id']]) ?? 1;
+                // get the radio directive value, default to any (1)
+                $_dir = (int) ($_group['fp_' . $_key] ?? 1);
 
-                // get the configured options domain
-                $_url = $_options['fp_' . $_key . '_src_domain'];
+                // get the source domain
+                $_url = $_group['fp_' . $_key . '_src_domain'] ?? '';
 
-                // append the policy to the string
+                // append the formatted directive
                 $_ret .= $this->kp_format_policy_directive($_key, $_dir, $_url) . ', ';
             }
 
-            // return the compiled string, minus the last comma
+            // return the compiled string, minus the trailing ', '
             return rtrim($_ret, ', ');
         }
 

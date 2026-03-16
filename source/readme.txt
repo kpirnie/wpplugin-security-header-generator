@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 5.4.77
+Stable tag: 5.6.03
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -69,7 +69,20 @@ Please understand, I cannot generate the proper headers for you through the word
 == Changelog ==
 
 = 5.6.03 =
-* Replace: reworked settings
+* Restructured: Standard headers
+    * better organization and management for me
+    * happy coincidence: better performance in both admin and front-end
+* Update: reworked settings
+    * Replaced exsiting setting framework with mine
+* Fixed: Switch and single checkbox value saving
+* Fixed: Access-Control-Allow-Credentials value on set
+    * was setting as boolean, now is string
+* Fixed: Settings backup/export
+* Add: New CORS related headers
+    * Access-Control-Expose-Headers
+    * Access-Control-Allow-Headers
+    * Access-Control-Max-Age
+    * See here for more information: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/
 
 = 5.4.77 =
 * Add: Presets for CSP

@@ -108,7 +108,7 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     include WPSH_PATH . '/vendor/autoload.php';
 
     // hook into the admin menu action to add our settings page
-    add_action('admin_menu', function (): void {
+    add_action('plugins_loaded', function (): void {
 
         // bring in our settings class
         $settings = new KCP_CSPGEN_Settings();
