@@ -117,27 +117,6 @@ For complex CSP configurations or professional assistance, contact the developer
 
 **Note**: Due to the complexity and time required for proper CSP configuration, individual CSP setup assistance cannot be provided through the WordPress.org support forums.
 
-## Changelog Highlights
-
-### Version 5.3.01 (Latest)
-- ✅ WordPress Core 6.9 compatibility verified
-- ⬆️ PHP 8.1 minimum requirement
-- 🔄 Updated WordPress defaults
-- 🐛 Fixed 'None' CSP setting functionality
-
-### Version 5.2.99
-- ➕ Added 'base-uri' directive
-- ➖ Removed multisite functionality (was causing header application issues)
-- 🔄 Renamed 'Allow Unsafe' to 'Extras'
-- ➖ Removed 'report-to' directive (pending full browser support)
-
-### Version 5.0.11
-- ➕ Added 'sandbox' directive for CSP
-- 🐛 Fixed CSP header application when no value is set
-- ✅ PHP 8.3 compatibility verified
-
-For complete changelog, see the plugin's WordPress.org page.
-
 ## Contributing
 
 The Security Header Generator is open source software. Contributions are welcome!
@@ -155,7 +134,7 @@ This plugin implements security best practices and is regularly updated to maint
 
 ## License
 
-This plugin is licensed under the GPL v2 or later.
+This plugin is licensed under the GPL v3 or later.
 
 ---
 
