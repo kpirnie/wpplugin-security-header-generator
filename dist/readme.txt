@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 5.6.03
+Stable tag: 6.0.23
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -68,7 +68,11 @@ Please understand, I cannot generate the proper headers for you through the word
  
 == Changelog ==
 
-= 5.6.03 =
+= 6.0.23 =
+* Implement: Settings migration from v5.x
+    * Just in case, the old version is backed up to `wpsh_settings_pre_migration_backup`
+    * End user is prompted to download it and back it up locally before removing it.
+    * Why? If downgrading to a previous version, the options can get restored
 * Restructured: Standard headers
     * better organization and management for me
     * happy coincidence: better performance in both admin and front-end

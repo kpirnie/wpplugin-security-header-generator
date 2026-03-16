@@ -24,6 +24,8 @@ class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'KCP_CSPGEN_Configs' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-configs.php',
         'KCP_CSPGEN_Headers' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-headers.php',
+        'KCP_CSPGEN_Migration' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-migration.php',
+        'KCP_CSPGEN_Migration_Backup' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-migration-backup.php',
         'KCP_CSPGEN_Presets' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-presets.php',
         'KCP_CSPGEN_Settings' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-settings.php',
         'KP\\WPFieldFramework\\BlockGenerator' => __DIR__ . '/..' . '/kevinpirnie/kpt-wpfieldframework/src/BlockGenerator.php',

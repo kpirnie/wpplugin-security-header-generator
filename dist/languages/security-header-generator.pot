@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-16 12:37+0000\n"
+"POT-Creation-Date: 2026-03-16 13:47+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -30,15 +30,15 @@ msgstr ""
 msgid "Cannot Network Activate"
 msgstr ""
 
-#: source/work/common.php:154
+#: source/work/common.php:176
 msgid "PHP Upgrade Notice"
 msgstr ""
 
-#: source/work/common.php:155
+#: source/work/common.php:177
 msgid "To maintain the security standards of the Security Header Generator plugin this will be the final version that supports PHP versions lower than 8.2. Your site must be upgraded in order to update the plugin to future versions."
 msgstr ""
 
-#: source/work/common.php:156
+#: source/work/common.php:178
 msgid "Please see here for up to date PHP version information: https://www.php.net/supported-versions.php"
 msgstr ""
 
@@ -1348,6 +1348,26 @@ msgstr ""
 
 #: source/work/inc/kcp-cspgen-configs.php:614
 msgid "same-origin-allow-popups"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-migration-backup.php:83
+msgid "Security Header Generator — Pre-Migration Backup"
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-migration-backup.php:86
+msgid "Before your settings were automatically migrated to the new format, a snapshot of your original configuration was saved to the database."
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-migration-backup.php:90
+msgid "Please download this backup file and save it somewhere safe."
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-migration-backup.php:92
+msgid "The file cannot be recovered after download — clicking the button below will permanently delete the backup from the database."
+msgstr ""
+
+#: source/work/inc/kcp-cspgen-migration-backup.php:104
+msgid "Download Backup &amp; Delete"
 msgstr ""
 
 #: source/work/inc/kcp-cspgen-presets.php:40

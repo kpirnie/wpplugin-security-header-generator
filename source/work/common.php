@@ -107,6 +107,28 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     // include our autoloader
     include WPSH_PATH . '/vendor/autoload.php';
 
+    /**
+     * Run the settings schema migration as early as possible in
+     * plugins_loaded so that the migrated data is in place before
+     * any action (send_headers, admin_init, etc.) calls get_our_option().
+     */
+    add_action('plugins_loaded', function (): void {
+ 
+        KCP_CSPGEN_Migration::maybe_migrate();
+ 
+    }, 1);
+ 
+    /**
+     * Initialise the migration backup notice and download handler.
+     * Priority 2 — runs immediately after the migration (priority 1)
+     * so the backup option is guaranteed to exist by the time we check.
+     */
+    add_action('plugins_loaded', function (): void {
+ 
+        KCP_CSPGEN_Migration_Backup::init();
+ 
+    }, 2);
+
     // hook into the admin menu action to add our settings page
     add_action('plugins_loaded', function (): void {
 

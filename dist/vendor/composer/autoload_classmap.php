@@ -9,6 +9,8 @@ return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'KCP_CSPGEN_Configs' => $baseDir . '/work/inc/kcp-cspgen-configs.php',
     'KCP_CSPGEN_Headers' => $baseDir . '/work/inc/kcp-cspgen-headers.php',
+    'KCP_CSPGEN_Migration' => $baseDir . '/work/inc/kcp-cspgen-migration.php',
+    'KCP_CSPGEN_Migration_Backup' => $baseDir . '/work/inc/kcp-cspgen-migration-backup.php',
     'KCP_CSPGEN_Presets' => $baseDir . '/work/inc/kcp-cspgen-presets.php',
     'KCP_CSPGEN_Settings' => $baseDir . '/work/inc/kcp-cspgen-settings.php',
     'KP\\WPFieldFramework\\BlockGenerator' => $vendorDir . '/kevinpirnie/kpt-wpfieldframework/src/BlockGenerator.php',
