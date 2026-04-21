@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
+class ComposerStaticInit2f689f97c3bf559676183dcf74a1aef8
 {
     public static $prefixLengthsPsr4 = array (
         'K' =>
@@ -22,6 +22,7 @@ class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'KCP_CSPGEN_Common' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-common.php',
         'KCP_CSPGEN_Configs' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-configs.php',
         'KCP_CSPGEN_Headers' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-headers.php',
         'KCP_CSPGEN_Migration' => __DIR__ . '/../..' . '/work/inc/kcp-cspgen-migration.php',
@@ -43,9 +44,9 @@ class ComposerStaticInita3c874ab9c3efef40cc6301f5815a401
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita3c874ab9c3efef40cc6301f5815a401::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2f689f97c3bf559676183dcf74a1aef8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2f689f97c3bf559676183dcf74a1aef8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2f689f97c3bf559676183dcf74a1aef8::$classMap;
 
         }, null, ClassLoader::class);
     }

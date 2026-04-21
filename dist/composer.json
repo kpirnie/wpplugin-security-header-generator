@@ -1,0 +1,47 @@
+{
+    "name": "kevinpirnie/security-header-generator",
+    "description": "Security Header Generator",
+    "version": "6.0.23",
+    "type": "project",
+    "homepage": "https://kevinpirnie.com/",
+    "readme": "readme.txt",
+    "license": "GPL-3.0-or-later",
+    "prefer-stable": true,
+    "funding": [
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.biz/kevinpirnie"
+        },
+        {
+            "type": "ko-fi",
+            "url": "https://ko-fi.com/kevinpirnie"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Kevin Pirnie",
+            "email": "iam@kevinpirnie.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "iam@kevinpirnie.com",
+        "issues": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator/-/issues",
+        "source": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator"
+    },
+    "require": {
+        "php": ">=8.2",
+        "kevinpirnie/kpt-wpfieldframework": ">=1"
+    },
+    "autoload": {
+        "classmap": [
+            "work/inc/"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "classmap-authoritative": true,
+        "apcu-autoloader": true,
+        "sort-packages": true
+    }
+}

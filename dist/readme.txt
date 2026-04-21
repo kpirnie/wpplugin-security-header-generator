@@ -5,7 +5,7 @@ Tags: security, security headers, content security policy, permissions, permissi
 Requires at least: 6.0.9
 Tested up to: 7.0
 Requires PHP: 8.2
-Stable tag: 6.0.23
+Stable tag: 6.0.43
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -63,10 +63,12 @@ Please understand, I cannot generate the proper headers for you through the word
 2. Content Security Policy Settings
 3. Permissions Settings
 4. Documentation
-5. Import/Export Settings
-6. Headers Set
+5. Headers Set
  
 == Changelog ==
+
+= 6.0.43 =
+* Fix: Settings save empty array
 
 = 6.0.23 =
 * Implement: Settings migration from v5.x
