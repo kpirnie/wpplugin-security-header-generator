@@ -42,5 +42,8 @@
     "gulp": "latest",
     "gulp-clean": "latest",
     "gulp-wp-pot": "latest"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
   }
 }
