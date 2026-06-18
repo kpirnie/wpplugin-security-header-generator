@@ -3,9 +3,9 @@ Contributors: kevp75
 Donate link: https://paypal.me/kevinpirnie
 Tags: security, security headers, content security policy, permissions, permissions policy
 Requires at least: 6.0.9
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 6.0.43
+Stable tag: 6.0.51
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -66,6 +66,9 @@ Please understand, I cannot generate the proper headers for you through the word
 5. Headers Set
  
 == Changelog ==
+
+= 6.0.51 =
+* Verify: WP Core 7.1
 
 = 6.0.43 =
 * Fix: Settings save empty array
