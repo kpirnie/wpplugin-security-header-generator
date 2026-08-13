@@ -31,6 +31,7 @@ rsync -a --prune-empty-dirs \
     --exclude='*' \
     "${SRC}/" "${DIST}/"
 cp "${SRC}/readme.txt" "${DIST}/readme.txt"
+cp "${SRC}/LICENSE" "${DIST}/LICENSE"
 
 # minify the assets in place, keeping the original filenames
 echo "# Working on Assets"
