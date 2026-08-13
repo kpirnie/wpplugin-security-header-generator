@@ -1,49 +1,12 @@
 {
   "name": "security-header-generator",
-  "package": "Security Header Generator",
-  "version": "5.3.83",
-  "description": "This plugin generates the proper security HTTP response headers to keep your site secured.",
-  "main": "gulpfile.js",
-  "source": "source",
-  "distribution": "dist",
-  "production": {
-    "shouldcopy": true,
-    "path": "/home/kpirnie/SVN/security-header-generator/trunk"
-  },
-  "license": "GPL-3.0",
-  "repository": {
-    "type": "git",
-    "url": "git+https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator.git"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "author": {
-    "name": "Kevin Pirnie",
-    "email": "me@kpirnie.com",
-    "url": "https://kevinpirnie.com/"
-  },
-  "bugs": {
-    "url": "https://gitlab.com/kp-development/wordpress/plugins/wordpress-security-header-generator/issues",
-    "email": "me@kpirnie.com"
-  },
+  "version": "6.0.75",
+  "private": true,
   "type": "commonjs",
   "scripts": {
-    "minify:js": "esbuild source/assets/js/script.js --minify --outfile=dist/assets/js/script.min.js",
-    "minify:css": "esbuild source/assets/css/style.css --minify --outfile=dist/assets/css/style.min.css",
-    "minify": "npm run minify:js && npm run minify:css",
-    "gulp": "gulp",
-    "build": "gulp && npm run minify"
+    "build": "./build.sh"
   },
-  "homepage": "https://kevinpirnie.com/kevin-pirnies-articles/wordpress-plugin-security-header-generator/",
   "devDependencies": {
-    "del": "latest",
-    "esbuild": "latest",
-    "gulp": "latest",
-    "gulp-clean": "latest",
-    "gulp-wp-pot": "latest"
-  },
-  "allowScripts": {
-    "esbuild@0.28.1": true
+    "esbuild": "latest"
   }
 }
