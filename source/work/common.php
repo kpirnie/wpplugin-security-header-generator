@@ -17,8 +17,8 @@ defined('ABSPATH') || die('No direct script access allowed');
 // Plugin Activation
 register_activation_hook(WPSH_PATH . '/' . WPSH_FILENAME, function ($_network): void {
 
-    // check the PHP version, and deny if lower than 8.1
-    if (version_compare(PHP_VERSION, '8.1', '<=')) {
+    // check the PHP version, and deny if lower than 8.2
+    if (version_compare(PHP_VERSION, '8.2', '<=')) {
 
         // it is, so throw and error message and exit
         wp_die(
@@ -113,20 +113,18 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
      * any action (send_headers, admin_init, etc.) calls get_our_option().
      */
     add_action('plugins_loaded', function (): void {
- 
+
         KCP_CSPGEN_Migration::maybe_migrate();
- 
     }, 1);
- 
+
     /**
      * Initialise the migration backup notice and download handler.
      * Priority 2 — runs immediately after the migration (priority 1)
      * so the backup option is guaranteed to exist by the time we check.
      */
     add_action('plugins_loaded', function (): void {
- 
+
         KCP_CSPGEN_Migration_Backup::init();
- 
     }, 2);
 
     // hook into the admin menu action to add our settings page

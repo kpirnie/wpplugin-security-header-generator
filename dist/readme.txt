@@ -3,9 +3,9 @@ Contributors: kevp75
 Donate link: https://paypal.me/kevinpirnie
 Tags: security, security headers, content security policy, permissions, permissions policy
 Requires at least: 6.0.9
-Tested up to: 7.1
+Tested up to: 7.2
 Requires PHP: 8.2
-Stable tag: 6.0.51
+Stable tag: 6.0.75
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -66,6 +66,17 @@ Please understand, I cannot generate the proper headers for you through the word
 5. Headers Set
  
 == Changelog ==
+
+= 6.0.75 =
+* Verify: WP Core 7.2
+* Fix: Plugin checker issues
+    * migration json export, inline script versioning, false positives
+
+= 6.0.65 =
+* Fix: select2 selector
+* Add: 'class' attribute to: link, switch, wysiwyg, image, file, gallery, repeater, group, accordion, heading, html, separator, and message fields
+* Add: framework identifier
+* Enforce: PHP 8.2 Min.
 
 = 6.0.51 =
 * Verify: WP Core 7.1

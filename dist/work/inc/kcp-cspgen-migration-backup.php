@@ -19,11 +19,12 @@
  * @package Kevin's Security Header Generator
  */
 
-defined( 'ABSPATH' ) || die( 'No direct script access allowed' );
+defined('ABSPATH') || die('No direct script access allowed');
 
-if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
+if (! class_exists('KCP_CSPGEN_Migration_Backup')) {
 
-    class KCP_CSPGEN_Migration_Backup {
+    class KCP_CSPGEN_Migration_Backup
+    {
 
         // ----------------------------------------------------------------
         // Constants
@@ -40,16 +41,17 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
         /**
          * Register all hooks.  Call once from plugins_loaded.
          */
-        public static function init(): void {
+        public static function init(): void
+        {
 
             // Admin notice — only when backup option exists
-            add_action( 'admin_notices',            [ self::class, 'maybe_show_notice' ] );
+            add_action('admin_notices',            [self::class, 'maybe_show_notice']);
 
             // Inline JS for the notice (only on our page)
-            add_action( 'admin_enqueue_scripts',    [ self::class, 'maybe_enqueue_script' ] );
+            add_action('admin_enqueue_scripts',    [self::class, 'maybe_enqueue_script']);
 
             // AJAX: authenticated users only (no nopriv variant)
-            add_action( 'wp_ajax_' . self::AJAX_ACTION, [ self::class, 'handle_download' ] );
+            add_action('wp_ajax_' . self::AJAX_ACTION, [self::class, 'handle_download']);
         }
 
 
@@ -61,35 +63,36 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
          * Render the notice.
          * Conditions: manage_options, on the plugin's own admin page, backup option exists.
          */
-        public static function maybe_show_notice(): void {
+        public static function maybe_show_notice(): void
+        {
 
-            if ( ! current_user_can( 'manage_options' ) ) {
+            if (! current_user_can('manage_options')) {
                 return;
             }
 
-            if ( ! self::is_plugin_page() ) {
+            if (! self::is_plugin_page()) {
                 return;
             }
 
-            if ( ! self::backup_exists() ) {
+            if (! self::backup_exists()) {
                 return;
             }
 
             $filename = self::build_filename();
 
-            ?>
+?>
             <div class="notice notice-warning" id="wpsh-migration-backup-notice">
 
-                <h3><?php esc_html_e( 'Security Header Generator — Pre-Migration Backup', 'security-header-generator' ); ?></h3>
+                <h3><?php esc_html_e('Security Header Generator — Pre-Migration Backup', 'security-header-generator'); ?></h3>
 
                 <p>
-                    <?php esc_html_e( 'Before your settings were automatically migrated to the new format, a snapshot of your original configuration was saved to the database.', 'security-header-generator' ); ?>
+                    <?php esc_html_e('Before your settings were automatically migrated to the new format, a snapshot of your original configuration was saved to the database.', 'security-header-generator'); ?>
                 </p>
 
                 <p>
-                    <?php esc_html_e( 'Please download this backup file and save it somewhere safe.', 'security-header-generator' ); ?>
+                    <?php esc_html_e('Please download this backup file and save it somewhere safe.', 'security-header-generator'); ?>
                     <strong>
-                        <?php esc_html_e( 'The file cannot be recovered after download — clicking the button below will permanently delete the backup from the database.', 'security-header-generator' ); ?>
+                        <?php esc_html_e('The file cannot be recovered after download — clicking the button below will permanently delete the backup from the database.', 'security-header-generator'); ?>
                     </strong>
                 </p>
 
@@ -98,15 +101,14 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
                         type="button"
                         class="button button-primary"
                         id="wpsh-download-migration-backup"
-                        data-nonce="<?php echo esc_attr( wp_create_nonce( self::NONCE_ACTION ) ); ?>"
-                        data-filename="<?php echo esc_attr( $filename ); ?>"
-                    >
-                        <?php esc_html_e( 'Download Backup &amp; Delete', 'security-header-generator' ); ?>
+                        data-nonce="<?php echo esc_attr(wp_create_nonce(self::NONCE_ACTION)); ?>"
+                        data-filename="<?php echo esc_attr($filename); ?>">
+                        <?php esc_html_e('Download Backup &amp; Delete', 'security-header-generator'); ?>
                     </button>
                 </p>
 
             </div>
-            <?php
+<?php
         }
 
 
@@ -118,17 +120,20 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
          * Enqueue a small inline script that wires up the download button.
          * Only added on the plugin's own page so we don't pollute other screens.
          */
-        public static function maybe_enqueue_script( string $hook_suffix ): void {
+        public static function maybe_enqueue_script(string $hook_suffix): void
+        {
 
-            if ( ! self::is_plugin_page() ) {
+            if (! self::is_plugin_page()) {
                 return;
             }
 
-            if ( ! self::backup_exists() ) {
+            if (! self::backup_exists()) {
                 return;
             }
 
             // Depends on nothing — pure vanilla JS, appended to the footer
+            // Inline-only handle (no src), so a version string would never be output.
+            // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
             wp_register_script(
                 'wpsh-migration-backup',
                 false,    // inline only — no file
@@ -137,8 +142,9 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
                 true
             );
 
-            wp_enqueue_script( 'wpsh-migration-backup' );
+            wp_enqueue_script('wpsh-migration-backup');
 
+            // the script is a self-contained IIFE that handles the button click, confirms with the user, and streams the download via fetch.
             $js = <<<'JS'
 (function () {
     'use strict';
@@ -207,7 +213,7 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration_Backup' ) ) {
 }());
 JS;
 
-            wp_add_inline_script( 'wpsh-migration-backup', $js );
+            wp_add_inline_script('wpsh-migration-backup', $js);
         }
 
 
@@ -223,48 +229,51 @@ JS;
          * ready to be flushed — so a PHP error before the echo leaves the
          * backup intact and the user can retry.
          */
-        public static function handle_download(): void {
+        public static function handle_download(): void
+        {
 
             // Capability check
-            if ( ! current_user_can( 'manage_options' ) ) {
-                wp_send_json_error( [ 'message' => 'Permission denied.' ], 403 );
+            if (! current_user_can('manage_options')) {
+                wp_send_json_error(['message' => 'Permission denied.'], 403);
             }
 
             // Nonce check
-            if ( ! check_ajax_referer( self::NONCE_ACTION, 'nonce', false ) ) {
-                wp_send_json_error( [ 'message' => 'Invalid nonce.' ], 403 );
+            if (! check_ajax_referer(self::NONCE_ACTION, 'nonce', false)) {
+                wp_send_json_error(['message' => 'Invalid nonce.'], 403);
             }
 
             // Fetch backup — if it's gone, tell the client gracefully
-            $backup = get_option( self::BACKUP_OPTION, null );
+            $backup = get_option(self::BACKUP_OPTION, null);
 
-            if ( ! is_array( $backup ) || empty( $backup ) ) {
-                wp_send_json_error( [ 'message' => 'No backup found. It may have already been downloaded.' ], 404 );
+            if (! is_array($backup) || empty($backup)) {
+                wp_send_json_error(['message' => 'No backup found. It may have already been downloaded.'], 404);
             }
 
             // Build JSON — match the original flat format exactly (no envelope wrapper)
-            $json = wp_json_encode( $backup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+            $json = wp_json_encode($backup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
-            if ( $json === false ) {
-                wp_send_json_error( [ 'message' => 'Failed to encode backup data.' ], 500 );
+            if ($json === false) {
+                wp_send_json_error(['message' => 'Failed to encode backup data.'], 500);
             }
 
             // All data is ready — safe to delete before we send
             // (if output fails after this point the data is gone, but
             //  the user will see a network error and can contact support)
-            delete_option( self::BACKUP_OPTION );
+            delete_option(self::BACKUP_OPTION);
 
             // Clear any output buffers WordPress or the host may have opened
-            while ( ob_get_level() ) {
+            while (ob_get_level()) {
                 ob_end_clean();
             }
 
             // Send file download headers
             nocache_headers();
-            header( 'Content-Type: application/json; charset=utf-8' );
-            header( 'Content-Disposition: attachment; filename="' . self::build_filename() . '"' );
-            header( 'Content-Length: ' . strlen( $json ) );
+            header('Content-Type: application/json; charset=utf-8');
+            header('Content-Disposition: attachment; filename="' . self::build_filename() . '"');
+            header('Content-Length: ' . strlen($json));
 
+            // Raw JSON file download — escaping would corrupt the payload.
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             echo $json;
 
             exit;
@@ -278,24 +287,27 @@ JS;
         /**
          * True when viewing any page under the wpsh_settings menu slug.
          */
-        private static function is_plugin_page(): bool {
+        private static function is_plugin_page(): bool
+        {
             // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-            return is_admin() && ( sanitize_key( $_GET['page'] ?? '' ) === 'wpsh_settings' );
+            return is_admin() && (sanitize_key($_GET['page'] ?? '') === 'wpsh_settings');
         }
 
         /**
          * True when the backup option exists and is a non-empty array.
          */
-        private static function backup_exists(): bool {
-            $backup = get_option( self::BACKUP_OPTION, null );
-            return is_array( $backup ) && ! empty( $backup );
+        private static function backup_exists(): bool
+        {
+            $backup = get_option(self::BACKUP_OPTION, null);
+            return is_array($backup) && ! empty($backup);
         }
 
         /**
          * Build a datestamped filename for the download.
          */
-        private static function build_filename(): string {
-            return 'wpsh-pre-migration-backup-' . gmdate( 'Y-m-d-His' ) . '.json';
+        private static function build_filename(): string
+        {
+            return 'wpsh-pre-migration-backup-' . gmdate('Y-m-d-His') . '.json';
         }
     }
 }
