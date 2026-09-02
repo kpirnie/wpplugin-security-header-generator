@@ -97,7 +97,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
 
                 // implement hook
                 do_action('wpsh_send_frontend_headers');
-
             }, PHP_INT_MIN);
         }
 
@@ -196,26 +195,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
         }
 
         /** 
-         * kp_process_headers_for_display
-         * 
-         * The method is responsible for processing the headers for public display only
-         * 
-         * @since 7.4
-         * @access public
-         * @author Kevin Pirnie <me@kpirnie.com>
-         * @package Kevin's Security Header Generator
-         * 
-         * @return array Returns an array of all headers configured
-         * 
-         */
-        public function kp_process_headers_for_display(): array
-        {
-
-            // just return
-            return $this->kp_populate_header_array();
-        }
-
-        /** 
          * kp_populate_header_array
          * 
          * The method is responsible for processing and configuring the headers
@@ -274,7 +253,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 if ($_admin_apply || (! is_admin())) {
 
                     // set the header with directives
-                    $_ret['Strict-Transport-Security'] = "max-age=$_age; $_extras";
+                    $_ret['Strict-Transport-Security'] = ($_extras) ? "max-age=$_age; $_extras" : "max-age=$_age";
 
                     // implement hook with the header argument
                     do_action('wpsh_sts_header', $_ret['Strict-Transport-Security']);
@@ -519,18 +498,8 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 // make sure this header should be added
                 if ($_admin_fp_apply || (! is_admin())) {
 
-                    // append it to the permissions policy header if it already exists
-                    if (isset($_ret['Permissions-Policy'])) {
-
-                        // append
-                        $_ret['Permissions-Policy'] .= $this->kp_permissions_policy_builder();
-
-                        // otherwise just populate it
-                    } else {
-
-                        // populate
-                        $_ret['Permissions-Policy'] = $this->kp_permissions_policy_builder();
-                    }
+                    // populate
+                    $_ret['Permissions-Policy'] = $this->kp_permissions_policy_builder();
                 }
             }
 
@@ -637,13 +606,12 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // Sandbox and report-to are flat fields - read directly
                     $_uris   = get_our_option($_val['id']) ?? '';
                     $_unsafe = array();
-
                 } else {
 
                     // All other directives are saved under their group wrapper key:
                     // wpsh_settings[csp_group_{id}][{id}]
                     // wpsh_settings[csp_group_{id}][{id}_allow_unsafe][]
-                    $_group  = (array) ( get_our_option('csp_group_' . $_val['id']) ?? array() );
+                    $_group  = (array) (get_our_option('csp_group_' . $_val['id']) ?? array());
                     $_uris   = $_group[$_val['id']] ?? '';
                     $_unsafe = $_group[$_val['id'] . '_allow_unsafe'] ?? array();
                 }
@@ -663,13 +631,14 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // special case: sandbox directive expects an array of tokens
                     if ($_val['id'] == 'generate_csp_custom_sandbox') {
 
-                        $_ret .= is_array($_uris) ? 'sandbox ' . implode(' ', $_uris) . '; ' : '';
+                        $_ret .= is_array($_uris) ? $_key . ' ' . implode(' ', $_uris) . '; ' : '';
 
+                        // nothing else to append for this one
+                        continue;
                     }
 
                     // append the directive
                     $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . $_defaults . "; ";
-
                 } else {
 
                     // manage the "extras" flags
@@ -719,7 +688,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                 // which contains:
                 //   fp_{key}            → the radio value (0=none, 1=any, 2=self, 3=source)
                 //   fp_{key}_src_domain → the source URL text field
-                $_group = (array) ( get_our_option($_val['id']) ?? array() );
+                $_group = (array) (get_our_option($_val['id']) ?? array());
 
                 // skip if this directive has never been configured
                 if (empty($_group)) {

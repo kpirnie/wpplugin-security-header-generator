@@ -18,12 +18,17 @@ defined('ABSPATH') || die('No direct script access allowed');
 register_activation_hook(WPSH_PATH . '/' . WPSH_FILENAME, function ($_network): void {
 
     // check the PHP version, and deny if lower than 8.2
-    if (version_compare(PHP_VERSION, '8.2', '<=')) {
+    if (version_compare(PHP_VERSION, '8.2', '<')) {
 
         // it is, so throw and error message and exit
         wp_die(
-            esc_html_e('<h1>PHP To Low</h1><p>Due to the nature of this plugin, it cannot be run on lower versions of PHP.</p><p>Please contact your hosting provider to upgrade your site to at least version 8.1.</p>', 'security-header-generator'),
-            esc_html_e('Cannot Activate: PHP To Low', 'security-header-generator'),
+            sprintf(
+                '<h1>%1$s</h1><p>%2$s</p><p>%3$s</p>',
+                esc_html__('PHP Too Low', 'security-header-generator'),
+                esc_html__('Due to the nature of this plugin, it cannot be run on lower versions of PHP.', 'security-header-generator'),
+                esc_html__('Please contact your hosting provider to upgrade your site to at least version 8.2.', 'security-header-generator')
+            ),
+            esc_html__('Cannot Activate: PHP Too Low', 'security-header-generator'),
             array(
                 'back_link' => true,
             )
@@ -35,8 +40,13 @@ register_activation_hook(WPSH_PATH . '/' . WPSH_FILENAME, function ($_network): 
 
         // we did, so... throw an error message and exit
         wp_die(
-            esc_html_e('<h1>Cannot Network Activate</h1><p>Due to the nature of this plugin, it cannot be network activated.</p><p>Please go back, and activate inside your subsites.</p>', 'security-header-generator'),
-            esc_html_e('Cannot Network Activate', 'security-header-generator'),
+            sprintf(
+                '<h1>%1$s</h1><p>%2$s</p><p>%3$s</p>',
+                esc_html__('Cannot Network Activate', 'security-header-generator'),
+                esc_html__('Due to the nature of this plugin, it cannot be network activated.', 'security-header-generator'),
+                esc_html__('Please go back, and activate inside your subsites.', 'security-header-generator')
+            ),
+            esc_html__('Cannot Network Activate', 'security-header-generator'),
             array(
                 'back_link' => true,
             )
@@ -130,6 +140,11 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     // hook into the admin menu action to add our settings page
     add_action('plugins_loaded', function (): void {
 
+        // the settings page is admin-only, no need to build it on the front-end
+        if (! is_admin()) {
+            return;
+        }
+
         // bring in our settings class
         $settings = new KCP_CSPGEN_Settings();
 
@@ -144,10 +159,10 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     add_action('admin_enqueue_scripts', function (): void {
 
         // register the unminified stylesheet
-        wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, time());
+        wp_register_style('kpsh_css', plugins_url('/assets/css/style.css', WPSH_PATH . '/' . WPSH_FILENAME), null, WPSH_VERSION);
 
         // register the unminified script
-        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), time(), true);
+        wp_register_script('kpsh_js', plugins_url('/assets/js/script.js', WPSH_PATH . '/' . WPSH_FILENAME), array(), WPSH_VERSION, true);
 
         // localize script data
         wp_localize_script('kpsh_js', 'wpshPresets', array(
@@ -166,7 +181,7 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
     add_action('admin_notices', function (): void {
 
         // if the site is under PHP 8.2
-        if (version_compare(PHP_VERSION, '8.2', '<=')) {
+        if (version_compare(PHP_VERSION, '8.2', '<')) {
 
             // show this notice
 ?>

@@ -116,9 +116,9 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
             $options->register();
 
             // add in the sub menu items linking to the tabs
-            add_submenu_page('wpsh_settings', '', 'CSP Headers', 'manage_options', 'admin.php?page=wpsh_settings&tab=csp', '');
-            add_submenu_page('wpsh_settings', '', 'Permissions Headers', 'manage_options', 'admin.php?page=wpsh_settings&tab=permissions', '');
-            add_submenu_page('wpsh_settings', '', 'Documentation', 'manage_options', 'admin.php?page=wpsh_settings&tab=doc', '');
+            add_submenu_page('wpsh_settings', __('CSP Headers', 'security-header-generator'), __('CSP Headers', 'security-header-generator'), 'manage_options', 'admin.php?page=wpsh_settings&tab=csp', '');
+            add_submenu_page('wpsh_settings', __('Permissions Headers', 'security-header-generator'), __('Permissions Headers', 'security-header-generator'), 'manage_options', 'admin.php?page=wpsh_settings&tab=permissions', '');
+            add_submenu_page('wpsh_settings', __('Documentation', 'security-header-generator'), __('Documentation', 'security-header-generator'), 'manage_options', 'admin.php?page=wpsh_settings&tab=doc', '');
 
             // bold the tab in the submenu
             add_filter('submenu_file', function ($submenu_file) {
@@ -306,31 +306,6 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     ],
 
                 ],
-                [
-                    'id' => 'csp_basic_auth',
-                    'label' => __('Basic Authentication', 'security-header-generator'),
-                    'description' => __('Enter your Basic Auth Username and Password, if your site has this protection. (aka: htaccess protection, or htpasswd)<br /><strong>NOTE:</strong> This is stored unencrypted.', 'security-header-generator'),
-                    'type' => 'group',
-                    'fields' => [
-                        [
-                            'id' => 'auth_un',
-                            'type' => 'text',
-                            'label'  => __('Username', 'security-header-generator'),
-                            'inline' => true,
-                        ],
-                        [
-                            'id' => 'auth_pw',
-                            'type' => 'password',
-                            'label'  => __('Password', 'security-header-generator'),
-                            'inline' => true,
-                        ],
-                    ],
-                    'conditional' => [
-                        'field' => 'generate_csp',
-                        'value' => true,
-                        'condition' => '==',
-                    ],
-                ],
 
             ];
 
@@ -344,8 +319,8 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     $dir_arr[] = [
                         'id' => $v['id'],
                         'type' => 'checkboxes',
-                        'label' => __($v['title'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-                        'description' => __($v['desc'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'label' => $v['title'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'description' => ['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                         'options' => [
                             'allow-downloads' => __('allow-downloads', 'security-header-generator'),
                             'allow-downloads-without-user-activation' => __('allow-downloads-without-user-activation', 'security-header-generator'),
@@ -378,8 +353,8 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     $dir_arr[] = [
                         'id' => $v['id'],
                         'type' => 'text',
-                        'label'  => __($v['title'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-                        'description' => __($v['desc'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'label'  => $v['title'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'description' => $v['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                         'conditional' => [
                             'field' => 'generate_csp',
                             'value' => true,
@@ -394,18 +369,18 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     $dir_arr[] = [
                         'id' => sprintf('csp_group_%s', $v['id']),
                         'type' => 'group',
-                        'label' => __($v['title'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'label' => $v['title'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                         'fields' => [
                             [
                                 'id' => $v['id'],
                                 'type' => 'text',
-                                'description' => __($v['desc'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                                'description' => $v['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                                 'inline' => true,
                             ],
                             [
                                 'id' => sprintf('%s_allow_unsafe', $v['id']),
                                 'type' => 'checkboxes',
-                                'description' => __($v['desc'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                                'description' => $v['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                                 'options' => $this->manage_extras($v['id']),
                                 'inline' => true,
                             ],
@@ -510,8 +485,8 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                 $ret[] = [
                     'id' => $v['id'],
                     'type' => 'group',
-                    'label' => __($v['title'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-                    'description' => __($v['desc'], 'security-header-generator'), // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                    'label' => $v['title'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                    'description' => $v['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                     'fields' => [
                         [
                             'id' => sprintf('fp_%s', $k),

@@ -1,4 +1,5 @@
 <?php
+
 /** 
  * Plugin Uninstaller
  * 
@@ -9,22 +10,21 @@
  * @author Kevin Pirnie <me@kpirnie.com>
  * @package Kevin's Security Header Generator
  * 
-*/
+ */
 
 // make sure we're actually supposed to be doing this
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) || ! WP_UNINSTALL_PLUGIN ||
-	dirname( WP_UNINSTALL_PLUGIN ) != dirname( plugin_basename( __FILE__ ) ) ) {
+if (
+	! defined('WP_UNINSTALL_PLUGIN') || ! WP_UNINSTALL_PLUGIN ||
+	dirname(WP_UNINSTALL_PLUGIN) != dirname(plugin_basename(__FILE__))
+) {
 	exit;
 }
 
 // remove our settings
-unregister_setting( 'kp_cspgen_settings_group', 'kp_cspgen_settings_name' );
+delete_option('wpsh_settings');
 
-// delete the option
-delete_option( 'kp_cspgen_settings_name' );
+// remove the pre-migration backup
+delete_option('wpsh_settings_pre_migration_backup');
 
-// remove the CPT
-unregister_post_type( 'kcp_csp' );
-
-// remove the post for the CSP
-array_map( fn( $id ) => wp_delete_post( $id, true ), get_posts( ['post_type' => 'kcp_csp', 'posts_per_page'=>-1, 'fields'=>'ids'] ) );
+// remove the schema version marker
+delete_option('wpsh_settings_schema_version');

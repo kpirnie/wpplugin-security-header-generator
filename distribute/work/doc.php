@@ -24,7 +24,7 @@ if (! current_user_can('manage_options')) {
 <p><?php esc_html_e('Head over to the admin section of your site and click "Security Headers", configure how you need it to be configured. The configured headers will automatically be implemented.', 'security-header-generator'); ?></p>
 
 <h3 id="gotcha"><?php esc_html_e('IMPORTANT: Hosting Environment Considerations', 'security-header-generator'); ?></h3>
-<p><?php esc_html_e('If your hosting environment is already setting these headers, most likely your settings in this plugin will <strong>NOT</strong> override the values you specify', 'security-header-generator'); ?>.</p>
+<p><?php echo wp_kses_post(__('If your hosting environment is already setting these headers, most likely your settings in this plugin will <strong>NOT</strong> override the values you specify', 'security-header-generator')); ?>.</p>
 <p><?php esc_html_e('If this is the case, please check with your hosting company or review your server configuration for headers being set. The plugin will do its best to override them, but in some environments this is just not possible', 'security-header-generator'); ?>.</p>
 
 <h3 id="settings"><?php esc_html_e('Settings Overview', 'security-header-generator'); ?></h3>
@@ -43,7 +43,7 @@ if (! current_user_can('manage_options')) {
             <li>
                 <strong><?php esc_html_e('Apply to the REST API', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
-                    <li><?php esc_html_e('Choose whether to apply these headers to your WordPress REST API. <strong>NOTE:</strong> Because of how WordPress works, enabling this will also apply headers to the admin areas. Test thoroughly after enabling to ensure nothing breaks.', 'security-header-generator'); ?></li>
+                    <li><?php echo wp_kses_post(__('Choose whether to apply these headers to your WordPress REST API. <strong>NOTE:</strong> Because of how WordPress works, enabling this will also apply headers to the admin areas. Test thoroughly after enabling to ensure nothing breaks.', 'security-header-generator')); ?></li>
                 </ul>
             </li>
             <li>
@@ -102,7 +102,7 @@ if (! current_user_can('manage_options')) {
                         </ul>
                     </li>
                     <li>
-                        <?php esc_html_e('Select which methods to allow. Most public websites need at least GET (for viewing pages). Clicking "Allow All" will check or uncheck all options. <strong>Note:</strong> Unselected methods will be blocked.', 'security-header-generator'); ?>
+                        <?php echo wp_kses_post(__('Select which methods to allow. Most public websites need at least GET (for viewing pages). Clicking "Allow All" will check or uncheck all options. <strong>Note:</strong> Unselected methods will be blocked.', 'security-header-generator')); ?>
                     </li>
                 </ul>
             </li>
@@ -135,7 +135,7 @@ if (! current_user_can('manage_options')) {
                             </li>
                         </ul>
                     </li>
-                    <li><?php esc_html_e('Enter a comma-delimited list of header names. Example: <code>Content-Type, Authorization, X-Requested-With</code>', 'security-header-generator'); ?></li>
+                    <li><?php echo wp_kses_post(__('Enter a comma-delimited list of header names. Example: <code>Content-Type, Authorization, X-Requested-With</code>', 'security-header-generator')); ?></li>
                 </ul>
             </li>
             <li>
@@ -150,7 +150,7 @@ if (! current_user_can('manage_options')) {
                             </li>
                         </ul>
                     </li>
-                    <li><?php esc_html_e('Enter a comma-delimited list of header names to expose. Example: <code>X-Custom-Header, X-Request-Id</code>', 'security-header-generator'); ?></li>
+                    <li><?php echo wp_kses_post(__('Enter a comma-delimited list of header names to expose. Example: <code>X-Custom-Header, X-Request-Id</code>', 'security-header-generator')); ?></li>
                 </ul>
             </li>
             <li>
@@ -181,7 +181,7 @@ if (! current_user_can('manage_options')) {
                         </ul>
                     </li>
                     <li>
-                        <?php esc_html_e('Enter a specific domain (like <code>https://example.com</code>) or use <code>*</code> to allow all domains. If left empty, defaults to <code>*</code>.', 'security-header-generator'); ?>
+                        <?php echo wp_kses_post(__('Enter a specific domain (like <code>https://example.com</code>) or use <code>*</code> to allow all domains. If left empty, defaults to <code>*</code>.', 'security-header-generator')); ?>
                     </li>
                 </ul>
             </li>
@@ -343,7 +343,7 @@ if (! current_user_can('manage_options')) {
                     <li>
                         <?php esc_html_e('Enable this to create a Content Security Policy for your site. This will show many additional fields where you can specify which external resources (scripts, styles, images, etc.) are allowed to load.', 'security-header-generator'); ?>
                         <ul class="the_list">
-                            <li><?php esc_html_e('Enter external domains in the Source fields using a space-separated list (example: <code>cdn.example.com fonts.google.com</code>)', 'security-header-generator'); ?></li>
+                            <li><?php echo wp_kses_post(__('Enter external domains in the Source fields using a space-separated list (example: <code>cdn.example.com fonts.google.com</code>)', 'security-header-generator')); ?></li>
                             <li><?php esc_html_e('Learn more:', 'security-header-generator'); ?> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP</a></li>
                         </ul>
                     </li>
@@ -352,7 +352,7 @@ if (! current_user_can('manage_options')) {
             <li>
                 <strong><?php esc_html_e('Apply to Admin', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
-                    <li><?php esc_html_e('Choose whether to apply the Content Security Policy to your WordPress admin area as well as the public site. <strong>Warning:</strong> This may break admin features if not configured correctly. Test thoroughly.', 'security-header-generator'); ?></li>
+                    <li><?php echo wp_kses_post(__('Choose whether to apply the Content Security Policy to your WordPress admin area as well as the public site. <strong>Warning:</strong> This may break admin features if not configured correctly. Test thoroughly.', 'security-header-generator')); ?></li>
                 </ul>
             </li>
             <li>
@@ -389,7 +389,7 @@ if (! current_user_can('manage_options')) {
                 <strong><?php esc_html_e('Include WordPress Defaults', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
                     <li>
-                        <?php esc_html_e('This toggle controls whether WordPress default domains are <strong>added to</strong> your custom values. It does NOT replace your custom settings.', 'security-header-generator'); ?>
+                        <?php echo wp_kses_post(__('This toggle controls whether WordPress default domains are <strong>added to</strong> your custom values. It does NOT replace your custom settings.', 'security-header-generator')); ?>
                     </li>
                     <li>
                         <?php esc_html_e('How it works:', 'security-header-generator'); ?>
@@ -420,7 +420,7 @@ if (! current_user_can('manage_options')) {
                         <strong>1. <?php esc_html_e('Source Field (Left Side):', 'security-header-generator'); ?></strong>
                         <ul class="the_list">
                             <li><?php esc_html_e('Enter external domains that should be allowed for this type of resource', 'security-header-generator'); ?></li>
-                            <li><?php esc_html_e('Example for scripts: <code>cdn.jsdelivr.net ajax.googleapis.com</code>', 'security-header-generator'); ?></li>
+                            <li><?php echo wp_kses_post(__('Example for scripts: <code>cdn.jsdelivr.net ajax.googleapis.com</code>', 'security-header-generator')); ?></li>
                             <li><?php esc_html_e('Separate multiple domains with spaces', 'security-header-generator'); ?></li>
                         </ul>
                     </li>
@@ -428,8 +428,8 @@ if (! current_user_can('manage_options')) {
                         <strong>2. <?php esc_html_e('Extra Settings Checkboxes (Right Side):', 'security-header-generator'); ?></strong>
                         <ul class="the_list">
                             <li><strong>Self:</strong> <?php esc_html_e('Allow resources from your own domain (recommended for most directives)', 'security-header-generator'); ?></li>
-                            <li><strong>Inline:</strong> <?php esc_html_e('Allow inline styles/scripts embedded in your HTML. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator'); ?></li>
-                            <li><strong>Eval:</strong> <?php esc_html_e('Allow JavaScript eval() function. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator'); ?></li>
+                            <li><strong>Inline:</strong> <?php echo wp_kses_post(__('Allow inline styles/scripts embedded in your HTML. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator')); ?></li>
+                            <li><strong>Eval:</strong> <?php echo wp_kses_post(__('Allow JavaScript eval() function. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator')); ?></li>
                             <li><strong>None:</strong> <?php esc_html_e('Block ALL sources for this directive (overrides everything else). Use this to completely disable a resource type.', 'security-header-generator'); ?></li>
                         </ul>
                     </li>
@@ -476,7 +476,7 @@ if (! current_user_can('manage_options')) {
                         </ul>
                     </li>
                     <li>
-                        <?php esc_html_e('If you select "Source", enter full URLs with protocol: <code>https://example.com https://trusted-site.com</code>', 'security-header-generator'); ?>
+                        <?php echo wp_kses_post(__('If you select "Source", enter full URLs with protocol: <code>https://example.com https://trusted-site.com</code>', 'security-header-generator')); ?>
                     </li>
                     <li><?php esc_html_e('Learn more:', 'security-header-generator'); ?> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy</a></li>
                 </ul>

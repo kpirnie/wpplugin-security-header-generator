@@ -1,7 +1,7 @@
 {
     "name": "kevinpirnie/security-header-generator",
     "description": "Security Header Generator",
-    "version": "6.0.75",
+    "version": "6.0.86",
     "type": "project",
     "homepage": "https://kevinpirnie.com/",
     "readme": "readme.txt",

@@ -222,9 +222,3 @@ function handleNoneCSP() {
         }
     });
 }
-
-// Remove duplicate space-separated tokens
-String.prototype.remDups = function () {
-    const set = new Set(this.split(' '));
-    return [...set].join(' ');
-};

@@ -1,6 +1,6 @@
 {
   "name": "security-header-generator",
-  "version": "6.0.75",
+  "version": "6.0.86",
   "private": true,
   "type": "commonjs",
   "scripts": {
@@ -8,5 +8,8 @@
   },
   "devDependencies": {
     "esbuild": "latest"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }

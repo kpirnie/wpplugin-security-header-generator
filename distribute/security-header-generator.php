@@ -11,7 +11,7 @@ Author: Kevin C. Pirnie
 Author URI: https://kevinpirnie.com/
 Requires at least: 6.0.9
 Requires PHP: 8.2
-Version: 6.0.76
+Version: 6.0.86
 Text Domain: security-header-generator
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -25,6 +25,9 @@ define('WPSH_DIRNAME', basename(dirname(__FILE__)));
 
 // setup the primary plugin file name
 define('WPSH_FILENAME', basename(__FILE__));
+
+// setup the plugin version
+define('WPSH_VERSION', '6.0.86');
 
 // Require our primary
 require(dirname(__FILE__) . '/work/common.php');

@@ -272,35 +272,5 @@ if (! class_exists('KCP_CSPGEN_Presets')) {
                 'generate_csp_custom_baseuri_allow_unsafe' => array(0),
             );
         }
-
-        /**
-         * Apply a preset to settings
-         * 
-         * @access public
-         * @static
-         * @param string $preset_key The preset key to apply
-         * @return bool Success/failure
-         */
-        public static function apply_preset(string $preset_key): bool
-        {
-            $presets = self::get_presets();
-
-            if (!isset($presets[$preset_key])) {
-                return false;
-            }
-
-            $preset_settings = $presets[$preset_key]['settings'];
-            $current_settings = get_option('wpsh_settings', array());
-
-            // Merge preset with current settings (preset takes precedence)
-            $new_settings = array_merge($current_settings, $preset_settings);
-
-            update_option('wpsh_settings', $new_settings);
-
-            // Clear cache
-            clear_our_option_cache();
-
-            return true;
-        }
     }
 }

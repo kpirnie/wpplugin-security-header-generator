@@ -51,11 +51,12 @@
  */
 
 // We don't want to allow direct access to this
-defined( 'ABSPATH' ) || die( 'No direct script access allowed' );
+defined('ABSPATH') || die('No direct script access allowed');
 
-if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
+if (! class_exists('KCP_CSPGEN_Migration')) {
 
-    class KCP_CSPGEN_Migration {
+    class KCP_CSPGEN_Migration
+    {
 
         // ----------------------------------------------------------------
         // Constants
@@ -70,7 +71,7 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * The schema version this migration targets.
          * Bump this whenever a future migration is added.
          */
-        private const TARGET_VERSION = '6.0.23';
+        private const TARGET_VERSION = '6.0.77';
 
 
         // ----------------------------------------------------------------
@@ -83,35 +84,73 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          *
          * @return void
          */
-        public static function maybe_migrate(): void {
+        public static function maybe_migrate(): void
+        {
 
-            $stored = (string) get_option( self::VERSION_OPTION, '0' );
+            $stored = (string) get_option(self::VERSION_OPTION, '0');
 
-            if ( version_compare( $stored, self::TARGET_VERSION, '>=' ) ) {
+            if (version_compare($stored, self::TARGET_VERSION, '>=')) {
                 return; // Already at current schema – nothing to do.
             }
 
-            $settings = get_option( 'wpsh_settings', [] );
+            $settings = get_option('wpsh_settings', []);
 
-            if ( ! empty( $settings ) && is_array( $settings ) && self::is_old_format( $settings ) ) {
+            if (! empty($settings) && is_array($settings) && self::is_old_format($settings)) {
 
                 // Snapshot before we touch anything
-                update_option( 'wpsh_settings_pre_migration_backup', $settings, false );
+                update_option('wpsh_settings_pre_migration_backup', $settings, false);
 
                 // migrate to the new format and update the setting
-                $migrated = self::transform( $settings );
-                update_option( 'wpsh_settings', $migrated );
+                $migrated = self::transform($settings);
+                update_option('wpsh_settings', $migrated);
+
+                // re-read so the credential purge below works against the migrated data
+                $settings = $migrated;
 
                 // Bust the per-request static cache so the rest of this
                 // request sees the migrated data immediately.
-                if ( function_exists( 'clear_our_option_cache' ) ) {
+                if (function_exists('clear_our_option_cache')) {
+                    clear_our_option_cache();
+                }
+            }
+
+            // strip the retired basic-auth credentials from any existing install
+            if (! empty($settings) && is_array($settings) && self::purge_credentials($settings)) {
+
+                update_option('wpsh_settings', $settings);
+
+                if (function_exists('clear_our_option_cache')) {
                     clear_our_option_cache();
                 }
             }
 
             // Mark schema as current whether or not there was anything to migrate
             // (e.g. fresh install, or already-current data).
-            update_option( self::VERSION_OPTION, self::TARGET_VERSION, false );
+            update_option(self::VERSION_OPTION, self::TARGET_VERSION, false);
+        }
+
+        /**
+         * Remove the retired csp_basic_auth username/password from the settings
+         * array, in both the grouped and the legacy flat layouts.
+         *
+         * @param array $settings The settings array, passed by reference.
+         *
+         * @return bool True when something was actually removed.
+         */
+        private static function purge_credentials(array &$settings): bool
+        {
+
+            $removed = false;
+
+            foreach (['csp_basic_auth', 'auth_un', 'auth_pw'] as $key) {
+
+                if (array_key_exists($key, $settings)) {
+                    unset($settings[$key]);
+                    $removed = true;
+                }
+            }
+
+            return $removed;
         }
 
 
@@ -127,17 +166,18 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          *   • Flat top-level CSP directive keys (generate_csp_custom_*)
          *   • 'feature_policies' as a nested array
          */
-        private static function is_old_format( array $settings ): bool {
+        private static function is_old_format(array $settings): bool
+        {
 
             // Any flat CSP directive key indicates old format
-            foreach ( self::grouped_csp_ids() as $id ) {
-                if ( array_key_exists( $id, $settings ) ) {
+            foreach (self::grouped_csp_ids() as $id) {
+                if (array_key_exists($id, $settings)) {
                     return true;
                 }
             }
 
             // Old-style nested feature policies
-            if ( isset( $settings['feature_policies'] ) && is_array( $settings['feature_policies'] ) ) {
+            if (isset($settings['feature_policies']) && is_array($settings['feature_policies'])) {
                 return true;
             }
 
@@ -152,21 +192,22 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
         /**
          * Full transformation pipeline.
          */
-        private static function transform( array $old ): array {
+        private static function transform(array $old): array
+        {
 
             $new = [];
 
             // 1. Standard-header fields — keep flat, normalise types
-            $new = array_merge( $new, self::migrate_standard_headers( $old ) );
+            $new = array_merge($new, self::migrate_standard_headers($old));
 
             // 2. CSP directive pairs → csp_group_{id} sub-arrays
-            $new = array_merge( $new, self::migrate_csp_directives( $old ) );
+            $new = array_merge($new, self::migrate_csp_directives($old));
 
             // 3. Flat CSP-adjacent fields (sandbox tokens, report-to)
-            $new = array_merge( $new, self::migrate_flat_csp_fields( $old ) );
+            $new = array_merge($new, self::migrate_flat_csp_fields($old));
 
             // 4. Feature-policy directives → {fp_id} sub-arrays
-            $new = array_merge( $new, self::migrate_feature_policies( $old ) );
+            $new = array_merge($new, self::migrate_feature_policies($old));
 
             return $new;
         }
@@ -181,27 +222,28 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * All values that the headers engine reads via get_our_option()
          * as flat keys must remain flat.
          */
-        private static function migrate_standard_headers( array $old ): array {
+        private static function migrate_standard_headers(array $old): array
+        {
 
             $new = [];
 
             // Boolean toggle/switch fields
-            foreach ( self::bool_field_keys() as $key ) {
-                if ( array_key_exists( $key, $old ) ) {
-                    $new[ $key ] = filter_var( $old[ $key ], FILTER_VALIDATE_BOOLEAN );
+            foreach (self::bool_field_keys() as $key) {
+                if (array_key_exists($key, $old)) {
+                    $new[$key] = filter_var($old[$key], FILTER_VALIDATE_BOOLEAN);
                 }
             }
 
             // Plain string fields
-            foreach ( self::string_field_keys() as $key ) {
-                if ( array_key_exists( $key, $old ) ) {
-                    $new[ $key ] = (string) $old[ $key ];
+            foreach (self::string_field_keys() as $key) {
+                if (array_key_exists($key, $old)) {
+                    $new[$key] = (string) $old[$key];
                 }
             }
 
             // Access-control allow-methods array
-            if ( array_key_exists( 'include_acam_methods', $old ) ) {
-                $new['include_acam_methods'] = is_array( $old['include_acam_methods'] )
+            if (array_key_exists('include_acam_methods', $old)) {
+                $new['include_acam_methods'] = is_array($old['include_acam_methods'])
                     ? $old['include_acam_methods']
                     : [];
             }
@@ -210,7 +252,8 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
         }
 
         /** All fields whose value must be stored as a PHP bool. */
-        private static function bool_field_keys(): array {
+        private static function bool_field_keys(): array
+        {
             return [
                 'apply_to_admin',
                 'apply_to_rest',
@@ -240,7 +283,8 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
         }
 
         /** All fields whose value must be stored as a plain string. */
-        private static function string_field_keys(): array {
+        private static function string_field_keys(): array
+        {
             return [
                 'include_sts_max_age',
                 'include_ofs_type',
@@ -249,8 +293,6 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
                 'coep_setting',
                 'corp_setting',
                 'coop_setting',
-                'auth_un',
-                'auth_pw',
                 'include_acah_headers',     // Added in 5.6.03
                 'include_aceh_headers',     // Added in 5.6.03
                 'include_acma_seconds',     // Added in 5.6.03
@@ -276,17 +318,18 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          *       'generate_csp_custom_scripts_allow_unsafe' => [1, 0],
          *   ]
          */
-        private static function migrate_csp_directives( array $old ): array {
+        private static function migrate_csp_directives(array $old): array
+        {
 
             $new = [];
 
-            foreach ( self::grouped_csp_ids() as $id ) {
+            foreach (self::grouped_csp_ids() as $id) {
 
                 $unsafe_id = $id . '_allow_unsafe';
 
-                $new[ 'csp_group_' . $id ] = [
-                    $id        => isset( $old[ $id ] ) ? (string) $old[ $id ] : '',
-                    $unsafe_id => self::coerce_allow_unsafe( $old[ $unsafe_id ] ?? [] ),
+                $new['csp_group_' . $id] = [
+                    $id        => isset($old[$id]) ? (string) $old[$id] : '',
+                    $unsafe_id => self::coerce_allow_unsafe($old[$unsafe_id] ?? []),
                 ];
             }
 
@@ -297,7 +340,8 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * IDs of all CSP directives that must be wrapped in a group.
          * (Sandbox and report-to are stored flat and are handled separately.)
          */
-        private static function grouped_csp_ids(): array {
+        private static function grouped_csp_ids(): array
+        {
             return [
                 'generate_csp_custom_baseuri',
                 'generate_csp_custom_child',
@@ -336,13 +380,14 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * @param  mixed $value Raw value from old settings.
          * @return int[]
          */
-        private static function coerce_allow_unsafe( mixed $value ): array {
+        private static function coerce_allow_unsafe(mixed $value): array
+        {
 
-            if ( ! is_array( $value ) || empty( $value ) ) {
+            if (! is_array($value) || empty($value)) {
                 return [];
             }
 
-            return array_values( array_map( 'intval', $value ) );
+            return array_values(array_map('intval', $value));
         }
 
 
@@ -354,18 +399,19 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * Sandbox and report-to are not wrapped in groups — the headers
          * engine reads them as plain flat keys.  Just carry them forward.
          */
-        private static function migrate_flat_csp_fields( array $old ): array {
+        private static function migrate_flat_csp_fields(array $old): array
+        {
 
             $new = [];
 
             // Sandbox: old = "" (nothing selected) or array of token strings
-            if ( array_key_exists( 'generate_csp_custom_sandbox', $old ) ) {
+            if (array_key_exists('generate_csp_custom_sandbox', $old)) {
                 $raw = $old['generate_csp_custom_sandbox'];
-                $new['generate_csp_custom_sandbox'] = is_array( $raw ) ? $raw : (string) $raw;
+                $new['generate_csp_custom_sandbox'] = is_array($raw) ? $raw : (string) $raw;
             }
 
             // Report-to: plain text value
-            if ( array_key_exists( 'generate_csp_report_to', $old ) ) {
+            if (array_key_exists('generate_csp_report_to', $old)) {
                 $new['generate_csp_report_to'] = (string) $old['generate_csp_report_to'];
             }
 
@@ -404,7 +450,8 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
          * but the radio sub-field and src-domain sub-field both use the
          * full directive key (fp_{$directive_key}).
          */
-        private static function migrate_feature_policies( array $old ): array {
+        private static function migrate_feature_policies(array $old): array
+        {
 
             $new = [];
 
@@ -412,19 +459,19 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
             // and fall back to any stray root-level fp_ scalars for resilience.
             $fp_flat = [];
 
-            if ( isset( $old['feature_policies'] ) && is_array( $old['feature_policies'] ) ) {
+            if (isset($old['feature_policies']) && is_array($old['feature_policies'])) {
                 $fp_flat = $old['feature_policies'];
             }
 
             // Absorb root-level fp_ scalars (some very early versions may have
             // stored them flat instead of nested under feature_policies).
-            foreach ( $old as $k => $v ) {
-                if ( strncmp( $k, 'fp_', 3 ) === 0 && ! is_array( $v ) && ! isset( $fp_flat[ $k ] ) ) {
-                    $fp_flat[ $k ] = $v;
+            foreach ($old as $k => $v) {
+                if (strncmp($k, 'fp_', 3) === 0 && ! is_array($v) && ! isset($fp_flat[$k])) {
+                    $fp_flat[$k] = $v;
                 }
             }
 
-            if ( ! class_exists( 'KCP_CSPGEN_Configs' ) ) {
+            if (! class_exists('KCP_CSPGEN_Configs')) {
                 // Configs class not yet available — skip FP migration.
                 // This is a safety net; in normal operation the autoloader
                 // will have resolved the class before this method runs.
@@ -432,7 +479,7 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
             }
 
             $directives = KCP_CSPGEN_Configs::get_permissions_directives();
-            foreach ( $directives as $directive_key => $val ) {
+            foreach ($directives as $directive_key => $val) {
                 /*
                  * $directive_key  = full directive name, e.g.
                  *                   'accelerometer', 'identity-credentials-get'
@@ -450,9 +497,9 @@ if ( ! class_exists( 'KCP_CSPGEN_Migration' ) ) {
                 $radio_key = 'fp_' . $directive_key;                     // e.g. 'fp_accelerometer', 'fp_identity-credentials-get'
                 $src_key   = 'fp_' . $directive_key . '_src_domain';     // e.g. 'fp_accelerometer_src_domain', 'fp_identity-credentials-get_src_domain'
 
-                $new[ $group_key ] = [
-                    $radio_key => (string) ( $fp_flat[ $val['id'] ] ?? '1' ),
-                    $src_key   => (string) ( $fp_flat[ $src_key ]   ?? '' ),
+                $new[$group_key] = [
+                    $radio_key => (string) ($fp_flat[$val['id']] ?? '1'),
+                    $src_key   => (string) ($fp_flat[$src_key]   ?? ''),
                 ];
             }
 
