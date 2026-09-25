@@ -70,6 +70,7 @@ Please understand, I cannot generate the proper headers for you through the word
 = 6.1.xx =
 * Verify: WP Core 7.1.2
 * Fix: broken sandbox description
+fix: read HSTS directives from the sts_group wrapper with flat-key fallback
 
 
 = 6.0.86 =

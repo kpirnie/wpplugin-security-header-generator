@@ -131,9 +131,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // add in ours
                     add_filter('rest_pre_serve_request', function ($value) {
 
-                        // remove all preset headers
-                        header_remove();
-
                         // get our generated headers
                         $_gen_headers = $this->kp_populate_header_array();
 
