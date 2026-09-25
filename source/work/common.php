@@ -3,7 +3,7 @@
 /** 
  * Common Functionality
  * 
- * Control and process the frameworks plugin updates from GitLab
+ * Bootstraps the plugin: activation checks, settings, assets, AJAX, and header processing
  * 
  * @since 7.4
  * @author Kevin Pirnie <me@kpirnie.com>

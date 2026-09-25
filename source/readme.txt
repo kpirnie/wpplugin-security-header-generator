@@ -76,6 +76,7 @@ fix: align Permissions-Policy directives
 fix: skip Access-Control-Allow-Credentials when the allowed origin is a wildcard
 remove: obsolete X-Content-Security-Policy header
 fix: remove plugin options from every subsite on multisite uninstall
+fix: make preset, backup handler, and backup script strings translatable
 
 
 = 6.0.86 =

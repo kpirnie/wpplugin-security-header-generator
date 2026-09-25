@@ -620,14 +620,11 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     $_unsafe = $_group[$_val['id'] . '_allow_unsafe'] ?? array();
                 }
 
-                // hold the defaults
-                $_defaults = '';
-
                 // hold an unsafe string
                 $_us = '';
 
                 // append it to the output string only if there is something to append
-                if (! empty($_uris) || ! empty($_defaults)) {
+                if (! empty($_uris)) {
 
                     // manage the "extras" flags
                     $_us = $this->manage_extras((array) $_unsafe);
@@ -642,7 +639,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     }
 
                     // append the directive
-                    $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . $_defaults . "; ";
+                    $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . "; ";
                 } else {
 
                     // manage the "extras" flags
