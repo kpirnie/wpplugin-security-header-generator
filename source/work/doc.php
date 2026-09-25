@@ -356,6 +356,23 @@ if (! current_user_can('manage_options')) {
                 </ul>
             </li>
             <li>
+                <strong><?php esc_html_e('Report Only', 'security-header-generator'); ?></strong>
+                <ul class="the_list">
+                    <li><?php echo wp_kses_post(__('Sends your policy as <code>Content-Security-Policy-Report-Only</code> instead of enforcing it. Browsers report what would have been blocked without actually blocking anything, which makes it the safest way to build and test your policy.', 'security-header-generator')); ?></li>
+                    <li><?php esc_html_e('Upgrade Insecure Requests is ignored by browsers in report-only mode, so if it is enabled it is still sent in an enforced Content-Security-Policy header on its own.', 'security-header-generator'); ?></li>
+                    <li><?php esc_html_e('Pair this with Report To and a Reporting Endpoint URL so the violations are actually collected somewhere.', 'security-header-generator'); ?></li>
+                </ul>
+            </li>
+            <li>
+                <strong><?php esc_html_e('Report To & Reporting Endpoint URL', 'security-header-generator'); ?></strong>
+                <ul class="the_list">
+                    <li><?php echo wp_kses_post(__('<strong>Report To:</strong> The name of the reporting group the browser should send violation reports to (example: <code>csp-endpoint</code>).', 'security-header-generator')); ?></li>
+                    <li><?php echo wp_kses_post(__('<strong>Reporting Endpoint URL:</strong> The URL that receives the reports. When both are set, a <code>Reporting-Endpoints</code> header is sent that maps the Report To name to this URL.', 'security-header-generator')); ?></li>
+                    <li><?php echo wp_kses_post(__('The URL is also added to the policy as a <code>report-uri</code> directive, for browsers that do not support <code>report-to</code> yet.', 'security-header-generator')); ?></li>
+                    <li><?php esc_html_e('Learn more:', 'security-header-generator'); ?> <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Reporting-Endpoints" target="_blank">https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Reporting-Endpoints</a></li>
+                </ul>
+            </li>
+            <li>
                 <strong><?php esc_html_e('CSP Presets', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
                     <li><?php esc_html_e('Quick start templates are available to help you configure CSP for common scenarios:', 'security-header-generator'); ?></li>
@@ -386,33 +403,6 @@ if (! current_user_can('manage_options')) {
                 </ul>
             </li>
             <li>
-                <strong><?php esc_html_e('Include WordPress Defaults', 'security-header-generator'); ?></strong>
-                <ul class="the_list">
-                    <li>
-                        <?php echo wp_kses_post(__('This toggle controls whether WordPress default domains are <strong>added to</strong> your custom values. It does NOT replace your custom settings.', 'security-header-generator')); ?>
-                    </li>
-                    <li>
-                        <?php esc_html_e('How it works:', 'security-header-generator'); ?>
-                        <ul class="the_list">
-                            <li><strong><?php esc_html_e('When ON:', 'security-header-generator'); ?></strong> <?php esc_html_e('Your custom domains PLUS WordPress default domains are included in the CSP', 'security-header-generator'); ?></li>
-                            <li><strong><?php esc_html_e('When OFF:', 'security-header-generator'); ?></strong> <?php esc_html_e('Only your custom domains are included in the CSP', 'security-header-generator'); ?></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <?php esc_html_e('WordPress default domains that will be added when enabled:', 'security-header-generator'); ?>
-                        <ul class="the_list">
-                            <li><strong>style-src:</strong> <code>https: *.googleapis.com</code></li>
-                            <li><strong>script-src:</strong> <code>https: *.googleapis.com *.gstatic.com</code></li>
-                            <li><strong>font-src:</strong> <code>data: https: *.gstatic.com</code></li>
-                            <li><strong>img-src:</strong> <code>data: https: *.gravatar.com *.wordpress.org s.w.org</code></li>
-                            <li><strong>connect-src:</strong> <code>https:</code></li>
-                            <li><strong>frame-src:</strong> <code>https: *.youtube.com *.vimeo.com</code></li>
-                            <li><strong>media-src:</strong> <code>https: s.w.org</code></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
                 <strong><?php esc_html_e('Understanding CSP Directive Configuration', 'security-header-generator'); ?></strong>
                 <ul class="the_list">
                     <li><?php esc_html_e('Each CSP directive (like script-src, style-src, etc.) has two configuration sections:', 'security-header-generator'); ?></li>
@@ -430,29 +420,12 @@ if (! current_user_can('manage_options')) {
                             <li><strong>Self:</strong> <?php esc_html_e('Allow resources from your own domain (recommended for most directives)', 'security-header-generator'); ?></li>
                             <li><strong>Inline:</strong> <?php echo wp_kses_post(__('Allow inline styles/scripts embedded in your HTML. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator')); ?></li>
                             <li><strong>Eval:</strong> <?php echo wp_kses_post(__('Allow JavaScript eval() function. <strong>Warning:</strong> This reduces security and should only be used if necessary.', 'security-header-generator')); ?></li>
+                            <li><strong>Unsafe Hashes:</strong> <?php echo wp_kses_post(__('Allow hashes in the source list to also match inline event handlers and <code>style</code> attributes. Script and style directives only.', 'security-header-generator')); ?></li>
+                            <li><strong>Report Sample:</strong> <?php esc_html_e('Include the first part of the offending code in violation reports, which makes blocked inline scripts/styles much easier to track down. Script and style directives only.', 'security-header-generator'); ?></li>
+                            <li><strong>Strict Dynamic:</strong> <?php echo wp_kses_post(__('Trust scripts loaded by an already-trusted script. When used, browsers ignore domain allow-lists and <code>\'self\'</code> for this directive, so only use it with hashes or nonces. Script directives only.', 'security-header-generator')); ?></li>
+                            <li><strong>WASM Unsafe Eval:</strong> <?php esc_html_e('Allow WebAssembly to compile and run without allowing JavaScript eval(). Script directives only.', 'security-header-generator'); ?></li>
                             <li><strong>None:</strong> <?php esc_html_e('Block ALL sources for this directive (overrides everything else). Use this to completely disable a resource type.', 'security-header-generator'); ?></li>
                         </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <strong><?php esc_html_e('How WordPress Defaults Toggle Affects Settings', 'security-header-generator'); ?></strong>
-                <ul class="the_list">
-                    <li><?php esc_html_e('When you turn WordPress Defaults ON:', 'security-header-generator'); ?>
-                        <ul class="the_list">
-                            <li><?php esc_html_e('WordPress default domains are ADDED to your Source field values', 'security-header-generator'); ?></li>
-                            <li><?php esc_html_e('Extra Settings checkboxes are temporarily set (usually "Self" is checked)', 'security-header-generator'); ?></li>
-                            <li><?php esc_html_e('Your original checkbox selections are saved in the background', 'security-header-generator'); ?></li>
-                        </ul>
-                    </li>
-                    <li><?php esc_html_e('When you turn WordPress Defaults OFF:', 'security-header-generator'); ?>
-                        <ul class="the_list">
-                            <li><?php esc_html_e('WordPress default domains are removed', 'security-header-generator'); ?></li>
-                            <li><?php esc_html_e('Your original Extra Settings checkbox selections are restored', 'security-header-generator'); ?></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong><?php esc_html_e('Important:', 'security-header-generator'); ?></strong> <?php esc_html_e('Changes only take effect when you click "Save Settings". Toggling WordPress Defaults on/off without saving will not permanently change your configuration.', 'security-header-generator'); ?>
                     </li>
                 </ul>
             </li>

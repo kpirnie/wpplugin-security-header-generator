@@ -80,6 +80,7 @@ fix: make preset, backup handler, and backup script strings translatable
 chore: correct common.php docblock and drop dead $_defaults from the CSP builder
 add: Reporting-Endpoints header and report-uri fallback for CSP reporting
 add: CSP report-only mode with upgrade-insecure-requests kept enforced
+add: unsafe-hashes, report-sample, strict-dynamic, and wasm-unsafe-eval CSP keywords
 
 
 = 6.0.86 =
