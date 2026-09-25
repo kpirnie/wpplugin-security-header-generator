@@ -1,6 +1,6 @@
 {
   "name": "security-header-generator",
-  "version": "6.0.86",
+  "version": "6.1.04",
   "private": true,
   "type": "commonjs",
   "scripts": {

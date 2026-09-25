@@ -175,20 +175,45 @@ if (! class_exists('KCP_CSPGEN_Configs')) {
                     'title' => __('Accelerometer', 'security-header-generator'),
                     'desc' => __('Controls access to the Accelerometer interface.', 'security-header-generator'),
                 ),
-                'ambient-light-sensor' => array(
-                    'id' => 'fp_ambient-light-sensor',
-                    'title' => __('Ambient Light Sensor', 'security-header-generator'),
-                    'desc' => __('Controls access to the AmbientLightSensor interface.', 'security-header-generator'),
-                ),
                 'autoplay' => array(
                     'id' => 'fp_autoplay',
                     'title' => __('Autoplay', 'security-header-generator'),
                     'desc' => __('Controls whether media can autoplay.', 'security-header-generator'),
                 ),
+                'bluetooth' => array(
+                    'id' => 'fp_bluetooth',
+                    'title' => __('Bluetooth', 'security-header-generator'),
+                    'desc' => __('Controls access to the Web Bluetooth API.', 'security-header-generator'),
+                ),
                 'camera' => array(
                     'id' => 'fp_camera',
                     'title' => __('Camera', 'security-header-generator'),
                     'desc' => __('Controls access to video input devices.', 'security-header-generator'),
+                ),
+                'captured-surface-control' => array(
+                    'id' => 'fp_captured-surface-control',
+                    'title' => __('Captured Surface Control', 'security-header-generator'),
+                    'desc' => __('Controls access to the Captured Surface Control API.', 'security-header-generator'),
+                ),
+                'compute-pressure' => array(
+                    'id' => 'fp_compute-pressure',
+                    'title' => __('Compute Pressure', 'security-header-generator'),
+                    'desc' => __('Controls access to the Compute Pressure API.', 'security-header-generator'),
+                ),
+                'cross-origin-isolated' => array(
+                    'id' => 'fp_cross-origin-isolated',
+                    'title' => __('Cross Origin Isolated', 'security-header-generator'),
+                    'desc' => __('Controls whether the document can be treated as cross-origin isolated.', 'security-header-generator'),
+                ),
+                'deferred-fetch' => array(
+                    'id' => 'fp_deferred-fetch',
+                    'title' => __('Deferred Fetch', 'security-header-generator'),
+                    'desc' => __('Controls access to the fetchLater() API.', 'security-header-generator'),
+                ),
+                'deferred-fetch-minimal' => array(
+                    'id' => 'fp_deferred-fetch-minimal',
+                    'title' => __('Deferred Fetch Minimal', 'security-header-generator'),
+                    'desc' => __('Controls the minimal fetchLater() quota shared with cross-origin subframes.', 'security-header-generator'),
                 ),
                 'display-capture' => array(
                     'id' => 'fp_display-capture',
@@ -230,11 +255,6 @@ if (! class_exists('KCP_CSPGEN_Configs')) {
                     'title' => __('Idle Detection', 'security-header-generator'),
                     'desc' => __('Controls access to the Idle Detection API.', 'security-header-generator'),
                 ),
-                'magnetometer' => array(
-                    'id' => 'fp_magnetometer',
-                    'title' => __('Magnetometer', 'security-header-generator'),
-                    'desc' => __('Controls access to the Magnetometer interface.', 'security-header-generator'),
-                ),
                 'microphone' => array(
                     'id' => 'fp_microphone',
                     'title' => __('Microphone', 'security-header-generator'),
@@ -244,6 +264,11 @@ if (! class_exists('KCP_CSPGEN_Configs')) {
                     'id' => 'fp_midi',
                     'title' => __('MIDI', 'security-header-generator'),
                     'desc' => __('Controls access to the Web MIDI API.', 'security-header-generator'),
+                ),
+                'otp-credentials' => array(
+                    'id' => 'fp_otp-credentials',
+                    'title' => __('OTP Credentials', 'security-header-generator'),
+                    'desc' => __('Controls access to the WebOTP API.', 'security-header-generator'),
                 ),
                 'payment' => array(
                     'id' => 'fp_payment',
@@ -275,10 +300,10 @@ if (! class_exists('KCP_CSPGEN_Configs')) {
                     'title' => __('Serial', 'security-header-generator'),
                     'desc' => __('Controls access to the Web Serial API.', 'security-header-generator'),
                 ),
-                'sync-xhr' => array(
-                    'id' => 'fp_sync-xhr',
-                    'title' => __('Sync XHR', 'security-header-generator'),
-                    'desc' => __('Controls synchronous XMLHttpRequest requests.', 'security-header-generator'),
+                'storage-access' => array(
+                    'id' => 'fp_storage-access',
+                    'title' => __('Storage Access', 'security-header-generator'),
+                    'desc' => __('Controls access to the Storage Access API.', 'security-header-generator'),
                 ),
                 'usb' => array(
                     'id' => 'fp_usb',
@@ -289,6 +314,11 @@ if (! class_exists('KCP_CSPGEN_Configs')) {
                     'id' => 'fp_web-share',
                     'title' => __('Web Share', 'security-header-generator'),
                     'desc' => __('Controls access to the Web Share API.', 'security-header-generator'),
+                ),
+                'window-management' => array(
+                    'id' => 'fp_window-management',
+                    'title' => __('Window Management', 'security-header-generator'),
+                    'desc' => __('Controls access to the Window Management API.', 'security-header-generator'),
                 ),
                 'xr-spatial-tracking' => array(
                     'id' => 'fp_xr-spatial-tracking',

@@ -3,9 +3,9 @@ Contributors: kevp75
 Donate link: https://paypal.me/kevinpirnie
 Tags: security, security headers, content security policy, permissions, permissions policy
 Requires at least: 6.0.9
-Tested up to: 7.1
+Tested up to: 7.1.2
 Requires PHP: 8.2
-Stable tag: 6.0.86
+Stable tag: 6.1.04
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
  
@@ -66,6 +66,22 @@ Please understand, I cannot generate the proper headers for you through the word
 5. Headers Set
  
 == Changelog ==
+
+= 6.1.04 =
+* Verify: WP Core 7.1.2
+* Fix: broken sandbox description
+* Fix: read HSTS directives from the sts_group wrapper with flat-key fallback
+* Fix: stop wiping core REST response headers before applying ours
+* Fix: align Permissions-Policy directives
+* Fix: skip Access-Control-Allow-Credentials when the allowed origin is a wildcard
+* Remove: obsolete X-Content-Security-Policy header
+* Fix: remove plugin options from every subsite on multisite uninstall
+* Fix: make preset, backup handler, and backup script strings translatable
+* Chore: correct common.php docblock and drop dead $_defaults from the CSP builder
+* Add: Reporting-Endpoints header and report-uri fallback for CSP reporting
+* Add: CSP report-only mode with upgrade-insecure-requests kept enforced
+* Add: unsafe-hashes, report-sample, strict-dynamic, and wasm-unsafe-eval CSP keywords
+* Docs: remove documentation for the retired WordPress Defaults toggle
 
 = 6.0.86 =
 * Remove: unused basic auth credential fields and purge stored values

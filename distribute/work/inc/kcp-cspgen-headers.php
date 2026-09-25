@@ -131,9 +131,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // add in ours
                     add_filter('rest_pre_serve_request', function ($value) {
 
-                        // remove all preset headers
-                        header_remove();
-
                         // get our generated headers
                         $_gen_headers = $this->kp_populate_header_array();
 
@@ -228,10 +225,16 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // see if we're configured to include the Strict Transport Security header
             if ($_apply_sts) {
 
+                // the directives are saved under the sts_group wrapper, migrated values may still be flat
+                $_sts = (array) (get_our_option('sts_group') ?? array());
+
+                // pull a directive from the group, falling back to the legacy flat key
+                $_sts_opt = fn(string $_k) => array_key_exists($_k, $_sts) ? $_sts[$_k] : get_our_option($_k);
+
                 // get our directives, and set defaults if they are not set
-                $_age = (get_our_option('include_sts_max_age')) ? get_our_option('include_sts_max_age') : 31536000;
-                $_include = (get_our_option('include_sts_subdomains')) ? 'includeSubdomains;' : '';
-                $_preload = (get_our_option('include_sts_preload')) ? 'preload;' : '';
+                $_age = ($_sts_opt('include_sts_max_age')) ? $_sts_opt('include_sts_max_age') : 31536000;
+                $_include = ($_sts_opt('include_sts_subdomains')) ? 'includeSubdomains;' : '';
+                $_preload = ($_sts_opt('include_sts_preload')) ? 'preload;' : '';
 
                 // trim the last semi-colon if needed
                 if ($_include && $_preload) {
@@ -440,8 +443,11 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // see if we're configured to include the access control allow credentials
             if ($_apply_acac) {
 
+                // browsers reject credentials alongside a wildcard origin, so skip it in that case
+                $_wildcard_origin = (($_ret['Access-Control-Allow-Origin'] ?? '') === '*');
+
                 // make sure this header should be added
-                if ($_admin_apply || (! is_admin())) {
+                if (($_admin_apply || (! is_admin())) && ! $_wildcard_origin) {
 
                     // append the header... since this is only applicable if it's true
                     $_ret['Access-Control-Allow-Credentials'] = 'true';
@@ -531,19 +537,43 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // include cross contect securtiy Policy setting
                     $_apply_upgrade = filter_var(get_our_option('include_upgrade_insecure'), FILTER_VALIDATE_BOOLEAN);
 
-                    // see if we're configured to upgrade all requests, if so.. append it to the chunk.  IIS doesn't allow duplicate keys
-                    if ($_apply_upgrade) {
+                    // see if we're only reporting violations instead of enforcing them
+                    $_report_only = filter_var(get_our_option('csp_report_only'), FILTER_VALIDATE_BOOLEAN);
 
-                        // the iis header
-                        $_chunk .= ' upgrade-insecure-requests;';
+                    // report-only ignores upgrade-insecure-requests, so it has to go out in an enforced header
+                    if ($_report_only) {
+
+                        // add the report-only content security policy header
+                        $_ret['Content-Security-Policy-Report-Only'] = $_chunk;
+
+                        // enforce the upgrade on its own if we're configured to
+                        if ($_apply_upgrade) {
+                            $_ret['Content-Security-Policy'] = 'upgrade-insecure-requests;';
+                        }
+                    } else {
+
+                        // see if we're configured to upgrade all requests, if so.. append it to the chunk.  IIS doesn't allow duplicate keys
+                        if ($_apply_upgrade) {
+
+                            // the iis header
+                            $_chunk .= ' upgrade-insecure-requests;';
+                        }
+
+                        // add the content security policy header
+                        $_ret['Content-Security-Policy'] = $_chunk;
                     }
 
-                    // add the content security policy header
-                    $_ret['Content-Security-Policy'] = $_chunk;
-                    $_ret['X-Content-Security-Policy'] = $_chunk;
+                    // pair the report-to group name with its endpoint
+                    $_report_to = get_our_option('generate_csp_report_to') ?? '';
+                    $_endpoint  = get_our_option('generate_csp_reporting_endpoint') ?? '';
+
+                    // only send it when both are configured
+                    if (! empty($_report_to) && ! empty($_endpoint)) {
+                        $_ret['Reporting-Endpoints'] = sprintf('%s="%s"', $_report_to, esc_url_raw($_endpoint));
+                    }
 
                     // implement hook with the header argument
-                    do_action('wpsh_csp_header', $_ret['Content-Security-Policy']);
+                    do_action('wpsh_csp_header', $_chunk);
                 }
             } else {
 
@@ -558,7 +588,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
 
                         // add the content security policy header
                         $_ret['Content-Security-Policy'] = 'upgrade-insecure-requests;';
-                        $_ret['X-Content-Security-Policy'] = 'upgrade-insecure-requests;';
 
                         // implement hook with the header argument
                         do_action('wpsh_upgradesecure_header', 'upgrade-insecure-requests;');
@@ -616,14 +645,11 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     $_unsafe = $_group[$_val['id'] . '_allow_unsafe'] ?? array();
                 }
 
-                // hold the defaults
-                $_defaults = '';
-
                 // hold an unsafe string
                 $_us = '';
 
                 // append it to the output string only if there is something to append
-                if (! empty($_uris) || ! empty($_defaults)) {
+                if (! empty($_uris)) {
 
                     // manage the "extras" flags
                     $_us = $this->manage_extras((array) $_unsafe);
@@ -638,7 +664,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     }
 
                     // append the directive
-                    $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . $_defaults . "; ";
+                    $_ret .= $_key . " " . $_us . $this->remove_duplicates((string) $_uris) . "; ";
                 } else {
 
                     // manage the "extras" flags
@@ -650,6 +676,14 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                         $_ret .= $_key . " " . $_us . "; ";
                     }
                 }
+            }
+
+            // the reporting endpoint doubles as a report-uri fallback for browsers without report-to support
+            $_endpoint = get_our_option('generate_csp_reporting_endpoint') ?? '';
+
+            // only append it if one is configured
+            if (! empty($_endpoint)) {
+                $_ret .= sprintf('report-uri %s; ', esc_url_raw($_endpoint));
             }
 
             // implement the post generation hook
@@ -804,6 +838,34 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // append
                     $_us .= " 'none' ";
                 } else {
+
+                    // check for the unsafe hashes
+                    if (in_array(4, $_extras)) {
+
+                        // append
+                        $_us .= " 'unsafe-hashes' ";
+                    }
+
+                    // check for the report sample
+                    if (in_array(5, $_extras)) {
+
+                        // append
+                        $_us .= " 'report-sample' ";
+                    }
+
+                    // check for the strict dynamic
+                    if (in_array(6, $_extras)) {
+
+                        // append
+                        $_us .= " 'strict-dynamic' ";
+                    }
+
+                    // check for the wasm unsafe eval
+                    if (in_array(7, $_extras)) {
+
+                        // append
+                        $_us .= " 'wasm-unsafe-eval' ";
+                    }
 
                     // check for the self
                     if (in_array(0, $_extras)) {
