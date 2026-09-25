@@ -320,7 +320,7 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                         'id' => $v['id'],
                         'type' => 'checkboxes',
                         'label' => $v['title'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
-                        'description' => ['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+                        'description' => $v['desc'], // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
                         'options' => [
                             'allow-downloads' => __('allow-downloads', 'security-header-generator'),
                             'allow-downloads-without-user-activation' => __('allow-downloads-without-user-activation', 'security-header-generator'),

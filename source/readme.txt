@@ -3,7 +3,7 @@ Contributors: kevp75
 Donate link: https://paypal.me/kevinpirnie
 Tags: security, security headers, content security policy, permissions, permissions policy
 Requires at least: 6.0.9
-Tested up to: 7.1
+Tested up to: 7.1.2
 Requires PHP: 8.2
 Stable tag: 6.0.86
 License: GPLv3
@@ -66,6 +66,10 @@ Please understand, I cannot generate the proper headers for you through the word
 5. Headers Set
  
 == Changelog ==
+
+= 6.1.xx =
+* Verify: WP Core 7.1.2
+
 
 = 6.0.86 =
 * Remove: unused basic auth credential fields and purge stored values
