@@ -606,6 +606,18 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                 $_ret[2] = __('Eval', 'security-header-generator');
             }
 
+            // script and style directives get the hash and sample keywords
+            if (str_starts_with($_item, 'generate_csp_custom_scripts') || str_starts_with($_item, 'generate_csp_custom_styles')) {
+                $_ret[4] = __('Unsafe Hashes', 'security-header-generator');
+                $_ret[5] = __('Report Sample', 'security-header-generator');
+            }
+
+            // script directives also get the strict-dynamic and wasm keywords
+            if (str_starts_with($_item, 'generate_csp_custom_scripts')) {
+                $_ret[6] = __('Strict Dynamic', 'security-header-generator');
+                $_ret[7] = __('WASM Unsafe Eval', 'security-header-generator');
+            }
+
             // by default all items need these
             $_ret[0] = __('Self', 'security-header-generator');
             $_ret[3] = __('None', 'security-header-generator');

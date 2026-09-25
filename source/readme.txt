@@ -79,6 +79,7 @@ fix: remove plugin options from every subsite on multisite uninstall
 fix: make preset, backup handler, and backup script strings translatable
 chore: correct common.php docblock and drop dead $_defaults from the CSP builder
 add: Reporting-Endpoints header and report-uri fallback for CSP reporting
+add: CSP report-only mode with upgrade-insecure-requests kept enforced
 
 
 = 6.0.86 =

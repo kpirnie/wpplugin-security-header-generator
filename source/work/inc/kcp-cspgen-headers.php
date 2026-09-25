@@ -839,6 +839,34 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     $_us .= " 'none' ";
                 } else {
 
+                    // check for the unsafe hashes
+                    if (in_array(4, $_extras)) {
+
+                        // append
+                        $_us .= " 'unsafe-hashes' ";
+                    }
+
+                    // check for the report sample
+                    if (in_array(5, $_extras)) {
+
+                        // append
+                        $_us .= " 'report-sample' ";
+                    }
+
+                    // check for the strict dynamic
+                    if (in_array(6, $_extras)) {
+
+                        // append
+                        $_us .= " 'strict-dynamic' ";
+                    }
+
+                    // check for the wasm unsafe eval
+                    if (in_array(7, $_extras)) {
+
+                        // append
+                        $_us .= " 'wasm-unsafe-eval' ";
+                    }
+
                     // check for the self
                     if (in_array(0, $_extras)) {
 
