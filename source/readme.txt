@@ -75,6 +75,7 @@ fix: stop wiping core REST response headers before applying ours
 fix: align Permissions-Policy directives
 fix: skip Access-Control-Allow-Credentials when the allowed origin is a wildcard
 remove: obsolete X-Content-Security-Policy header
+fix: remove plugin options from every subsite on multisite uninstall
 
 
 = 6.0.86 =

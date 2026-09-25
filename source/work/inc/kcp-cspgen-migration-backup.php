@@ -156,11 +156,7 @@ if (! class_exists('KCP_CSPGEN_Migration_Backup')) {
 
         btn.addEventListener('click', function () {
 
-            var confirmed = window.confirm(
-                'This will download your pre-migration settings backup and permanently delete it from the database.\n\n' +
-                'Make sure to save the downloaded file somewhere safe — it cannot be recovered after download.\n\n' +
-                'Proceed?'
-            );
+            var confirmed = window.confirm(wpshBackupI18n.confirm);
 
             if (!confirmed) return;
 
@@ -169,7 +165,7 @@ if (! class_exists('KCP_CSPGEN_Migration_Backup')) {
             var filename = self.getAttribute('data-filename');
 
             self.disabled    = true;
-            self.textContent = 'Downloading\u2026';
+            self.textContent = wpshBackupI18n.downloading;
 
             var formData = new FormData();
             formData.append('action', 'wpsh_download_migration_backup');
@@ -203,15 +199,29 @@ if (! class_exists('KCP_CSPGEN_Migration_Backup')) {
             })
             .catch(function (err) {
                 self.disabled    = false;
-                self.textContent = 'Download Backup & Delete';
-                window.alert(
-                    'Download failed: ' + err.message + '\n\nThe backup is still in the database. Please try again.'
-                );
+                self.textContent = wpshBackupI18n.button;
+                window.alert(wpshBackupI18n.failed.replace('%s', err.message));
             });
         });
     });
 }());
 JS;
+
+            // pass the translatable strings to the script
+            wp_add_inline_script(
+                'wpsh-migration-backup',
+                sprintf(
+                    'var wpshBackupI18n = %s;',
+                    wp_json_encode(array(
+                        'confirm'     => __("This will download your pre-migration settings backup and permanently delete it from the database.\n\nMake sure to save the downloaded file somewhere safe — it cannot be recovered after download.\n\nProceed?", 'security-header-generator'),
+                        'downloading' => __('Downloading…', 'security-header-generator'),
+                        'button'      => __('Download Backup & Delete', 'security-header-generator'),
+                        /* translators: %s: the error message returned by the download request */
+                        'failed'      => __("Download failed: %s\n\nThe backup is still in the database. Please try again.", 'security-header-generator'),
+                    ))
+                ),
+                'before'
+            );
 
             wp_add_inline_script('wpsh-migration-backup', $js);
         }
@@ -234,26 +244,26 @@ JS;
 
             // Capability check
             if (! current_user_can('manage_options')) {
-                wp_send_json_error(['message' => 'Permission denied.'], 403);
+                wp_send_json_error(['message' => __('Permission denied.', 'security-header-generator')], 403);
             }
 
             // Nonce check
             if (! check_ajax_referer(self::NONCE_ACTION, 'nonce', false)) {
-                wp_send_json_error(['message' => 'Invalid nonce.'], 403);
+                wp_send_json_error(['message' => __('Invalid nonce.', 'security-header-generator')], 403);
             }
 
             // Fetch backup — if it's gone, tell the client gracefully
             $backup = get_option(self::BACKUP_OPTION, null);
 
             if (! is_array($backup) || empty($backup)) {
-                wp_send_json_error(['message' => 'No backup found. It may have already been downloaded.'], 404);
+                wp_send_json_error(['message' => __('No backup found. It may have already been downloaded.', 'security-header-generator')], 404);
             }
 
             // Build JSON — match the original flat format exactly (no envelope wrapper)
             $json = wp_json_encode($backup, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
             if ($json === false) {
-                wp_send_json_error(['message' => 'Failed to encode backup data.'], 500);
+                wp_send_json_error(['message' => __('Failed to encode backup data.', 'security-header-generator')], 500);
             }
 
             // All data is ready — safe to delete before we send

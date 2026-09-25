@@ -199,19 +199,19 @@ if (in_array(WPSH_DIRNAME . '/' . WPSH_FILENAME, apply_filters('active_plugins',
         check_ajax_referer('wpsh_presets', 'nonce');
 
         if (!current_user_can('manage_options')) {
-            wp_send_json_error('Insufficient permissions');
+            wp_send_json_error(__('Insufficient permissions', 'security-header-generator'));
         }
 
         $preset_key = sanitize_text_field(wp_unslash($_POST['preset_key'] ?? ''));
 
         if (empty($preset_key)) {
-            wp_send_json_error('No preset key provided');
+            wp_send_json_error(__('No preset key provided', 'security-header-generator'));
         }
 
         $presets = KCP_CSPGEN_Presets::get_presets();
 
         if (!isset($presets[$preset_key])) {
-            wp_send_json_error('Invalid preset key');
+            wp_send_json_error(__('Invalid preset key', 'security-header-generator'));
         }
 
         wp_send_json_success(array(
