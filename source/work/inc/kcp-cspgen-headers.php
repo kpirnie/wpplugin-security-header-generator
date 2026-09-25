@@ -228,10 +228,16 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // see if we're configured to include the Strict Transport Security header
             if ($_apply_sts) {
 
+                // the directives are saved under the sts_group wrapper, migrated values may still be flat
+                $_sts = (array) (get_our_option('sts_group') ?? array());
+
+                // pull a directive from the group, falling back to the legacy flat key
+                $_sts_opt = fn(string $_k) => array_key_exists($_k, $_sts) ? $_sts[$_k] : get_our_option($_k);
+
                 // get our directives, and set defaults if they are not set
-                $_age = (get_our_option('include_sts_max_age')) ? get_our_option('include_sts_max_age') : 31536000;
-                $_include = (get_our_option('include_sts_subdomains')) ? 'includeSubdomains;' : '';
-                $_preload = (get_our_option('include_sts_preload')) ? 'preload;' : '';
+                $_age = ($_sts_opt('include_sts_max_age')) ? $_sts_opt('include_sts_max_age') : 31536000;
+                $_include = ($_sts_opt('include_sts_subdomains')) ? 'includeSubdomains;' : '';
+                $_preload = ($_sts_opt('include_sts_preload')) ? 'preload;' : '';
 
                 // trim the last semi-colon if needed
                 if ($_include && $_preload) {
