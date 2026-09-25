@@ -362,6 +362,19 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                         ],
                     ];
 
+                    // add the endpoint the report-to group name points to
+                    $dir_arr[] = [
+                        'id' => 'generate_csp_reporting_endpoint',
+                        'type' => 'url',
+                        'label' => __('Reporting Endpoint URL', 'security-header-generator'),
+                        'description' => __('The URL violation reports are sent to. Sends a Reporting-Endpoints header using the Report To name above, and adds a report-uri fallback for browsers that do not support report-to.', 'security-header-generator'),
+                        'conditional' => [
+                            'field' => 'generate_csp',
+                            'value' => true,
+                            'condition' => '==',
+                        ],
+                    ];
+
                     // proceed with the rest
                 } else {
 

@@ -547,6 +547,15 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // add the content security policy header
                     $_ret['Content-Security-Policy'] = $_chunk;
 
+                    // pair the report-to group name with its endpoint
+                    $_report_to = get_our_option('generate_csp_report_to') ?? '';
+                    $_endpoint  = get_our_option('generate_csp_reporting_endpoint') ?? '';
+
+                    // only send it when both are configured
+                    if (! empty($_report_to) && ! empty($_endpoint)) {
+                        $_ret['Reporting-Endpoints'] = sprintf('%s="%s"', $_report_to, esc_url_raw($_endpoint));
+                    }
+
                     // implement hook with the header argument
                     do_action('wpsh_csp_header', $_ret['Content-Security-Policy']);
                 }
@@ -651,6 +660,14 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                         $_ret .= $_key . " " . $_us . "; ";
                     }
                 }
+            }
+
+            // the reporting endpoint doubles as a report-uri fallback for browsers without report-to support
+            $_endpoint = get_our_option('generate_csp_reporting_endpoint') ?? '';
+
+            // only append it if one is configured
+            if (! empty($_endpoint)) {
+                $_ret .= sprintf('report-uri %s; ', esc_url_raw($_endpoint));
             }
 
             // implement the post generation hook
