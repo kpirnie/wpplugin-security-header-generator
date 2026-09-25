@@ -546,7 +546,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
 
                     // add the content security policy header
                     $_ret['Content-Security-Policy'] = $_chunk;
-                    $_ret['X-Content-Security-Policy'] = $_chunk;
 
                     // implement hook with the header argument
                     do_action('wpsh_csp_header', $_ret['Content-Security-Policy']);
@@ -564,7 +563,6 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
 
                         // add the content security policy header
                         $_ret['Content-Security-Policy'] = 'upgrade-insecure-requests;';
-                        $_ret['X-Content-Security-Policy'] = 'upgrade-insecure-requests;';
 
                         // implement hook with the header argument
                         do_action('wpsh_upgradesecure_header', 'upgrade-insecure-requests;');

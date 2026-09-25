@@ -73,6 +73,7 @@ Please understand, I cannot generate the proper headers for you through the word
 fix: read HSTS directives from the sts_group wrapper with flat-key fallback
 fix: stop wiping core REST response headers before applying ours
 fix: align Permissions-Policy directives
+fix: skip Access-Control-Allow-Credentials when the allowed origin is a wildcard
 
 
 = 6.0.86 =
