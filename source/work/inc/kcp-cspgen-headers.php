@@ -537,15 +537,31 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     // include cross contect securtiy Policy setting
                     $_apply_upgrade = filter_var(get_our_option('include_upgrade_insecure'), FILTER_VALIDATE_BOOLEAN);
 
-                    // see if we're configured to upgrade all requests, if so.. append it to the chunk.  IIS doesn't allow duplicate keys
-                    if ($_apply_upgrade) {
+                    // see if we're only reporting violations instead of enforcing them
+                    $_report_only = filter_var(get_our_option('csp_report_only'), FILTER_VALIDATE_BOOLEAN);
 
-                        // the iis header
-                        $_chunk .= ' upgrade-insecure-requests;';
+                    // report-only ignores upgrade-insecure-requests, so it has to go out in an enforced header
+                    if ($_report_only) {
+
+                        // add the report-only content security policy header
+                        $_ret['Content-Security-Policy-Report-Only'] = $_chunk;
+
+                        // enforce the upgrade on its own if we're configured to
+                        if ($_apply_upgrade) {
+                            $_ret['Content-Security-Policy'] = 'upgrade-insecure-requests;';
+                        }
+                    } else {
+
+                        // see if we're configured to upgrade all requests, if so.. append it to the chunk.  IIS doesn't allow duplicate keys
+                        if ($_apply_upgrade) {
+
+                            // the iis header
+                            $_chunk .= ' upgrade-insecure-requests;';
+                        }
+
+                        // add the content security policy header
+                        $_ret['Content-Security-Policy'] = $_chunk;
                     }
-
-                    // add the content security policy header
-                    $_ret['Content-Security-Policy'] = $_chunk;
 
                     // pair the report-to group name with its endpoint
                     $_report_to = get_our_option('generate_csp_report_to') ?? '';
@@ -557,7 +573,7 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
                     }
 
                     // implement hook with the header argument
-                    do_action('wpsh_csp_header', $_ret['Content-Security-Policy']);
+                    do_action('wpsh_csp_header', $_chunk);
                 }
             } else {
 

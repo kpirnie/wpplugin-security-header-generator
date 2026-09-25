@@ -277,6 +277,20 @@ if (! class_exists('KCP_CSPGEN_Settings')) {
                     'default' => false,
                 ],
                 [
+                    'id' => 'csp_report_only',
+                    'type' => 'switch',
+                    'label' => __('Report Only?', 'security-header-generator'),
+                    'description' => __('Sends the policy as Content-Security-Policy-Report-Only, so violations are reported but nothing is blocked. Use this while building your policy. Upgrade Insecure Requests is still enforced if enabled.', 'security-header-generator'),
+                    'on_label'  => __('Yes', 'security-header-generator'),
+                    'off_label' => __('No', 'security-header-generator'),
+                    'default'   => false,
+                    'conditional' => [
+                        'field' => 'generate_csp',
+                        'value' => true,
+                        'condition' => '==',
+                    ],
+                ],
+                [
                     'id' => 'apply_csp_to_admin',
                     'type' => 'switch',
                     'label' => __('Apply it to the Admin?', 'security-header-generator'),
