@@ -20,11 +20,34 @@ if (
 	exit;
 }
 
-// remove our settings
-delete_option('wpsh_settings');
+// the options we need to remove
+$_wpsh_options = array(
+	'wpsh_settings',
+	'wpsh_settings_pre_migration_backup',
+	'wpsh_settings_schema_version',
+);
 
-// remove the pre-migration backup
-delete_option('wpsh_settings_pre_migration_backup');
+// multisite activates per subsite, so every site may hold its own copy
+if (is_multisite()) {
 
-// remove the schema version marker
-delete_option('wpsh_settings_schema_version');
+	// loop over every site in the network
+	foreach (get_sites(array('fields' => 'ids', 'number' => 0)) as $_wpsh_site_id) {
+
+		// switch to the site
+		switch_to_blog($_wpsh_site_id);
+
+		// remove our options
+		foreach ($_wpsh_options as $_wpsh_option) {
+			delete_option($_wpsh_option);
+		}
+
+		// switch back
+		restore_current_blog();
+	}
+} else {
+
+	// remove our options
+	foreach ($_wpsh_options as $_wpsh_option) {
+		delete_option($_wpsh_option);
+	}
+}
