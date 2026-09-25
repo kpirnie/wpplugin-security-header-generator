@@ -443,8 +443,11 @@ if (! class_exists('KCP_CSPGEN_Headers')) {
             // see if we're configured to include the access control allow credentials
             if ($_apply_acac) {
 
+                // browsers reject credentials alongside a wildcard origin, so skip it in that case
+                $_wildcard_origin = (($_ret['Access-Control-Allow-Origin'] ?? '') === '*');
+
                 // make sure this header should be added
-                if ($_admin_apply || (! is_admin())) {
+                if (($_admin_apply || (! is_admin())) && ! $_wildcard_origin) {
 
                     // append the header... since this is only applicable if it's true
                     $_ret['Access-Control-Allow-Credentials'] = 'true';

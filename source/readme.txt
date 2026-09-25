@@ -72,6 +72,7 @@ Please understand, I cannot generate the proper headers for you through the word
 * Fix: broken sandbox description
 fix: read HSTS directives from the sts_group wrapper with flat-key fallback
 fix: stop wiping core REST response headers before applying ours
+fix: align Permissions-Policy directives
 
 
 = 6.0.86 =
